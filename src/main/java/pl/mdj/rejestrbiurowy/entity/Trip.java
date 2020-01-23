@@ -4,6 +4,7 @@ package pl.mdj.rejestrbiurowy.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -24,6 +25,7 @@ public class Trip {
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
+    private LocalDate date;
     private String description;
     private Long mileage;
 /*
