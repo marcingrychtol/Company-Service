@@ -20,9 +20,9 @@ public class Task {
     @JoinColumn(name = "project_id")
     private Project project;
     @Enumerated(EnumType.STRING)
-    private ETaskStatus taskStatus;
+    private ETaskStatus status;
     @Enumerated(EnumType.STRING)
-    private ETaskCategory taskCategory;
+    private ETaskCategory category;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String description;
