@@ -6,6 +6,8 @@ import pl.mdj.rejestrbiurowy.entity.enums.ETaskStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -14,8 +16,9 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long projectId;
-    private Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
     @Enumerated(EnumType.STRING)
     private ETaskStatus taskStatus;
     @Enumerated(EnumType.STRING)
@@ -23,6 +26,16 @@ public class Task {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String description;
+
+    public List<Employee> getEmployees() {
+        if (employees == null){
+            employees = new ArrayList<>();
+        }
+        return employees;
+    }
+
+    @ManyToMany(mappedBy = "employees", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Employee> employees;
 
 //    public Long getId() {
 //        return id;

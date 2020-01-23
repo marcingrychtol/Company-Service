@@ -3,10 +3,7 @@ package pl.mdj.rejestrbiurowy.entity;
 import lombok.Data;
 import pl.mdj.rejestrbiurowy.entity.enums.EEmployeeCategory;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -14,9 +11,13 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long authorId;
-    private Long adresseeId;
-    private EEmployeeCategory adresseeCategoryId;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Employee author;
+    @ManyToOne
+    @JoinColumn(name = "addressee_id")
+    private Employee addressee;
+    private EEmployeeCategory addresseeCategory;
     private String subjectTableName;
     private String subjectItemId;
     private String description;
