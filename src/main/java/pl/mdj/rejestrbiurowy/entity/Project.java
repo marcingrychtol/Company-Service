@@ -5,8 +5,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@Builder
 @Data
+@Entity
+@NoArgsConstructor
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +20,10 @@ public class Project {
     private String description;
     private Boolean active;
 
+    public Project(Client client, String name, String description) {
+        this.client = client;
+    }
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 
@@ -26,3 +32,6 @@ public class Project {
         task.setProject(this);
     }
 }
+
+
+
