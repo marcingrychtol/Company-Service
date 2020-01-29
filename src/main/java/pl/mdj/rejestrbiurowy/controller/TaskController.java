@@ -1,29 +1,26 @@
 package pl.mdj.rejestrbiurowy.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.mdj.rejestrbiurowy.entity.Task;
-import pl.mdj.rejestrbiurowy.repository.TaskRepository;
+import pl.mdj.rejestrbiurowy.service.TaskServiceImpl;
+import pl.mdj.rejestrbiurowy.service.interfaces.TaskService;
 
+@AllArgsConstructor
 @RestController
-@RequestMapping("/task")
+@RequestMapping("task")
 public class TaskController {
     /*
     * Task
     * TaskCategory
      */
+    TaskService taskService;
 
-    @Autowired
-    TaskRepository taskRepository;
-
-    @PostMapping(path="/instance", consumes = "application/json")
-    public Task addTask(@RequestBody Task task){
-        taskRepository.save(task);
-        return task;
-    }
+//    @PostMapping(path="/instance", consumes = "application/json")
+//    public Task addTask(@RequestBody Task task){
+//        taskService.(task);
+//        return task;
+//    }
 
 
 }

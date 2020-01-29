@@ -1,8 +1,9 @@
 package pl.mdj.rejestrbiurowy.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import pl.mdj.rejestrbiurowy.entity.enums.EEmployeeCategory;
+import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,10 +12,9 @@ import java.util.List;
 
 @Entity
 @Data
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class Employee extends MyEntity {
+
     @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;

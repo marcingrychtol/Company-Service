@@ -1,18 +1,20 @@
 package pl.mdj.rejestrbiurowy.controller;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.mdj.rejestrbiurowy.service.interfaces.CommentService;
+import pl.mdj.rejestrbiurowy.repository.ClientRepository;
+import pl.mdj.rejestrbiurowy.service.interfaces.ClientService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("comment")
-public class CommentController {
+@RequestMapping("client")
+public class ClientController {
+
     /*
-    * Comment
+    * Client
+    * Location
      */
 
-    CommentService commentService;
+    ClientService clientService;
 }

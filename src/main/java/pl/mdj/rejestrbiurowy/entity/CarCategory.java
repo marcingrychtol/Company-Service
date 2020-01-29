@@ -1,17 +1,18 @@
 package pl.mdj.rejestrbiurowy.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarCategory;
+import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
-public class CarCategory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class CarCategory extends MyEntity {
+
     @Enumerated
     private ECarCategory category;
 

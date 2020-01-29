@@ -2,17 +2,17 @@ package pl.mdj.rejestrbiurowy.entity;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Data
-public class Trip {
+@EqualsAndHashCode(callSuper = true)
+public class Trip extends MyEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
@@ -62,3 +62,5 @@ public class Trip {
         this.description = description;
     }*/
 }
+
+

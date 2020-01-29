@@ -1,16 +1,17 @@
 package pl.mdj.rejestrbiurowy.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
-public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class Client extends MyEntity {
+
     private String name;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,8 +1,10 @@
 package pl.mdj.rejestrbiurowy.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import pl.mdj.rejestrbiurowy.entity.enums.ETaskCategory;
 import pl.mdj.rejestrbiurowy.entity.enums.ETaskStatus;
+import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,11 +13,9 @@ import java.util.List;
 
 @Entity
 @Data
-public class Task {
+@EqualsAndHashCode(callSuper = true)
+public class Task extends MyEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
