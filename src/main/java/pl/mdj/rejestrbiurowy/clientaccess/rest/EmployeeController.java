@@ -1,10 +1,8 @@
-package pl.mdj.rejestrbiurowy.controller;
+package pl.mdj.rejestrbiurowy.clientaccess.rest;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
-import pl.mdj.rejestrbiurowy.service.EmployeeServiceImpl;
 import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 
 @AllArgsConstructor

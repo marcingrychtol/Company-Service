@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.controller;
+package pl.mdj.rejestrbiurowy.clientaccess.rest;
 
 
 import lombok.AllArgsConstructor;
