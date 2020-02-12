@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,6 +10,8 @@
 </head>
 
 <body>
+
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Navbar</a>
@@ -48,6 +50,22 @@
         </form>
     </div>
 </nav>
+
+<p th:text="${name}"></p>
+<!--<p th:text="${car.getCarCategory()}"></p>-->
+
+<tr th:each="car: ${cars}">
+    <p>======</p>
+    <td th:text="${car.getName()}"></td>
+    <br>
+    <td th:text="${car.getFuel()}"></td>
+    <br>
+    <td th:text="${car.getCarCategory()}"></td>
+    <br>
+    <td th:text="${car.getMileage()}"></td>
+    <br>
+    <td th:text="${car.getRegistration()}"></td>
+</tr>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
