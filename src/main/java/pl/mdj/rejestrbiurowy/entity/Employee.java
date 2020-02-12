@@ -15,9 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends MyEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "task_id")
-    private Task task;
+
     private String name;
 //    @Column(name = "employee_category")
     @Enumerated(EnumType.STRING)
@@ -26,20 +24,20 @@ public class Employee extends MyEntity {
     private String eMail;
     private BigDecimal salary;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "employee_task",
-            joinColumns = @JoinColumn(name = "taskId"),
-            inverseJoinColumns = @JoinColumn(name = "employeeId")
-    )
-    private List<Task> tasks;
-
-    public List<Task> getTasks() {
-        if (tasks == null){
-            tasks = new ArrayList<>();
-        }
-        return tasks;
-    }
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable(
+//            name = "employee_task",
+//            joinColumns = @JoinColumn(name = "taskId"),
+//            inverseJoinColumns = @JoinColumn(name = "employeeId")
+//    )
+//    private List<Task> tasks;
+//
+//    public List<Task> getTasks() {
+//        if (tasks == null){
+//            tasks = new ArrayList<>();
+//        }
+//        return tasks;
+//    }
 
     /*
     public Employee() {

@@ -7,11 +7,8 @@ import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 @Service
 @Transactional(readOnly = true)
 public class EmployeeServiceImpl implements EmployeeService {
-    EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
+    EmployeeRepository employeeRepository;
 
 
 }

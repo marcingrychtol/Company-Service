@@ -23,13 +23,10 @@ public class Project extends MyEntity {
         this.client = client;
     }
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
+//    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Task> tasks;
 
-    public void addTask(Task task){
-        getTasks().add(task);
-        task.setProject(this);
-    }
+
 }
 
 

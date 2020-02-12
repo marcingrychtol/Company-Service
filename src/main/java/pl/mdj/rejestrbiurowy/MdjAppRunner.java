@@ -19,7 +19,6 @@ public class MdjAppRunner {
     private EmployeeService employeeService;
     private LocationService locationService;
     private ProjectService projectService;
-    private TaskService taskService;
     private TripService tripService;
 
 

@@ -13,10 +13,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class CarCategory extends MyEntity {
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ECarCategory category;
 
-    @OneToMany(mappedBy = "car_category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "carCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars;
 
     public void addCar(Car car){

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class Car extends MyEntity {
 
     @ManyToOne
-    @JoinColumn(name = "car_category_id")
+    @JoinColumn
     private CarCategory carCategory;
     private String name;
     private String registration;

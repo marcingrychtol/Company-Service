@@ -14,16 +14,16 @@ import java.time.LocalDate;
 public class Trip extends MyEntity {
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn
     private Employee employee;
     @ManyToOne
-    @JoinColumn(name = "car_id")
+    @JoinColumn
     private Car car;
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn
     private Project project;
     @ManyToOne
-    @JoinColumn(name = "location_id")
+    @JoinColumn
     private Location location;
     private LocalDate date;
     private String description;

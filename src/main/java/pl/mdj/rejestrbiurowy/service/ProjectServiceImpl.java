@@ -19,10 +19,6 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectRepository projectRepository;
     ClientRepository clientRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ClientRepository clientRepository) {
-        this.projectRepository = projectRepository;
-        this.clientRepository = clientRepository;
-    }
 
     @Override
     public Long createProject(Client client, String name, String description) {
