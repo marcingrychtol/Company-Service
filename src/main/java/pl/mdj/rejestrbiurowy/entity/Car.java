@@ -1,7 +1,6 @@
 package pl.mdj.rejestrbiurowy.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarCategory;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarFuel;
 import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
@@ -12,6 +11,8 @@ import java.time.LocalDate;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Car extends MyEntity {
 
     @Enumerated(EnumType.STRING)
@@ -23,4 +24,9 @@ public class Car extends MyEntity {
     private LocalDate insuranceExpiration;
     private LocalDate inspectionExpiration;
     private int mileage;
+
+    public Car(String name, String registration) {
+        this.name = name;
+        this.registration = registration;
+    }
 }

@@ -56,16 +56,20 @@
 
 <tr th:each="car: ${cars}">
     <p>======</p>
-    <td th:text="${car.getName()}"></td>
-    <br>
-    <td th:text="${car.getFuel()}"></td>
-    <br>
-    <td th:text="${car.getCarCategory()}"></td>
-    <br>
-    <td th:text="${car.getMileage()}"></td>
-    <br>
+    <td th:text="${car.getName()}"></td><br>
+    <td th:text="${car.getFuel()}"></td><br>
+    <td th:text="${car.getCarCategory()}"></td><br>
+    <td th:text="${car.getMileage()}"></td><br>
     <td th:text="${car.getRegistration()}"></td>
 </tr>
+
+
+<form th:action="@{/mvc/car/add}" th:object="${newCar}" method="post">
+    <p>Name: <input type="text" th:field="*{name}"></p>
+    <p>Registration:<input type="text" th:field="*{registration}"></p>
+    <p><input type="submit" value="add new car"/></p>
+</form>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

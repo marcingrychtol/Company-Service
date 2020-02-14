@@ -6,6 +6,6 @@ import pl.mdj.rejestrbiurowy.service.interfaces.LocationService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class LocationServiceImpl implements LocationService {
 }

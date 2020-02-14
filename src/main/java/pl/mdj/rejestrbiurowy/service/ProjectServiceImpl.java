@@ -13,7 +13,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.ProjectService;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ProjectServiceImpl implements ProjectService {
 
     ProjectRepository projectRepository;
