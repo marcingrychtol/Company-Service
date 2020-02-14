@@ -1,6 +1,5 @@
-package pl.mdj.rejestrbiurowy.runners;
+package pl.mdj.rejestrbiurowy.bootstrap;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -16,9 +15,9 @@ import java.util.Arrays;
 
 @Component
 @NoArgsConstructor
-public class MdjAppRunner implements MdjRunner {
+public class MdjRunnerImpl implements MdjRunner {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MdjAppRunner.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MdjRunnerImpl.class);
 
     @Autowired
     private CarService carService;

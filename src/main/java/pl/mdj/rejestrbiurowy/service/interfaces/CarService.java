@@ -9,8 +9,7 @@ import java.util.List;
 
 
 public interface CarService {
-
     String addCar(Car car);
-
     List<Car> findAll();
+    String deleteById(Long id);
 }

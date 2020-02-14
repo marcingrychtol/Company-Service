@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.runners;
+package pl.mdj.rejestrbiurowy.bootstrap;
 
 public interface MdjRunner {
     void run();

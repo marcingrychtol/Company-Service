@@ -34,13 +34,19 @@ public class CarServiceImpl implements CarService {
 
     public String addCar(Car car){
         carRepository.save(car);
-        LOG.info("Car is saved", car);
+        LOG.info("Car is saved: " + car.toString(), car);
         return "";
     }
 
     @Override
     public List<Car> findAll() {
-        return (List<Car>) carRepository.findAll();
+        return carRepository.findAll();
+    }
+
+    @Override
+    public String deleteById(Long id) {
+        carRepository.deleteById(id);
+        return "";
     }
 
 }

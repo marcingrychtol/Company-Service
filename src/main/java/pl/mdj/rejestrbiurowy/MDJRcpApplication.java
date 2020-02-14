@@ -1,12 +1,10 @@
 package pl.mdj.rejestrbiurowy;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pl.mdj.rejestrbiurowy.runners.MdjAppRunner;
-import pl.mdj.rejestrbiurowy.runners.MdjRunner;
+import pl.mdj.rejestrbiurowy.bootstrap.MdjRunner;
 
 @SpringBootApplication
 @NoArgsConstructor

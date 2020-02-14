@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.entity.Car;
 import pl.mdj.rejestrbiurowy.entity.CarSimple;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarCategory;
@@ -22,14 +19,14 @@ import java.util.List;
 @RequestMapping(path = "mvc/car")
 public class CarControllerMVC {
 
+    private static final String REDIR_MAIN_CAR = "redirect:/mvc/car/all";
     Logger LOG = LoggerFactory.getLogger(CarControllerMVC.class);
-
     private CarService carService;
 
+    @Autowired
     public CarControllerMVC(CarService carService) {
         this.carService = carService;
     }
-
 
     @GetMapping(path = "/all")
     public String get(Model model){
@@ -37,13 +34,20 @@ public class CarControllerMVC {
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("newCar", new Car());
+        model.addAttribute("deleteCar", new Car());
         return ("car");
     }
 
     @PostMapping("/add")
     public String addCar(@ModelAttribute Car car){
         carService.addCar(car);
-        LOG.info("car added ", car);
-        return "redirect:/mvc/car/all";
+//        LOG.info("car added ", car);
+        return REDIR_MAIN_CAR;
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCar(@PathVariable Long id){
+        carService.deleteById(id);
+        return REDIR_MAIN_CAR;
     }
 }
