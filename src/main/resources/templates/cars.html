@@ -73,9 +73,9 @@
                     <br>
                     <td th:text="${car.getRegistration()}"></td>
                     </p>
-                    <a th:href="@{/mvc/car/delete/${car.getId()}}" class="btn btn-primary">Rezerwuj</a>
-                    <a th:href="@{/mvc/car/delete/${car.getId()}}" class="btn btn-secondary">Edytuj</a>
-                    <a th:href="@{/mvc/car/delete/${car.getId()}}" class="btn btn-danger">Usuń</a>
+                    <a href="#" class="btn btn-primary">Rezerwuj</a>
+                    <a href="#" class="btn btn-secondary">Edytuj</a>
+                    <a th:href="@{/mvc/car/delete/{id}(id=${car.getId()})}" class="btn btn-danger">Usuń</a>
                 </div>
             </div>
         </tr>

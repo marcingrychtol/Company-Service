@@ -48,8 +48,8 @@ public class CarControllerMVC {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteCar(@PathVariable Long id){
-        carService.deleteById(id);
+    public String deleteCar(@PathVariable String id){
+        carService.deleteById(Long.parseLong(id));
         return REDIR_MAIN_CAR;
     }
 }
