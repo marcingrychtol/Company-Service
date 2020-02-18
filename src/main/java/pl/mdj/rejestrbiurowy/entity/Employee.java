@@ -15,14 +15,14 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends MyEntity {
 
-
     private String name;
+    private String secondName;
 //    @Column(name = "employee_category")
-    @Enumerated(EnumType.STRING)
-    private EEmployeeCategory employeeCategory;
+//    @Enumerated(EnumType.STRING)
+//    private EEmployeeCategory employeeCategory;
     private String phoneNumber;
     private String eMail;
-    private BigDecimal salary;
+//    private BigDecimal salary;
 
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 //    @JoinTable(

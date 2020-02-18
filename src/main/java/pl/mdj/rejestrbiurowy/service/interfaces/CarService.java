@@ -8,8 +8,6 @@ import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import java.util.List;
 
 
-public interface CarService {
-    String addCar(Car car);
-    List<Car> findAll();
-    String deleteById(Long id);
+public interface CarService extends BasicService<Car, Long> {
+
 }

@@ -8,7 +8,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("trip")
+@RequestMapping("api/trip")
 public class TripController {
     /*
     * Trip

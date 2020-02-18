@@ -7,7 +7,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.ClientService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("client")
+@RequestMapping("api/client")
 public class ClientController {
 
     /*

@@ -7,7 +7,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.LocationService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("location")
+@RequestMapping("api/location")
 public class LocationController {
     /*
     * Location

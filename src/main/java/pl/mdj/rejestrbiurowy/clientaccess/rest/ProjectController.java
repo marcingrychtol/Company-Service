@@ -12,7 +12,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("project")
+@RequestMapping("api/project")
 public class ProjectController {
     /*
     * Project

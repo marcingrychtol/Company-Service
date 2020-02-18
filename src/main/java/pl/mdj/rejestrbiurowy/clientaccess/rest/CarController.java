@@ -7,7 +7,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("car")
+@RequestMapping("api/car")
 public class CarController {
     /*
      * Car

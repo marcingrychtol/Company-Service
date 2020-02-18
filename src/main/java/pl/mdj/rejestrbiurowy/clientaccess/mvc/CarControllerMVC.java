@@ -10,7 +10,7 @@ import pl.mdj.rejestrbiurowy.entity.Car;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 
 @Controller
-@RequestMapping(path = "mvc/car")
+@RequestMapping(path = "cars")
 public class CarControllerMVC {
 
     private static final String REDIR_MAIN_CAR = "redirect:/mvc/car/all";
@@ -27,7 +27,7 @@ public class CarControllerMVC {
     public String getAll(Model model){
 
         model.addAttribute("name", "Rezerwator");
-        model.addAttribute("cars", carService.findAll());
+        model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new Car());
         return ("cars");
     }
@@ -36,15 +36,15 @@ public class CarControllerMVC {
     public String getAdd(Model model){
 
         model.addAttribute("name", "Rezerwator");
-        model.addAttribute("cars", carService.findAll());
+        model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new Car());
         return ("car-add");
     }
 
     @PostMapping("/add")
     public String addCar(@ModelAttribute Car car){
-        carService.addCar(car);
-        return REDIR_MAIN_CAR;
+        carService.addOne(car);
+        return REDIR_ADD_CAR;
     }
 
     @GetMapping("/delete/{id}")

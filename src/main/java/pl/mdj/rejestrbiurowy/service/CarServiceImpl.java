@@ -4,7 +4,6 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.entity.Car;
@@ -12,6 +11,7 @@ import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -23,6 +23,7 @@ public class CarServiceImpl implements CarService {
      * Car
      * CarCategory
      */
+
     private Logger LOG = LoggerFactory.getLogger(CarServiceImpl.class);
 
     CarRepository carRepository;
@@ -32,21 +33,26 @@ public class CarServiceImpl implements CarService {
         this.carRepository = carRepository;
     }
 
-    public String addCar(Car car){
+    public Car addOne(Car car){
         carRepository.save(car);
         LOG.info("Car is saved: " + car.toString(), car);
-        return "";
+        return car;
     }
 
+
     @Override
-    public List<Car> findAll() {
+    public List<Car> getAll() {
         return carRepository.findAll();
     }
 
     @Override
-    public String deleteById(Long id) {
+    public Car getOne(Long id) {
+        return carRepository.getOne(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
         carRepository.deleteById(id);
-        return "";
     }
 
 }

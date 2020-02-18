@@ -1,47 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <div th:replace="fragments/bootstrap-styles"></div>
-
     <title>MDJ rezerwator</title>
 </head>
-
 <body>
 
-<div th:replace="fragments/nav-bar"></div>
-
-
 <div class="container">
+    <div th:replace="fragments/nav-bar"></div>
 
     <div class="row">
 
-        <tr th:each="car: ${cars}">
+        <tr th:each="employee: ${employees}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                 <div class="card">
                     <h5 class="card-header bg-primary">
-                        <td th:text="${car.getId()}"></td>
-                        <td th:text="${car.getName()}"></td>
+                        <td th:text="${employee.getId()}"></td>
+                        <td th:text="${employee.getName()}"></td>
+                        <td th:text="${employee.getSecondName()}"></td>
                     </h5>
                     <div class="card-body bg-light">
                         <p class="card-text">
-                        <td th:text="${car.getFuel()}"></td>
+                        <td th:text="${employee.getEMail()}"></td>
                         <br>
-                        <td th:text="${car.getCarCategory()}"></td>
+                        <td th:text="${employee.getPhoneNumber()}"></td>
                         <br>
-                        <td th:text="${car.getMileage()}"></td>
-                        <br>
-                        <td th:text="${car.getRegistration()}"></td>
-                        </p>
-                        <a href="#" class="btn btn-primary">Rezerwuj</a>
+                        <a href="#" class="btn btn-primary">Loguj</a>
                     </div>
                 </div>
             </div>
         </tr>
     </div>
 
-</div>
 
+</div>
 <div th:replace="fragments/bootstrap-scripts"></div>
+
 </body>
 </html>

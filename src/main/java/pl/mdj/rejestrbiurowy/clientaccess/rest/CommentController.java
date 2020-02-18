@@ -8,7 +8,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.CommentService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("comment")
+@RequestMapping("api/comment")
 public class CommentController {
     /*
     * Comment

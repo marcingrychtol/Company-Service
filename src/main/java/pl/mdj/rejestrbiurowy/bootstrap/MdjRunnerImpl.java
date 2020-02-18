@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.mdj.rejestrbiurowy.entity.Car;
+import pl.mdj.rejestrbiurowy.entity.Employee;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarCategory;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarFuel;
 import pl.mdj.rejestrbiurowy.service.interfaces.*;
@@ -22,7 +23,11 @@ public class MdjRunnerImpl implements MdjRunner {
     @Autowired
     private CarService carService;
 
-    public void run(){
+    @Autowired
+    private EmployeeService employeeService;
+
+    public void run() {
+        {
             Car car1 = new Car();
             Car car2 = new Car();
             Car car3 = new Car();
@@ -52,8 +57,47 @@ public class MdjRunnerImpl implements MdjRunner {
             car4.setName("VW LT");
             car4.setRegistration("KT 7777");
 
-        for (Car car : Arrays.asList(car1, car2, car3, car4)) {
-            carService.addCar(car);
-        }
+            for (Car car : Arrays.asList(car1, car2, car3, car4)) {
+                carService.addOne(car);
+            }
+        } //CARS
+
+        {
+            Employee employee1 = new Employee();
+            Employee employee2 = new Employee();
+            Employee employee3 = new Employee();
+            Employee employee4 = new Employee();
+            Employee employee5 = new Employee();
+
+            employee1.setName("Adam");
+            employee1.setSecondName("Grychtoł");
+            employee1.setPhoneNumber("123456789");
+            employee1.setEMail("adamgrychtol@mdj.pl");
+
+            employee2.setName("Wojciech");
+            employee2.setSecondName("Kołodziej");
+            employee2.setPhoneNumber("123456789");
+            employee2.setEMail("wojciechkolodziej@mdj.pl");
+
+            employee3.setName("Marcin");
+            employee3.setSecondName("Grychtoł");
+            employee3.setPhoneNumber("123456789");
+            employee3.setEMail("marcingrychtol@mdj.pl");
+
+            employee4.setName("Adam");
+            employee4.setSecondName("Broja");
+            employee4.setPhoneNumber("123456789");
+            employee4.setEMail("adambroja@mdj.pl");
+
+            employee5.setName("Norbert");
+            employee5.setSecondName("Przeliorz");
+            employee5.setPhoneNumber("123456789");
+            employee5.setEMail("norbertprzeliorz@mdj.pl");
+
+            for (Employee employee : Arrays.asList(employee1, employee2, employee3, employee4, employee5)) {
+                employeeService.addOne(employee);
+
+            }
+        } // EMPLOYEES
     }
 }

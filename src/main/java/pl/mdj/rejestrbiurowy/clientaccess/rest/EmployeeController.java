@@ -7,7 +7,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("employee")
+@RequestMapping("api/employee")
 public class EmployeeController {
     /*
     * Employee
