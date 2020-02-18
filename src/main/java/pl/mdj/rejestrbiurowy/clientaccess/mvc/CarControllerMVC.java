@@ -7,19 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.entity.Car;
-import pl.mdj.rejestrbiurowy.entity.CarSimple;
-import pl.mdj.rejestrbiurowy.entity.enums.ECarCategory;
-import pl.mdj.rejestrbiurowy.entity.enums.ECarFuel;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Controller
 @RequestMapping(path = "mvc/car")
 public class CarControllerMVC {
 
     private static final String REDIR_MAIN_CAR = "redirect:/mvc/car/all";
+    private static final String REDIR_ADD_CAR = "redirect:/mvc/car/add";
     Logger LOG = LoggerFactory.getLogger(CarControllerMVC.class);
     private CarService carService;
 
@@ -29,19 +24,26 @@ public class CarControllerMVC {
     }
 
     @GetMapping(path = "/all")
-    public String get(Model model){
+    public String getAll(Model model){
 
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("newCar", new Car());
-        model.addAttribute("deleteCar", new Car());
-        return ("car");
+        return ("cars");
+    }
+
+    @GetMapping(path = "/add")
+    public String getAdd(Model model){
+
+        model.addAttribute("name", "Rezerwator");
+        model.addAttribute("cars", carService.findAll());
+        model.addAttribute("newCar", new Car());
+        return ("car-add");
     }
 
     @PostMapping("/add")
     public String addCar(@ModelAttribute Car car){
         carService.addCar(car);
-//        LOG.info("car added ", car);
         return REDIR_MAIN_CAR;
     }
 
