@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <div th:replace="fragments/bootstrap-styles"></div>
@@ -11,20 +11,33 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-6 p-1">
-            <div class="card">
-                <div class="card-body bg-light">
-                    <p class="card-text">Auta</p>
-                </div>
+
+        <div class="col-12 p-1">
+            <div class="card text-center">
+
             </div>
         </div>
+
         <div class="col-6 p-1">
-            <div class="card">
+            <a th:href="@{/cars}">
+                <div class="card text-center">
+                    <div class="card-body bg-light">
+                        <p class="card-text">Auta</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 p-1">
+            <a th:href="@{/trips}">
+            <div class="card text-center">
                 <div class="card-body bg-light">
-                    <p class="card-text">Kalendarz</p>
+                    <p class="card-text">Kalyndorz</p>
                 </div>
             </div>
+            </a>
         </div>
+
     </div>
 </div>
 

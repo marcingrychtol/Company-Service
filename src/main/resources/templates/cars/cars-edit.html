@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="col-12">
-            <form th:action="@{/mvc/car/add}" th:object="${newCar}" method="post">
+            <form th:action="@{/cars/add}" th:object="${newCar}" method="post">
                 <div class="form-group">
                     <label for="carNameInput1">Nazwa pojazdu:</label>
                     <input type="text" class="form-control" th:field="*{name}" id="carNameInput1">
@@ -50,7 +50,7 @@
                         <td th:text="${car.getRegistration()}"></td>
                         </p>
                         <a href="#" class="btn btn-secondary">Edytuj</a>
-                        <a th:href="@{/mvc/cars/delete/{id}(id=${car.getId()})}" class="btn btn-danger">Usuń</a>
+                        <a th:href="@{/cars/delete/{id}(id=${car.getId()})}" class="btn btn-danger">Usuń</a>
                     </div>
                 </div>
             </div>

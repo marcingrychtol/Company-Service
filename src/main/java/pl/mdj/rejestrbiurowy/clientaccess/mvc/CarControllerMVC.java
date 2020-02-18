@@ -13,8 +13,8 @@ import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 @RequestMapping(path = "cars")
 public class CarControllerMVC {
 
-    private static final String REDIR_MAIN_CAR = "redirect:/mvc/car/all";
-    private static final String REDIR_ADD_CAR = "redirect:/mvc/car/add";
+    private static final String REDIR_MAIN_CAR = "redirect:/cars";
+    private static final String REDIR_EDIT_CAR = "redirect:/cars/edit";
     Logger LOG = LoggerFactory.getLogger(CarControllerMVC.class);
     private CarService carService;
 
@@ -23,33 +23,33 @@ public class CarControllerMVC {
         this.carService = carService;
     }
 
-    @GetMapping(path = "/all")
+    @GetMapping("")
     public String getAll(Model model){
 
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new Car());
-        return ("cars");
+        return ("cars/cars");
     }
 
-    @GetMapping(path = "/add")
+    @GetMapping(path = "/edit")
     public String getAdd(Model model){
 
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new Car());
-        return ("car-add");
+        return ("cars/cars-edit");
     }
 
     @PostMapping("/add")
     public String addCar(@ModelAttribute Car car){
         carService.addOne(car);
-        return REDIR_ADD_CAR;
+        return REDIR_EDIT_CAR;
     }
 
     @GetMapping("/delete/{id}")
     public String deleteCar(@PathVariable String id){
         carService.deleteById(Long.parseLong(id));
-        return REDIR_MAIN_CAR;
+        return REDIR_EDIT_CAR;
     }
 }

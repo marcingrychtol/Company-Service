@@ -12,11 +12,11 @@ public class TripControllerMVC {
 
     @GetMapping("")
     public String getCallendar(Model model){
-        return "trips";
+        return "trips/trips";
     }
 
     @GetMapping("/day/{id}")
     public String getDay(@PathVariable String id, Model model){
-        return "day";
+        return "trips/day";
     }
 }

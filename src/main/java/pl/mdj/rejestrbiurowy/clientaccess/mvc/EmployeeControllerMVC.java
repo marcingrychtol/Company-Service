@@ -21,6 +21,11 @@ public class EmployeeControllerMVC {
     @GetMapping("")
     public String getEmployees(Model model){
         model.addAttribute("employees", employeeService.getAll());
-        return "employees";
+        return "employees/employees";
+    }
+
+    @GetMapping("/edit")
+    public String editEmployees(Model model){
+        return "employees/employees-edit";
     }
 }
