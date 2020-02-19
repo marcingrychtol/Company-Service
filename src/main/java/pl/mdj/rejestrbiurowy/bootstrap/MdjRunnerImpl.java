@@ -37,7 +37,7 @@ public class MdjRunnerImpl implements MdjRunner {
             car1.setFuel(ECarFuel.BENZYNA);
             car1.setMileage(270253);
             car1.setName("Dacia Dokker");
-            car1.setRegistration("SL 1404");
+            car1.setRegistration("SL 98765");
 
             car2.setCarCategory(ECarCategory.PRIVATE_BIG);
             car2.setFuel(ECarFuel.BENZYNA);
@@ -49,7 +49,7 @@ public class MdjRunnerImpl implements MdjRunner {
             car3.setFuel(ECarFuel.DIESEL);
             car3.setMileage(300000);
             car3.setName("Audi A4");
-            car3.setRegistration("WZ 4569");
+            car3.setRegistration("WZ 6545");
 
             car4.setCarCategory(ECarCategory.COMPANY);
             car4.setFuel(ECarFuel.DIESEL);
@@ -66,35 +66,29 @@ public class MdjRunnerImpl implements MdjRunner {
             Employee employee1 = new Employee();
             Employee employee2 = new Employee();
             Employee employee3 = new Employee();
-            Employee employee4 = new Employee();
             Employee employee5 = new Employee();
 
             employee1.setName("Adam");
-            employee1.setSecondName("Grychtoł");
+            employee1.setSecondName("Adamski");
             employee1.setPhoneNumber("123456789");
-            employee1.setEMail("adamgrychtol@mdj.pl");
+            employee1.setEmail("adam@mdj.pl");
 
             employee2.setName("Wojciech");
-            employee2.setSecondName("Kołodziej");
+            employee2.setSecondName("Cieszyński");
             employee2.setPhoneNumber("123456789");
-            employee2.setEMail("wojciechkolodziej@mdj.pl");
+            employee2.setEmail("wojciech@mdj.pl");
 
             employee3.setName("Marcin");
-            employee3.setSecondName("Grychtoł");
+            employee3.setSecondName("Madagaskar");
             employee3.setPhoneNumber("123456789");
-            employee3.setEMail("marcingrychtol@mdj.pl");
-
-            employee4.setName("Adam");
-            employee4.setSecondName("Broja");
-            employee4.setPhoneNumber("123456789");
-            employee4.setEMail("adambroja@mdj.pl");
+            employee3.setEmail("marcing@mdj.pl");
 
             employee5.setName("Norbert");
-            employee5.setSecondName("Przeliorz");
+            employee5.setSecondName("Bezpośredni");
             employee5.setPhoneNumber("123456789");
-            employee5.setEMail("norbertprzeliorz@mdj.pl");
+            employee5.setEmail("norbert@mdj.pl");
 
-            for (Employee employee : Arrays.asList(employee1, employee2, employee3, employee4, employee5)) {
+            for (Employee employee : Arrays.asList(employee1, employee2, employee3, employee5)) {
                 employeeService.addOne(employee);
 
             }

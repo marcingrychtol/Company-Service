@@ -18,22 +18,22 @@
 
         <tr th:each="car: ${cars}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                <div class="card border-success">
+                <div class="card border-success text-center">
                     <h5 class="card-header bg-light">
                         <td th:text="${car.getId()}"></td>
                         <td th:text="${car.getName()}"></td>
                     </h5>
                     <div class="card-body">
                         <p class="card-text">
-                        <td th:text="${car.getFuel()}"></td>
-                        <br>
-                        <td th:text="${car.getCarCategory()}"></td>
-                        <br>
-                        <td th:text="${car.getMileage()}"></td>
-                        <br>
+<!--                        <td th:text="${car.getFuel()}"></td>-->
+<!--                        <br>-->
+<!--                        <td th:text="${car.getCarCategory()}"></td>-->
+<!--                        <br>-->
+<!--                        <td th:text="${car.getMileage()}"></td>-->
+<!--                        <br>-->
                         <td th:text="${car.getRegistration()}"></td>
                         </p>
-                        <a href="#" class="btn btn-outline-success stretched-link">Rezerwuj</a>
+                        <a href="#" class="btn btn-outline-success stretched-link btn-block">Rezerwuj</a>
                     </div>
                 </div>
             </div>

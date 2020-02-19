@@ -12,19 +12,29 @@
 
 <div class="container">
 
+
     <div class="row">
         <div class="col-12">
-            <form th:action="@{/cars/add}" th:object="${newCar}" method="post">
+            <form th:action="@{/employees/add}" th:object="${newEmployee}" method="post">
                 <div class="form-group">
-                    <label for="carNameInput1">Nazwa pojazdu:</label>
-                    <input type="text" class="form-control" th:field="*{name}" id="carNameInput1">
-                    <small id="carNameHelp1" class="form-text text-muted">Marka, model</small>
+                    <label for="empNameInput1">Imię:</label>
+                    <input type="text" class="form-control" th:field="*{name}" id="empNameInput1">
                 </div>
                 <div class="form-group">
-                    <label for="carRegistrationInput1">Numer rejestracyjny:</label>
-                    <input type="text" class="form-control" th:field="*{registration}" id="carRegistrationInput1">
+                    <label for="empSecondNameInput1">Nazwisko:</label>
+                    <input type="text" class="form-control" th:field="*{secondName}" id="empSecondNameInput1">
                 </div>
-                <button type="submit" class="btn btn-success" value="add new car">Dodaj do bazy</button>
+                <div class="form-group">
+                    <label for="empPhoneInput1">Nr telefonu:</label>
+                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="empPhoneInput1">
+                    <small id="empPhoneHelp1" class="form-text text-muted">+48 123 456 789</small>
+                </div>
+                <div class="form-group">
+                    <label for="empMailInput1">Adres e-mail:</label>
+                    <input type="text" class="form-control" th:field="*{email}" id="empMailInput1">
+                    <small id="empNameHelp1" class="form-text text-muted">To jest tylko testowa podpowiedź</small>
+                </div>
+                <button type="submit" class="btn btn-success" value="add new employee">Dociep hajera do bazy</button>
             </form>
         </div>
     </div>
@@ -32,29 +42,25 @@
 
     <div class="row">
 
-        <tr th:each="car: ${cars}">
+        <tr th:each="emp: ${employees}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                <div class="card">
-                    <h5 class="card-header bg-primary">
-                        <td th:text="${car.getId()}"></td>
-                        <td th:text="${car.getName()}"></td>
+                <div class="card border-danger text-center">
+                    <h5 class="card-header bg-danger text-light">
+                        <td th:text="${emp.getId()}"></td>
+                        <td th:text="${emp.getName()}"></td>
+                        <td th:text="${emp.getSecondName()}"></td>
                     </h5>
                     <div class="card-body bg-light">
                         <p class="card-text">
-                        <td th:text="${car.getFuel()}"></td>
+                        <td th:text="${emp.getEmail()}"></td>
                         <br>
-                        <td th:text="${car.getCarCategory()}"></td>
+                        <td th:text="${emp.getPhoneNumber()}"></td>
                         <br>
-                        <td th:text="${car.getMileage()}"></td>
-                        <br>
-                        <td th:text="${car.getRegistration()}"></td>
-                        </p>
-                        <a href="#" class="btn btn-secondary">Edytuj</a>
-                        <a th:href="@{/cars/delete/{id}(id=${car.getId()})}" class="btn btn-danger">Usuń</a>
+                        <a href="#" class="btn btn-outline-secondary btn-lg btn-block">  Edytuj  </a>
+                        <a th:href="@{/employees/delete/{id}(id=${emp.getId()})}" class="btn btn-outline-danger btn-sm btn-block">Usuń</a>
                     </div>
                 </div>
             </div>
-        </tr>
     </div>
 
 </div>

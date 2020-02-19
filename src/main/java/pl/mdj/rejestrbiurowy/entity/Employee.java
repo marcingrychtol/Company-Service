@@ -21,7 +21,7 @@ public class Employee extends MyEntity {
 //    @Enumerated(EnumType.STRING)
 //    private EEmployeeCategory employeeCategory;
     private String phoneNumber;
-    private String eMail;
+    private String email;
 //    private BigDecimal salary;
 
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
