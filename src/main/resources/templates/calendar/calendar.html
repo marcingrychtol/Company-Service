@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="fragments/bootstrap-styles"></div>
+    <title>MDJ rezerwator - dzień</title>
+</head>
+<body>
+<div th:replace="fragments/nav-bar"></div>
+
+<div class="container">
+
+    <div class="row">
+        <tr th:each="day: ${dateList}">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
+                <div class="shadow card border-warning text-center">
+                    <h5 class="card-header bg-light">
+                        <td th:text="${day.getDayOfWeek()}"></td>
+                    </h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                        <h1>
+                            <td th:text="${day.getDayOfMonth()}"></td>
+                        </h1>
+                        <td th:text="${day.getMonth()}"></td>
+                        <br>
+                        <a th:href="@{/calendar/pick}"
+                           class="btn btn-outline-warning stretched-link btn-block">Wybierz</a>
+                    </div>
+                </div>
+            </div>
+        </tr>
+    </div>
+</div>
+
+
+<div th:replace="fragments/bootstrap-scripts"></div>
+</body>
+</html>

@@ -11,16 +11,15 @@
 
 <div th:replace="fragments/nav-bar"></div>
 
-
 <div class="container">
 
     <div class="row">
 
         <tr th:each="car: ${cars}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                <div class="card border-success text-center">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
+                <div class="shadow card border-success text-center">
                     <h5 class="card-header bg-light">
-                        <td th:text="${car.getId()}"></td>
+<!--                        <td th:text="${car.getId()}"></td>-->
                         <td th:text="${car.getName()}"></td>
                     </h5>
                     <div class="card-body">
@@ -33,7 +32,7 @@
 <!--                        <br>-->
                         <td th:text="${car.getRegistration()}"></td>
                         </p>
-                        <a href="#" class="btn btn-outline-success stretched-link btn-block">Rezerwuj</a>
+                        <a th:href="@{/}" class="btn btn-outline-success stretched-link btn-block">Rezerwuj</a>
                     </div>
                 </div>
             </div>

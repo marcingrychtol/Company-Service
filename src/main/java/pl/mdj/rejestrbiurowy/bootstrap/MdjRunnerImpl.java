@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.mdj.rejestrbiurowy.entity.Car;
 import pl.mdj.rejestrbiurowy.entity.Employee;
+import pl.mdj.rejestrbiurowy.entity.Trip;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarCategory;
 import pl.mdj.rejestrbiurowy.entity.enums.ECarFuel;
 import pl.mdj.rejestrbiurowy.service.interfaces.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 
@@ -25,6 +27,9 @@ public class MdjRunnerImpl implements MdjRunner {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private TripService tripService;
 
     public void run() {
         {
@@ -70,22 +75,22 @@ public class MdjRunnerImpl implements MdjRunner {
 
             employee1.setName("Adam");
             employee1.setSecondName("Adamski");
-            employee1.setPhoneNumber("123456789");
+            employee1.setPhoneNumber("+48 123 456 789");
             employee1.setEmail("adam@mdj.pl");
 
             employee2.setName("Wojciech");
             employee2.setSecondName("Cieszyński");
-            employee2.setPhoneNumber("123456789");
+            employee2.setPhoneNumber("+48 123 456 789");
             employee2.setEmail("wojciech@mdj.pl");
 
             employee3.setName("Marcin");
             employee3.setSecondName("Madagaskar");
-            employee3.setPhoneNumber("123456789");
+            employee3.setPhoneNumber("+48 123 456 789");
             employee3.setEmail("marcing@mdj.pl");
 
             employee5.setName("Norbert");
             employee5.setSecondName("Bezpośredni");
-            employee5.setPhoneNumber("123456789");
+            employee5.setPhoneNumber("+48 123 456 789");
             employee5.setEmail("norbert@mdj.pl");
 
             for (Employee employee : Arrays.asList(employee1, employee2, employee3, employee5)) {
@@ -93,5 +98,32 @@ public class MdjRunnerImpl implements MdjRunner {
 
             }
         } // EMPLOYEES
+
+        {
+            Trip trip1 = new Trip();
+            Trip trip2 = new Trip();
+            Trip trip3 = new Trip();
+
+            trip1.setCar(carService.getOne((long) 1));
+            trip1.setEmployee(employeeService.getOne((long) 5));
+            trip1.setDate(LocalDate.now());
+
+            trip2.setCar(carService.getOne((long) 2));
+            trip2.setEmployee(employeeService.getOne((long) 6));
+            trip2.setDate(LocalDate.now().plusDays(1));
+
+            trip3.setCar(carService.getOne((long) 3));
+            trip3.setEmployee(employeeService.getOne((long) 7));
+            trip3.setDate(LocalDate.now().plusDays(2));
+
+            for (Trip trip :
+                    Arrays.asList(trip1, trip2, trip3)) {
+                tripService.addOne(trip);
+            }
+            for (Trip trip :
+                    Arrays.asList(trip1, trip2, trip3)) {
+                tripService.addOne(trip);
+            }
+        } // TRIPS
     }
 }

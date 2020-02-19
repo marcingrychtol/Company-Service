@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <div th:replace="fragments/bootstrap-styles"></div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <title>MDJ rezerwator</title>
 
 </head>
@@ -10,37 +14,85 @@
 <div th:replace="fragments/nav-bar"></div>
 
 <div class="container">
-    <div class="row">
+    <div class="alert alert-secondary alert-dismissible fade show mt-2" role="alert">
+        <h1 class="display-4">Łobsztaluj se auto!</h1>
+<!--        <p class="lead">Klikając na trzy poniższe karty, wybierz dzień, osobę, oraz pojazd do zarezerwowania.</p>-->
+        <!--        <hr class="my-4">-->
+        <!--        <p>W razie braku możliwości rezerwacji, przejdź do części Rajzy, w celu rozwiązania konfliktów</p>-->
+    </div>
 
-        <div class="col-12 p-1">
-            <div class="card text-center">
+    <div class="container">
+        <form th:action="@{/trips/add}" th:object="${newTrip}" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-4" th:field="*{date}">
+                    <input class="form-control form-control-lg" id="datepicker" />
+                    <script>
+                        $('#datepicker').datepicker({
+                            uiLibrary: 'bootstrap4'
+                        });
+                    </script>
+                </div>
+                <div class="form-group col-md-4">
+                    <select class="form-control form-control-lg" th:field="*{carId}">
+                        <option value="" >pojazd</option>
+                        <option value="" disabled="disabled">--------</option>
+                        <option th:each="car : ${cars}" th:value="${car.getId()}" th:text="${car.getName()} + ' - ' + ${car.getRegistration()}">/option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <select class="form-control form-control-lg" th:field="*{employeeId}">
+                        <option value="0">kierowca</option>
+                        <option value="" disabled="disabled">--------</option>
+                        <option th:each="emp : ${employees}" th:value="${emp.getId()}" th:text="${emp.getName()} + ' ' + ${emp.getSecondName()}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg btn-block mt-3">Ciś knefel a łobsztaluj</button>
 
             </div>
-        </div>
+        </form>
 
-        <div class="col-6 p-1">
-            <a th:href="@{/cars}">
-                <div class="card text-center">
-                    <div class="card-body bg-light">
-                        <p class="card-text">Auta</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-6 p-1">
-            <a th:href="@{/trips}">
-            <div class="card text-center">
-                <div class="card-body bg-light">
-                    <p class="card-text">Kalyndorz</p>
-                </div>
-            </div>
-            </a>
-        </div>
+        <!--        <div class="card-deck" th:action="@{/trips/}" >-->
+        <!--            <div class="shadow card border-primary text-center">-->
+        <!--&lt;!&ndash;                <img src="..." class="card-img-top" alt="...">&ndash;&gt;-->
+        <!--                <div class="card-header bg-light">-->
+        <!--                    <h5 class="card-title">Dzień</h5>-->
+        <!--                </div>-->
+        <!--                <div class="card-body">-->
+        <!--                    <p class="card-text">Nie wybrano</p>-->
+        <!--                </div>-->
+        <!--                <div class="card-footer">-->
+        <!--                    <a th:href="@{/calendar}" class="btn btn-light stretched-link btn-block btn-sm" >Ustaw</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="shadow card border-primary text-center">-->
+        <!--&lt;!&ndash;                <img src="..." class="card-img-top" alt="...">&ndash;&gt;-->
+        <!--                <div class="card-header bg-light">-->
+        <!--                    <h5 class="card-title">Pojazd</h5>-->
+        <!--                </div>-->
+        <!--                <div class="card-body">-->
+        <!--                    <p class="card-text">Nie wybrano</p>-->
+        <!--                </div>-->
+        <!--                <div class="card-footer">-->
+        <!--                    <a th:href="@{/cars}" class="btn btn-light stretched-link btn-block btn-sm">Ustaw</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="shadow card border-primary text-center">-->
+        <!--&lt;!&ndash;                <img src="..." class="card-img-top" alt="...">&ndash;&gt;-->
+        <!--                <div class="card-header bg-light">-->
+        <!--                    <h5 class="card-title">Osoba</h5>-->
+        <!--                </div>-->
+        <!--                <div class="card-body">-->
+        <!--                    <p class="card-text">Nie wybrano</p>-->
+        <!--                </div>-->
+        <!--                <div class="card-footer">-->
+        <!--                    <a th:href="@{/employees}" class="btn btn-light stretched-link btn-block btn-sm">Ustaw</a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
 
     </div>
-</div>
 
+</div>
 
 <div th:replace="fragments/bootstrap-scripts"></div>
 </body>

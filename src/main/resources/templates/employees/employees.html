@@ -14,10 +14,10 @@
 
     <div class="row">
         <tr th:each="employee: ${employees}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="card border-danger text-center">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
+                    <div class="shadow card border-danger text-center">
                         <h5 class="card-header bg-light">
-                            <td th:text="${employee.getId()}"></td>
+<!--                            <td th:text="${employee.getId()}"></td>-->
                             <td th:text="${employee.getName()}"></td>
                             <td th:text="${employee.getSecondName()}"></td>
                         </h5>
@@ -27,9 +27,14 @@
                             <br>
                             <td th:text="${employee.getPhoneNumber()}"></td>
                             <br>
-                            <a href="#" class="btn btn-outline-danger stretched-link btn-block">Logowanie</a>
+                            <a th:href="@{/}" class="btn btn-outline-danger stretched-link btn-block">Wybierz</a>
                         </div>
                     </div>
+<!--                    <div class="card border-light text-center">-->
+<!--                        <div class="card-footer">-->
+<!--                            <a href="#" class="btn btn-light stretched-link btn-block btn-sm">Pokaż rezerwacje</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
             </div>
         </tr>
     </div>

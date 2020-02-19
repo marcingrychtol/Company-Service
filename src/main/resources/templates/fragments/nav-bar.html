@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" xmlns:th="http://www.w3.org/1999/xhtml">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success" xmlns:th="http://www.thymeleaf.org">
     <div class="container">
         <a class="navbar-brand" th:href="@{/}">ŁOBSZTALATOR</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -18,7 +18,10 @@
                     <a class="nav-link" th:href="@{/employees}">Hajery </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/trips}">Kalyndorz </a>
+                    <a class="nav-link" th:href="@{/calendar}">Kalyndorz </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/trips}">Rajzy </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -39,7 +42,7 @@
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <button class="btn btn-outline-success bg-light my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
     </div>

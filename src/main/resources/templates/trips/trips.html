@@ -8,7 +8,39 @@
 <body>
 <div th:replace="fragments/nav-bar"></div>
 
+<div class="container">
+    <div class="row">
 
+        <tr th:each="trip: ${trips}">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-1 mb-1">
+                <div class="shadow card border-success text-center">
+                    <h5 class="card-header bg-light">
+                        <td th:text="${trip.getEmployee().getName()}"></td>
+                        <br>
+                        <td th:text="${trip.getEmployee().getSecondName()}"></td>
+                    </h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                        <td th:text="${trip.getDate().getDayOfWeek()}"></td>
+                        <br>
+                        <td th:text="${trip.getDate().getDayOfMonth()}"></td>
+                        <br>
+                        <td th:text="${trip.getDate().getMonth()}"></td>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                        <td th:text="${trip.getCar().getName()}"></td>
+                        <br>
+                        <td th:text="${trip.getCar().getRegistration()}"></td>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </tr>
+    </div>
+
+</div>
 
 <div th:replace="fragments/bootstrap-scripts"></div>
 </body>
