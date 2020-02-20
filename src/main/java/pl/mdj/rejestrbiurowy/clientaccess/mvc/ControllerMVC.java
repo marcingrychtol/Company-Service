@@ -43,4 +43,10 @@ public class ControllerMVC implements BasicController {
         model.addAttribute("cars", carService.getAll());
         return "index";
     }
+
+    @GetMapping("/datepicker")
+    public String getDatepicker(){
+        return "datepicker";
+    }
+
 }
