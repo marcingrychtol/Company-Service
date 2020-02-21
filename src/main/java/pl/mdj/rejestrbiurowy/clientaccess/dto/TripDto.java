@@ -13,6 +13,5 @@ import java.util.Date;
 public class TripDto {
     private Long carId;
     private Long employeeId;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date date;
 }

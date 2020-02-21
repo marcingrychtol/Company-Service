@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <div th:replace="fragments/bootstrap-styles"></div>
-    <title>MDJ rezerwator</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 </head>
@@ -19,86 +18,57 @@
     </div>
 
     <div class="container">
+
         <form th:action="@{/trips/add}" th:object="${newTrip}" method="post">
-            <div class="form-row">
-                <!--                <div class="form-group col-md-4" th:field="*{date}">-->
-                <!--                    <input type="date" class="form-control form-control-lg" id="datepicker"/>-->
-                <!--                    <script>-->
-                <!--                        $('#datepicker').datepicker({-->
-                <!--                            uiLibrary: 'bootstrap4'-->
-                <!--                        });-->
-                <!--                    </script>-->
-                <!--                </div>-->
-                <div class="form-group col-md-4">
-                    <input id="startDate" width="276" />
-                    <input id="endDate" width="276" />
-                </div>
-<!--                <div class="input-daterange input-group col-md-4" id="datepicker">-->
-<!--                    <input type="text" class="input-sm form-control" name="start"/>-->
-<!--                    <span class="input-group-addon">to</span>-->
-<!--                    <input type="text" class="input-sm form-control" name="end"/>-->
 
-<!--                </div>-->
+                <div class="card-deck" >
+                    <div class="shadow card border-warning text-center">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title">Dzień</h5>
+                        </div>
+                        <div class="card-body">
+                            Kiedy wezna: <input id="startDate" width="276" th:field="*{date}" />
+                            Kiedy łoddom: <input id="endDate" width="276" />
+                        </div>
+<!--                        <div class="card-footer">-->
+<!--                            <button type="submit" th:href="@{/employees}" class="btn btn-light btn-block btn-sm">Ustaw</button>-->
+<!--                        </div>-->
 
-                <div class="form-group col-md-4">
-                    <select class="form-control form-control-lg" th:field="*{carId}">
-                        <option value="">pojazd</option>
-                        <option value="" disabled="disabled">--------</option>
-                        <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                th:text="${car.getName()} + ' - ' + ${car.getRegistration()}">/option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <select class="custom-select" size="4" th:field="*{employeeId}">
-                        <option value="0">kierowca</option>
-                        <option value="" disabled="disabled">--------</option>
-                        <option th:each="emp : ${employees}" th:value="${emp.getId()}"
-                                th:text="${emp.getName()} + ' ' + ${emp.getSecondName()}"></option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-success btn-lg btn-block mt-3">Ciś knefel a łobsztaluj</button>
+                    </div>
+                    <div class="shadow card border-success text-center">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title">Pojazd</h5>
+                        </div>
+                        <div class="card-body">
+                            <select class="custom-select" size="6" th:field="*{carId}">
+<!--                                <option value="">pojazd</option>-->
+<!--                                <option value="" disabled="disabled">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
+                                <option th:each="car : ${cars}" th:value="${car.getId()}"
+                                        th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">/option>
+                            </select>
+                        </div>
+<!--                        <div class="card-footer">-->
+<!--                            <button type="submit" th:href="@{/employees}" class="btn btn-light btn-block btn-sm">Ustaw</button>-->
+<!--                        </div>-->
+                    </div>
+                    <div class="shadow card border-danger text-center">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title">Osoba</h5>
+                        </div>
+                        <div class="card-body">
+                            <select class="custom-select" size="6" th:field="*{employeeId}">
+                                <option th:each="emp : ${employees}" th:value="${emp.getId()}"
+                                        th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}"></option>
+                            </select>
+                        </div>
+<!--                        <div class="card-footer">-->
+<!--                            <button type="submit" th:href="@{/employees}" class="btn btn-light btn-block btn-sm">Ustaw</button>-->
+<!--                        </div>-->
 
-            </div>
+                    </div>
+                </div>
+            <button type="submit" th:href="@{/employees}" class="shadow btn btn-success btn-block btn-lg mt-3">Ciś knefel, a łobsztaluj!</button>
         </form>
-
-        <!--        <div class="card-deck" th:action="@{/trips/}" >-->
-        <!--            <div class="shadow card border-primary text-center">-->
-        <!--&lt;!&ndash;                <img src="..." class="card-img-top" alt="...">&ndash;&gt;-->
-        <!--                <div class="card-header bg-light">-->
-        <!--                    <h5 class="card-title">Dzień</h5>-->
-        <!--                </div>-->
-        <!--                <div class="card-body">-->
-        <!--                    <p class="card-text">Nie wybrano</p>-->
-        <!--                </div>-->
-        <!--                <div class="card-footer">-->
-        <!--                    <a th:href="@{/calendar}" class="btn btn-light stretched-link btn-block btn-sm" >Ustaw</a>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="shadow card border-primary text-center">-->
-        <!--&lt;!&ndash;                <img src="..." class="card-img-top" alt="...">&ndash;&gt;-->
-        <!--                <div class="card-header bg-light">-->
-        <!--                    <h5 class="card-title">Pojazd</h5>-->
-        <!--                </div>-->
-        <!--                <div class="card-body">-->
-        <!--                    <p class="card-text">Nie wybrano</p>-->
-        <!--                </div>-->
-        <!--                <div class="card-footer">-->
-        <!--                    <a th:href="@{/cars}" class="btn btn-light stretched-link btn-block btn-sm">Ustaw</a>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="shadow card border-primary text-center">-->
-        <!--&lt;!&ndash;                <img src="..." class="card-img-top" alt="...">&ndash;&gt;-->
-        <!--                <div class="card-header bg-light">-->
-        <!--                    <h5 class="card-title">Osoba</h5>-->
-        <!--                </div>-->
-        <!--                <div class="card-body">-->
-        <!--                    <p class="card-text">Nie wybrano</p>-->
-        <!--                </div>-->
-        <!--                <div class="card-footer">-->
-        <!--                    <a th:href="@{/employees}" class="btn btn-light stretched-link btn-block btn-sm">Ustaw</a>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
 
     </div>
 

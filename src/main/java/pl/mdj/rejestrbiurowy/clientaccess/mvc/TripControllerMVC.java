@@ -17,6 +17,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Controller
 @RequestMapping(path = "trips")
@@ -47,7 +48,11 @@ public class TripControllerMVC {
         trip.setCar(carService.getOne(tripDto.getCarId()));
         trip.setEmployee(employeeService.getOne(tripDto.getEmployeeId()));
         LOG.warn(tripDto.getDate().toString());
-//        trip.setDate(LocalDate.of(tripDto.getDate()));
+        trip.setDate(tripDto
+                .getDate()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate());
         tripService.addOne(trip);
         return "redirect:/trips/";
     }
