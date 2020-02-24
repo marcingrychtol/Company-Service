@@ -10,8 +10,9 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripDto {
+public class TripDto implements MyDto{
     private Long carId;
     private Long employeeId;
-    private Date date;
+    private Date startingDate;
+    private Date endingDate;
 }

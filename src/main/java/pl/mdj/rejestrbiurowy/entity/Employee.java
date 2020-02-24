@@ -2,13 +2,9 @@ package pl.mdj.rejestrbiurowy.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import pl.mdj.rejestrbiurowy.entity.enums.EEmployeeCategory;
 import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data

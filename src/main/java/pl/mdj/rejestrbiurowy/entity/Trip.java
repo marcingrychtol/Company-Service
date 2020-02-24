@@ -7,6 +7,7 @@ import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -25,7 +26,8 @@ public class Trip extends MyEntity {
     @ManyToOne
     @JoinColumn
     private Location location;
-    private LocalDate date;
+    private LocalDateTime startingDateTime;
+    private LocalDateTime endingDateTime;
     private String description;
     private Long mileage;
 /*

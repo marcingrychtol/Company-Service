@@ -10,7 +10,7 @@ import pl.mdj.rejestrbiurowy.bootstrap.MdjRunner;
 @NoArgsConstructor
 public class MDJRcpApplication {
 
-    private static MdjRunner mdjRunner;
+    private static MdjRunner mdjRunner; // TODO: #3
 
     @Autowired
     public MDJRcpApplication(MdjRunner mdjRunner) {

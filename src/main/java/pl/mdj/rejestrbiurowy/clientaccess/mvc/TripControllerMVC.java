@@ -1,39 +1,25 @@
 package pl.mdj.rejestrbiurowy.clientaccess.mvc;
 
-import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.clientaccess.dto.TripDto;
-import pl.mdj.rejestrbiurowy.entity.Trip;
-import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
-import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
+import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 @Controller
 @RequestMapping(path = "trips")
 public class TripControllerMVC {
 
-    private static Logger LOG = LoggerFactory.getLogger(TripControllerMVC.class);
-
     TripService tripService;
-    CarService carService;
-    EmployeeService employeeService;
+    TripMapper tripMapper;
 
     @Autowired
-    public TripControllerMVC(TripService tripService, CarService carService, EmployeeService employeeService) {
+    public TripControllerMVC(TripService tripService, TripMapper tripMapper) {
         this.tripService = tripService;
-        this.carService = carService;
-        this.employeeService = employeeService;
+        this.tripMapper = tripMapper;
     }
 
     @GetMapping("")
@@ -44,17 +30,20 @@ public class TripControllerMVC {
 
     @PostMapping("/add")
     public String addTrip(@ModelAttribute TripDto tripDto){
-        Trip trip = new Trip();
-        trip.setCar(carService.getOne(tripDto.getCarId()));
-        trip.setEmployee(employeeService.getOne(tripDto.getEmployeeId()));
-        LOG.warn(tripDto.getDate().toString());
-        trip.setDate(tripDto
-                .getDate()
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate());
-        tripService.addOne(trip);
+        tripService.addOne(tripMapper.mapToEntity(tripDto));
         return "redirect:/trips/";
+    }
+
+    @GetMapping("/edit")
+    public String editTrips(Model model){
+        model.addAttribute("trips", tripService.getAll());
+        return "trips/trips-edit";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String DeleteTrip(@PathVariable Long id){
+        tripService.deleteById(id);
+        return "redirect:/trips/edit";
     }
 
 

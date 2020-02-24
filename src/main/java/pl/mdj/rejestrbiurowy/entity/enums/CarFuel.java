@@ -1,5 +1,5 @@
 package pl.mdj.rejestrbiurowy.entity.enums;
 
-public enum ECarFuel {
+public enum CarFuel {
     BENZYNA, DIESEL
 }

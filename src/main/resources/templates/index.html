@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -21,52 +22,40 @@
 
         <form th:action="@{/trips/add}" th:object="${newTrip}" method="post">
 
-                <div class="card-deck" >
-                    <div class="shadow card border-warning text-center">
-                        <div class="card-header bg-light">
-                            <h5 class="card-title">Dzień</h5>
-                        </div>
-                        <div class="card-body">
-                            Kiedy wezna: <input id="startDate" width="276" th:field="*{date}" />
-                            Kiedy łoddom: <input id="endDate" width="276" />
-                        </div>
-<!--                        <div class="card-footer">-->
-<!--                            <button type="submit" th:href="@{/employees}" class="btn btn-light btn-block btn-sm">Ustaw</button>-->
-<!--                        </div>-->
-
+            <div class="card-deck" >
+                <div class="shadow card border-warning text-center">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title">Dzień</h5>
                     </div>
-                    <div class="shadow card border-success text-center">
-                        <div class="card-header bg-light">
-                            <h5 class="card-title">Pojazd</h5>
-                        </div>
-                        <div class="card-body">
-                            <select class="custom-select" size="6" th:field="*{carId}">
-<!--                                <option value="">pojazd</option>-->
-<!--                                <option value="" disabled="disabled">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
-                                <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                        th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">/option>
-                            </select>
-                        </div>
-<!--                        <div class="card-footer">-->
-<!--                            <button type="submit" th:href="@{/employees}" class="btn btn-light btn-block btn-sm">Ustaw</button>-->
-<!--                        </div>-->
+                    <div class="card-body">
+                        Kiedy wezna: <input id="startDate" width="276"  th:field="*{startingDate}"/>
+                        Kiedy łoddom: <input id="endDate" width="276" th:field="*{endingDate}"/>
                     </div>
-                    <div class="shadow card border-danger text-center">
-                        <div class="card-header bg-light">
-                            <h5 class="card-title">Osoba</h5>
-                        </div>
-                        <div class="card-body">
-                            <select class="custom-select" size="6" th:field="*{employeeId}">
-                                <option th:each="emp : ${employees}" th:value="${emp.getId()}"
-                                        th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}"></option>
-                            </select>
-                        </div>
-<!--                        <div class="card-footer">-->
-<!--                            <button type="submit" th:href="@{/employees}" class="btn btn-light btn-block btn-sm">Ustaw</button>-->
-<!--                        </div>-->
 
+                </div>
+                <div class="shadow card border-success text-center">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title">Pojazd</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="custom-select" size="6" th:field="*{carId}">
+                            <option th:each="car : ${cars}" th:value="${car.getId()}"
+                                    th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">/option>
+                        </select>
                     </div>
                 </div>
+                <div class="shadow card border-danger text-center">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title">Osoba</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="custom-select" size="6" th:field="*{employeeId}">
+                            <option th:each="emp : ${employees}" th:value="${emp.getId()}"
+                                    th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <button type="submit" th:href="@{/employees}" class="shadow btn btn-success btn-block btn-lg mt-3">Ciś knefel, a łobsztaluj!</button>
         </form>
 

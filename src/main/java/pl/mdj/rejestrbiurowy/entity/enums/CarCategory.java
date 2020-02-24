@@ -1,5 +1,5 @@
 package pl.mdj.rejestrbiurowy.entity.enums;
 
-public enum ECarCategory {
+public enum CarCategory {
     PRIVATE_SMALL,PRIVATE_BIG,COMPANY
 }

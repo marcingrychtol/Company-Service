@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
-    @Query(value = "select s from Trip s where function('DATE_TRUNC','day',s.date)=?1")
+    @Query(value = "select s from Trip s where function('DATE_TRUNC','day',s.startingDateTime)=?1")
     List<Trip> findAllByDate(LocalDate startDateTime);
 
 //    @EntityGraph(value = "Trip")

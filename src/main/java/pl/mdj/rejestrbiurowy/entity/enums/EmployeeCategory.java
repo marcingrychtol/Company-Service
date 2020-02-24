@@ -1,5 +1,5 @@
 package pl.mdj.rejestrbiurowy.entity.enums;
 
-public enum EEmployeeCategory {
+public enum EmployeeCategory {
     PROGRAMMER, OFFICE, WORKER, MANAGER
 }

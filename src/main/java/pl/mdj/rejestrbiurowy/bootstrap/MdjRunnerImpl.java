@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import pl.mdj.rejestrbiurowy.entity.Car;
 import pl.mdj.rejestrbiurowy.entity.Employee;
 import pl.mdj.rejestrbiurowy.entity.Trip;
-import pl.mdj.rejestrbiurowy.entity.enums.ECarCategory;
-import pl.mdj.rejestrbiurowy.entity.enums.ECarFuel;
+import pl.mdj.rejestrbiurowy.entity.enums.CarCategory;
+import pl.mdj.rejestrbiurowy.entity.enums.CarFuel;
 import pl.mdj.rejestrbiurowy.service.interfaces.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 
@@ -38,26 +38,26 @@ public class MdjRunnerImpl implements MdjRunner {
             Car car3 = new Car();
             Car car4 = new Car();
 
-            car1.setCarCategory(ECarCategory.COMPANY);
-            car1.setFuel(ECarFuel.BENZYNA);
+            car1.setCarCategory(CarCategory.COMPANY);
+            car1.setFuel(CarFuel.BENZYNA);
             car1.setMileage(270253);
             car1.setName("Dacia Dokker");
             car1.setRegistration("SL 98765");
 
-            car2.setCarCategory(ECarCategory.PRIVATE_BIG);
-            car2.setFuel(ECarFuel.BENZYNA);
+            car2.setCarCategory(CarCategory.PRIVATE_BIG);
+            car2.setFuel(CarFuel.BENZYNA);
             car2.setMileage(30000);
             car2.setName("Skoda Octavia");
             car2.setRegistration("NN 8524");
 
-            car3.setCarCategory(ECarCategory.PRIVATE_SMALL);
-            car3.setFuel(ECarFuel.DIESEL);
+            car3.setCarCategory(CarCategory.PRIVATE_SMALL);
+            car3.setFuel(CarFuel.DIESEL);
             car3.setMileage(300000);
             car3.setName("Audi A4");
             car3.setRegistration("WZ 6545");
 
-            car4.setCarCategory(ECarCategory.COMPANY);
-            car4.setFuel(ECarFuel.DIESEL);
+            car4.setCarCategory(CarCategory.COMPANY);
+            car4.setFuel(CarFuel.DIESEL);
             car4.setMileage(180500);
             car4.setName("VW LT");
             car4.setRegistration("KT 7777");
@@ -106,15 +106,18 @@ public class MdjRunnerImpl implements MdjRunner {
 
             trip1.setCar(carService.getOne((long) 1));
             trip1.setEmployee(employeeService.getOne((long) 5));
-            trip1.setDate(LocalDate.now());
+            trip1.setStartingDateTime(LocalDateTime.now());
+            trip1.setEndingDateTime(LocalDateTime.now().plusHours(1));
 
             trip2.setCar(carService.getOne((long) 2));
             trip2.setEmployee(employeeService.getOne((long) 6));
-            trip2.setDate(LocalDate.now().plusDays(1));
+            trip2.setStartingDateTime(LocalDateTime.now().plusHours(2));
+            trip2.setEndingDateTime(LocalDateTime.now().plusHours(4));
 
             trip3.setCar(carService.getOne((long) 3));
             trip3.setEmployee(employeeService.getOne((long) 7));
-            trip3.setDate(LocalDate.now().plusDays(2));
+            trip3.setStartingDateTime(LocalDateTime.now().plusHours(5));
+            trip3.setEndingDateTime(LocalDateTime.now().plusHours(9));
 
             for (Trip trip :
                     Arrays.asList(trip1, trip2, trip3)) {
