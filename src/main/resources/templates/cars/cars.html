@@ -15,7 +15,7 @@
 
         <tr th:each="car: ${cars}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
-                <div class="shadow card border-success text-center">
+                <div class="shadow card border-success text-center rounded-0">
                     <h5 class="card-header bg-light">
 <!--                        <td th:text="${car.getId()}"></td>-->
                         <td th:text="${car.getName()}"></td>
@@ -30,7 +30,7 @@
 <!--                        <br>-->
                         <td th:text="${car.getRegistration()}"></td>
                         </p>
-                        <a th:href="@{/}" class="btn btn-outline-success stretched-link btn-block">Rezerwuj</a>
+                        <a th:href="@{/}" class="btn btn-outline-success stretched-link btn-block rounded-0">Rezerwuj</a>
                     </div>
                 </div>
             </div>
