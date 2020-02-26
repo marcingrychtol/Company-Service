@@ -1,7 +1,7 @@
 package pl.mdj.rejestrbiurowy.service.mappers;
 
 import pl.mdj.rejestrbiurowy.clientaccess.dto.MyDto;
-import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
+import pl.mdj.rejestrbiurowy.entity.MyEntity;
 
 import java.util.List;
 

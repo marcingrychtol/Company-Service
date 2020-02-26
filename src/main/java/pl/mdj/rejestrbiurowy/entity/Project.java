@@ -1,17 +1,16 @@
 package pl.mdj.rejestrbiurowy.entity;
 
 import lombok.*;
-import pl.mdj.rejestrbiurowy.entity.interfaces.MyEntity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @NoArgsConstructor
-public class Project extends MyEntity {
-
+public class Project implements MyEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
