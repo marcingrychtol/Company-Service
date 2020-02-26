@@ -10,11 +10,11 @@ public interface BasicMapper<E extends MyEntity, D extends MyDto> {
     List<D> mapToDto(List<E> inputEntityList);
     E mapToEntity(D inputDto);
     List<E> mapToEntity(List<D> inputDtoList);
-    /*
-    default List<D> mapToDto(List<E> inputEntityList, ID id){
-        return inputEntityList.stream()
-                .map(o -> mapToDto(o, o.getId()))
-                .collect(Collectors.toList());
-    }
-    */
+
+//    default List<D> mapToDto(List<E> inputEntityList){
+//        return inputEntityList.stream()
+//                .map(o -> mapToDto(o))
+//                .collect(Collectors.toList());
+//    }
+
 }

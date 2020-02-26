@@ -107,17 +107,17 @@ public class MdjRunnerImpl implements MdjRunner {
             trip1.setCar(carService.getOne((long) 1));
             trip1.setEmployee(employeeService.getOne((long) 5));
             trip1.setStartingDateTime(LocalDateTime.now());
-            trip1.setEndingDateTime(LocalDateTime.now().plusHours(1));
+            trip1.setEndingDateTime(LocalDateTime.now().plusDays(1));
 
             trip2.setCar(carService.getOne((long) 2));
             trip2.setEmployee(employeeService.getOne((long) 6));
-            trip2.setStartingDateTime(LocalDateTime.now().plusHours(2));
-            trip2.setEndingDateTime(LocalDateTime.now().plusHours(4));
+            trip2.setStartingDateTime(LocalDateTime.now().plusDays(2));
+            trip2.setEndingDateTime(LocalDateTime.now().plusDays(4));
 
             trip3.setCar(carService.getOne((long) 3));
             trip3.setEmployee(employeeService.getOne((long) 7));
-            trip3.setStartingDateTime(LocalDateTime.now().plusHours(5));
-            trip3.setEndingDateTime(LocalDateTime.now().plusHours(9));
+            trip3.setStartingDateTime(LocalDateTime.now().plusDays(5));
+            trip3.setEndingDateTime(LocalDateTime.now().plusDays(9));
 
             for (Trip trip :
                     Arrays.asList(trip1, trip2, trip3)) {

@@ -12,41 +12,30 @@
 
         <tr th:each="trip: ${trips}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-1 mb-1">
-                <div class="shadow card border-success text-center">
+                <div class="shadow card border-success text-center rounded-0">
                     <h5 class="card-header bg-light">
-                        <td th:text="${trip.getEmployee().getName()}"></td>
-                        <br>
-                        <td th:text="${trip.getEmployee().getSecondName()}"></td>
-                    </h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                        <td th:text="${trip.getStartingDateTime().getDayOfWeek()}"></td>
-                        <br>
-                        <td th:text="${trip.getStartingDateTime().getDayOfMonth()}"></td>
-                        <br>
-                        <td th:text="${trip.getStartingDateTime().getMonth()}"></td>
-                        <br>
-                        <td th:text="${trip.getStartingDateTime().getHour()}"></td>
-                        :<td th:text="${trip.getStartingDateTime().getMinute()}"></td>
-                        </p>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
-                        <td th:text="${trip.getEndingDateTime().getDayOfWeek()}"></td>
-                        <br>
-                        <td th:text="${trip.getEndingDateTime().getDayOfMonth()}"></td>
-                        <br>
-                        <td th:text="${trip.getEndingDateTime().getMonth()}"></td>
-                        <br>
-                        <td th:text="${trip.getEndingDateTime().getHour()}"></td>
-                        :<td th:text="${trip.getEndingDateTime().getMinute()}"></td>
-                        </p>
-                    </div>
-                    <div class="card-footer">
                         <p class="card-text">
                         <td th:text="${trip.getCar().getName()}"></td>
                         <br>
                         <td th:text="${trip.getCar().getRegistration()}"></td>
+                        </p>
+                    </h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                        <td th:text="'Od: ' + ${trip.getStartingDateTime().getDayOfWeek()}"></td>
+                        <td th:text="${trip.getStartingDateTime().getDayOfMonth()}"></td>
+                        <td th:text="${trip.getStartingDateTime().getMonth()}"></td>
+                        </p>
+                        <p class="card-text">
+                        <td th:text="'Do: ' + ${trip.getEndingDateTime().getDayOfWeek()}"></td>
+                        <td th:text="${trip.getEndingDateTime().getDayOfMonth()}"></td>
+                        <td th:text="${trip.getEndingDateTime().getMonth()}"></td>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                        <td th:text="${trip.getEmployee().getName()}"></td>
+                        <td th:text="${trip.getEmployee().getSecondName()}"></td>
                         </p>
                     </div>
                 </div>

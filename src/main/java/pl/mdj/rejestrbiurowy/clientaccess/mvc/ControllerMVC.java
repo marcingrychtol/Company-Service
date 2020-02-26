@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @RequestMapping("/")
 public class ControllerMVC implements BasicController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ControllerMVC.class);
     EmployeeService employeeService;
     CarService carService;
 
@@ -31,16 +30,10 @@ public class ControllerMVC implements BasicController {
 
     @GetMapping("/")
     public String getHome(Model model){
-        try{
-            model.getAttribute("day");
-        } catch (Exception e){
-            LOG.info(e.getMessage());
-        }
-
-        model.addAttribute("alert", "testowy alert");
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("cars", carService.getAll());
+        model.addAttribute("today", LocalDate.now());
         return "index";
     }
     

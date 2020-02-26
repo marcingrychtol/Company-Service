@@ -15,7 +15,7 @@
 
         <tr th:each="trip: ${trips}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                <div class="shadow card border-danger text-center">
+                <div class="shadow card border-danger text-center rounded-0">
                     <h5 class="card-header bg-light">
                         <td th:text="${trip.getEmployee().getName()}"></td>
                         <br>
@@ -53,7 +53,7 @@
                         </p>
                     </div>
                     <div class="card-body bg-light">
-                        <a href="#" class="btn btn-outline-secondary btn-lg btn-block">  Edytuj  </a>
+                        <a href="#" class="btn btn-outline-secondary btn-lg btn-block rounded-0">  Edytuj  </a>
                         <a th:href="@{/trips/delete/{id}(id=${trip.getId()})}" class="btn btn-outline-danger btn-sm btn-block">Usuń</a>
                     </div>
                 </div>

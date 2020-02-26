@@ -1,4 +1,4 @@
-<nav class="shadow-sm navbar navbar-expand-lg navbar-dark bg-success" xmlns:th="http://www.thymeleaf.org">
+<nav class="shadow-sm navbar navbar-expand-lg navbar-dark bg-info" xmlns:th="http://www.thymeleaf.org">
     <div class="container">
         <a class="navbar-brand" th:href="@{/}">ŁOBSZTALATOR</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -23,7 +23,7 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/trips}">Rajzy </a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown rounded-0">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
@@ -32,18 +32,17 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" th:href="@{/cars/edit}">Auto </a>
                         <a class="dropdown-item" th:href="@{/employees/edit}">Hajer </a>
-<!--                        <div class="dropdown-divider"></div>-->
+                        <!--                        <div class="dropdown-divider"></div>-->
                         <a class="dropdown-item" th:href="@{/trips/edit}">Rajza </a>
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item ">
                     <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success bg-light my-2 my-sm-0" type="submit">Search</button>
-            </form>
+                </li></ul>
+<!--                <li class="nav-item active float-right">-->
+
+<!--                </li>-->
+
         </div>
     </div>
 </nav>

@@ -17,23 +17,23 @@
             <form class="was-validated" th:action="@{/employees/add}" th:object="${newEmployee}" method="post">
                 <div class="form-group">
                     <label for="empNameInput1">Imię:</label>
-                    <input type="text" class="form-control is-invalid" th:field="*{name}" id="empNameInput1">
+                    <input type="text" class="form-control is-invalid rounded-0" th:field="*{name}" id="empNameInput1">
                 </div>
                 <div class="form-group">
                     <label for="empSecondNameInput1">Nazwisko:</label>
-                    <input type="text" class="form-control" th:field="*{secondName}" id="empSecondNameInput1">
+                    <input type="text" class="form-control rounded-0" th:field="*{secondName}" id="empSecondNameInput1">
                 </div>
                 <div class="form-group">
                     <label for="empPhoneInput1">Nr telefonu:</label>
-                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="empPhoneInput1">
+                    <input type="text" class="form-control rounded-0" th:field="*{phoneNumber}" id="empPhoneInput1">
                     <small id="empPhoneHelp1" class="form-text text-muted">+48 123 456 789</small>
                 </div>
                 <div class="form-group">
                     <label for="empMailInput1">Adres e-mail:</label>
-                    <input type="text" class="form-control" th:field="*{email}" id="empMailInput1">
+                    <input type="text" class="form-control rounded-0" th:field="*{email}" id="empMailInput1">
                     <small id="empNameHelp1" class="form-text text-muted">To jest tylko testowa podpowiedź</small>
                 </div>
-                <button type="submit" class="btn btn-success" value="add new employee">Dociep hajera do bazy</button>
+                <button type="submit" class="btn btn-success rounded-0" value="add new employee">Dociep hajera do bazy</button>
             </form>
         </div>
     </div>
@@ -43,7 +43,7 @@
 
         <tr th:each="emp: ${employees}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                <div class="shadow card border-danger text-center">
+                <div class="shadow card border-danger text-center rounded-0">
                     <h5 class="card-header bg-danger text-light">
                         <td th:text="${emp.getId()}"></td>
                         <td th:text="${emp.getName()}"></td>
@@ -55,8 +55,8 @@
                         <br>
                         <td th:text="${emp.getPhoneNumber()}"></td>
                         <br>
-                        <a href="#" class="btn btn-outline-secondary btn-lg btn-block">  Edytuj  </a>
-                        <a th:href="@{/employees/delete/{id}(id=${emp.getId()})}" class="btn btn-outline-danger btn-sm btn-block">Usuń</a>
+                        <a href="#" class="btn btn-outline-secondary btn-lg btn-block rounded-0">  Edytuj  </a>
+                        <a th:href="@{/employees/delete/{id}(id=${emp.getId()})}" class="btn btn-outline-danger btn-sm btn-block rounded-0">Usuń</a>
                     </div>
                 </div>
             </div>
