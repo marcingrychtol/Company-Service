@@ -121,6 +121,7 @@ public class MdjRunnerImpl implements MdjRunner {
             trip1.setEndingDate(LocalDateTime.now().plusDays(1));
 
             trip2.setCar(carService.findOne((long) 2));
+
             trip2.setEmployee(employeeService.findOne((long) 2));
             trip2.setStartingDateTime(LocalDateTime.now().plusDays(2));
             trip2.setEndingDateTime(LocalDateTime.now().plusDays(4));
