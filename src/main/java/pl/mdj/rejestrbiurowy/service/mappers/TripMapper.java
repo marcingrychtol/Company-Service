@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
+import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 
@@ -18,11 +19,13 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
 
     CarService carService;
     EmployeeService employeeService;
+    TripRepository tripRepository;
 
     @Autowired
-    public TripMapper(CarService carService, EmployeeService employeeService) {
+    public TripMapper(CarService carService, EmployeeService employeeService, TripRepository tripRepository) {
         this.carService = carService;
         this.employeeService = employeeService;
+        this.tripRepository = tripRepository;
     }
 
     @Override
@@ -52,20 +55,32 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
 
     @Override
     public Trip mapToEntity(TripDto inputDto) {
-        Trip trip = new Trip();
-        trip.setCar(carService.getOne(inputDto.getCarId()));
-        trip.setEmployee(employeeService.getOne(inputDto.getEmployeeId()));
-        trip.setStartingDateTime(LocalDateTime
+
+        Trip entity;
+
+
+        if (inputDto.getId() != null) {
+            entity = tripRepository.findById(inputDto.getId()).orElse(new Trip());
+            if (entity.getId() != null) {
+                return entity;
+            }
+        }
+
+        entity = new Trip();
+        entity.setId(inputDto.getId());
+        entity.setCar(carService.findOne(inputDto.getCarId()));
+        entity.setEmployee(employeeService.findOne(inputDto.getEmployeeId()));
+        entity.setStartingDateTime(LocalDateTime
                 .ofInstant(inputDto
                         .getStartingDate()
                         .toInstant(),
                         ZoneId.of("CET")));
-        trip.setEndingDateTime(LocalDateTime
+        entity.setEndingDateTime(LocalDateTime
                 .ofInstant(inputDto
                         .getEndingDate()
                         .toInstant(),
                         ZoneId.of("CET")));
-        return trip;
+        return entity;
     }
 
     @Override

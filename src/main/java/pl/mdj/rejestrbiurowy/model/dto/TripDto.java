@@ -10,6 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TripDto {
+    private Long id;
     private Long carId;
     private Long employeeId;
     private Date startingDate;

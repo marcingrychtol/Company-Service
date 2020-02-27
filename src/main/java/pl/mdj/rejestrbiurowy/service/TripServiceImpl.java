@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
@@ -13,6 +14,7 @@ import java.util.List;
 @Service
 @Transactional
 public class TripServiceImpl implements TripService {
+
 
     TripRepository tripRepository;
     TripMapper tripMapper;
@@ -25,22 +27,21 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<TripDto> getAll() {
-        return tripMapper.mapToDto(tripRepository.findAll());
+        return null;
     }
 
     @Override
-    public TripDto getOne(Long id) {
-        return tripMapper.mapToDto(tripRepository.getOne(id));
+    public TripDto findOne(Long id) {
+        return null;
     }
 
     @Override
-    public TripDto addOne(TripDto trip) {
-        tripRepository.save(tripMapper.mapToEntity(trip));
-        return trip;
+    public TripDto addOne(TripDto tripDto) {
+        return null;
     }
 
     @Override
     public void deleteById(Long id) {
-        tripRepository.deleteById(id);
+
     }
 }

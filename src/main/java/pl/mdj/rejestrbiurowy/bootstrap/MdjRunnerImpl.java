@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.*;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
@@ -108,34 +109,36 @@ public class MdjRunnerImpl implements MdjRunner {
 
         } // EMPLOYEES
 
-//        {
-//            Trip trip1 = new Trip();
-//            Trip trip2 = new Trip();
-//            Trip trip3 = new Trip();
-//
-//            trip1.setCar(carService.getOne((long) 1));
-//            trip1.setEmployee(employeeService.getOne((long) 5));
-//            trip1.setStartingDateTime(LocalDateTime.now());
-//            trip1.setEndingDateTime(LocalDateTime.now().plusDays(1));
-//
-//            trip2.setCar(carService.getOne((long) 2));
-//            trip2.setEmployee(employeeService.getOne((long) 6));
-//            trip2.setStartingDateTime(LocalDateTime.now().plusDays(2));
-//            trip2.setEndingDateTime(LocalDateTime.now().plusDays(4));
-//
-//            trip3.setCar(carService.getOne((long) 3));
-//            trip3.setEmployee(employeeService.getOne((long) 7));
-//            trip3.setStartingDateTime(LocalDateTime.now().plusDays(5));
-//            trip3.setEndingDateTime(LocalDateTime.now().plusDays(9));
-//
-//            for (Trip trip :
-//                    Arrays.asList(trip1, trip2, trip3)) {
-//                tripService.addOne(tripMapper.mapToDto(trip));
-//            }
-//            for (Trip trip :
-//                    Arrays.asList(trip1, trip2, trip3)) {
-//                tripService.addOne(tripMapper.mapToDto(trip));
-//            }
-//        } // TRIPS
+        {
+            TripDto trip1 = new TripDto();
+            TripDto trip2 = new TripDto();
+            TripDto trip3 = new TripDto();
+            TripDto trip4 = new TripDto();
+
+            trip1.setCarId(carService.findOne(1L));
+            trip1.setEmployeeId(employeeService.findOne((long) 1));
+            trip1.setStartingDate(LocalDateTime.now());
+            trip1.setEndingDate(LocalDateTime.now().plusDays(1));
+
+            trip2.setCar(carService.findOne((long) 2));
+            trip2.setEmployee(employeeService.findOne((long) 2));
+            trip2.setStartingDateTime(LocalDateTime.now().plusDays(2));
+            trip2.setEndingDateTime(LocalDateTime.now().plusDays(4));
+
+            trip4.setCar(carService.findOne((long) 3));
+            trip4.setEmployee(employeeService.findOne((long) 3));
+            trip4.setStartingDateTime(LocalDateTime.now().plusDays(2));
+            trip4.setEndingDateTime(LocalDateTime.now().plusDays(4));
+
+            trip3.setCar(carService.findOne((long) 4));
+            trip3.setEmployee(employeeService.findOne((long) 4));
+            trip3.setStartingDateTime(LocalDateTime.now().plusDays(5));
+            trip3.setEndingDateTime(LocalDateTime.now().plusDays(9));
+
+            for (Trip trip :
+                    Arrays.asList(trip1, trip2, trip3, trip4)) {
+                tripService.addOne(trip);
+            }
+        } // TRIPS
     }
 }
