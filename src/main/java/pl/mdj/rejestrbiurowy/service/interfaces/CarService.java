@@ -1,11 +1,6 @@
 package pl.mdj.rejestrbiurowy.service.interfaces;
 
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import pl.mdj.rejestrbiurowy.entity.Car;
-import pl.mdj.rejestrbiurowy.repository.CarRepository;
-
-import java.util.List;
+import pl.mdj.rejestrbiurowy.model.entity.Car;
 
 
 public interface CarService extends BasicService<Car, Long> {

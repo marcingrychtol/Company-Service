@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.mdj.rejestrbiurowy.clientaccess.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
-import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
 
 @Controller
@@ -14,12 +13,10 @@ import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 public class TripControllerMVC {
 
     TripService tripService;
-    TripMapper tripMapper;
 
     @Autowired
-    public TripControllerMVC(TripService tripService, TripMapper tripMapper) {
+    public TripControllerMVC(TripService tripService) {
         this.tripService = tripService;
-        this.tripMapper = tripMapper;
     }
 
     @GetMapping("")
@@ -29,8 +26,8 @@ public class TripControllerMVC {
     }
 
     @PostMapping("/add")
-    public String addTrip(@ModelAttribute TripDto tripDto){
-        tripService.addOne(tripMapper.mapToEntity(tripDto));
+    public String addTrip(@ModelAttribute TripDto tripDto, Model model){
+        model.addAttribute("tripVirtual", tripService.addOne(tripDto));
         return "redirect:/trips/";
     }
 

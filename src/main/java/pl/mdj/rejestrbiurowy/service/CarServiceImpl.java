@@ -6,12 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.mdj.rejestrbiurowy.entity.Car;
+import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Service

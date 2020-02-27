@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.entity;
+package pl.mdj.rejestrbiurowy.model.entity;
 
 
 import lombok.Data;
@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Trip implements MyEntity {
+public class Trip {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn
@@ -18,15 +18,9 @@ public class Trip implements MyEntity {
     @ManyToOne
     @JoinColumn
     private Car car;
-    @ManyToOne
-    @JoinColumn
-    private Project project;
-    @ManyToOne
-    @JoinColumn
-    private Location location;
     private LocalDateTime startingDateTime;
     private LocalDateTime endingDateTime;
-    private String description;
+    private String additionalMessage;
     private Long mileage;
 
 }

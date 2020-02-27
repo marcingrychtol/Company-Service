@@ -1,8 +1,8 @@
-package pl.mdj.rejestrbiurowy.entity;
+package pl.mdj.rejestrbiurowy.model.entity;
 
 import lombok.*;
-import pl.mdj.rejestrbiurowy.entity.enums.CarCategory;
-import pl.mdj.rejestrbiurowy.entity.enums.CarFuel;
+import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
+import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Car implements MyEntity {
+public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
     private CarCategory carCategory;

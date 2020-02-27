@@ -3,12 +3,11 @@ package pl.mdj.rejestrbiurowy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.mdj.rejestrbiurowy.entity.Employee;
+import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional

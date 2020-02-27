@@ -1,11 +1,8 @@
 package pl.mdj.rejestrbiurowy.service.mappers;
 
-import pl.mdj.rejestrbiurowy.clientaccess.dto.MyDto;
-import pl.mdj.rejestrbiurowy.entity.MyEntity;
-
 import java.util.List;
 
-public interface BasicMapper<E extends MyEntity, D extends MyDto> {
+public interface BasicMapper<E, D> {
     D mapToDto(E inputEntity);
     List<D> mapToDto(List<E> inputEntityList);
     E mapToEntity(D inputDto);

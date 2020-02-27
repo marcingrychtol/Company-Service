@@ -3,9 +3,10 @@ package pl.mdj.rejestrbiurowy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.mdj.rejestrbiurowy.entity.Trip;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
+import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
 import java.util.List;
 
@@ -14,25 +15,28 @@ import java.util.List;
 public class TripServiceImpl implements TripService {
 
     TripRepository tripRepository;
+    TripMapper tripMapper;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository) {
+    public TripServiceImpl(TripRepository tripRepository, TripMapper tripMapper) {
         this.tripRepository = tripRepository;
+        this.tripMapper = tripMapper;
     }
 
     @Override
-    public List<Trip> getAll() {
-        return tripRepository.findAll();
+    public List<TripDto> getAll() {
+        return tripMapper.mapToDto(tripRepository.findAll());
     }
 
     @Override
-    public Trip getOne(Long id) {
-        return tripRepository.getOne(id);
+    public TripDto getOne(Long id) {
+        return tripMapper.mapToDto(tripRepository.getOne(id));
     }
 
     @Override
-    public Trip addOne(Trip trip) {
-        return tripRepository.save(trip);
+    public TripDto addOne(TripDto trip) {
+        tripRepository.save(tripMapper.mapToEntity(trip));
+        return trip;
     }
 
     @Override

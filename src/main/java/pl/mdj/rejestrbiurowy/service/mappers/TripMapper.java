@@ -2,8 +2,8 @@ package pl.mdj.rejestrbiurowy.service.mappers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.mdj.rejestrbiurowy.clientaccess.dto.TripDto;
-import pl.mdj.rejestrbiurowy.entity.Trip;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 

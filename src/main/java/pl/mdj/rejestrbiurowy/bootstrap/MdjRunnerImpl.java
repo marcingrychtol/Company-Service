@@ -5,15 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.mdj.rejestrbiurowy.entity.Car;
-import pl.mdj.rejestrbiurowy.entity.Employee;
-import pl.mdj.rejestrbiurowy.entity.Trip;
-import pl.mdj.rejestrbiurowy.entity.enums.CarCategory;
-import pl.mdj.rejestrbiurowy.entity.enums.CarFuel;
+import pl.mdj.rejestrbiurowy.model.entity.*;
+import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
+import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
 import pl.mdj.rejestrbiurowy.service.interfaces.*;
+import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 @Component
@@ -30,6 +31,9 @@ public class MdjRunnerImpl implements MdjRunner {
 
     @Autowired
     private TripService tripService;
+
+    @Autowired
+    private TripMapper tripMapper;
 
     public void run() {
         {
@@ -73,60 +77,65 @@ public class MdjRunnerImpl implements MdjRunner {
             Employee employee3 = new Employee();
             Employee employee5 = new Employee();
 
+            List<Employee> employeeList = new ArrayList<>();
+
             employee1.setName("Adam");
             employee1.setSecondName("Adamski");
             employee1.setPhoneNumber("+48 123 456 789");
             employee1.setEmail("adam@mdj.pl");
+            employeeList.add(employee1);
 
             employee2.setName("Wojciech");
             employee2.setSecondName("Cieszyński");
             employee2.setPhoneNumber("+48 123 456 789");
             employee2.setEmail("wojciech@mdj.pl");
+            employeeList.add(employee2);
 
             employee3.setName("Marcin");
             employee3.setSecondName("Madagaskar");
             employee3.setPhoneNumber("+48 123 456 789");
             employee3.setEmail("marcing@mdj.pl");
+            employeeList.add(employee3);
 
             employee5.setName("Norbert");
             employee5.setSecondName("Bezpośredni");
             employee5.setPhoneNumber("+48 123 456 789");
             employee5.setEmail("norbert@mdj.pl");
+            employeeList.add(employee5);
 
-            for (Employee employee : Arrays.asList(employee1, employee2, employee3, employee5)) {
-                employeeService.addOne(employee);
+            employeeList.stream()
+                    .forEach(e -> employeeService.addOne(e));
 
-            }
         } // EMPLOYEES
 
-        {
-            Trip trip1 = new Trip();
-            Trip trip2 = new Trip();
-            Trip trip3 = new Trip();
-
-            trip1.setCar(carService.getOne((long) 1));
-            trip1.setEmployee(employeeService.getOne((long) 5));
-            trip1.setStartingDateTime(LocalDateTime.now());
-            trip1.setEndingDateTime(LocalDateTime.now().plusDays(1));
-
-            trip2.setCar(carService.getOne((long) 2));
-            trip2.setEmployee(employeeService.getOne((long) 6));
-            trip2.setStartingDateTime(LocalDateTime.now().plusDays(2));
-            trip2.setEndingDateTime(LocalDateTime.now().plusDays(4));
-
-            trip3.setCar(carService.getOne((long) 3));
-            trip3.setEmployee(employeeService.getOne((long) 7));
-            trip3.setStartingDateTime(LocalDateTime.now().plusDays(5));
-            trip3.setEndingDateTime(LocalDateTime.now().plusDays(9));
-
-            for (Trip trip :
-                    Arrays.asList(trip1, trip2, trip3)) {
-                tripService.addOne(trip);
-            }
-            for (Trip trip :
-                    Arrays.asList(trip1, trip2, trip3)) {
-                tripService.addOne(trip);
-            }
-        } // TRIPS
+//        {
+//            Trip trip1 = new Trip();
+//            Trip trip2 = new Trip();
+//            Trip trip3 = new Trip();
+//
+//            trip1.setCar(carService.getOne((long) 1));
+//            trip1.setEmployee(employeeService.getOne((long) 5));
+//            trip1.setStartingDateTime(LocalDateTime.now());
+//            trip1.setEndingDateTime(LocalDateTime.now().plusDays(1));
+//
+//            trip2.setCar(carService.getOne((long) 2));
+//            trip2.setEmployee(employeeService.getOne((long) 6));
+//            trip2.setStartingDateTime(LocalDateTime.now().plusDays(2));
+//            trip2.setEndingDateTime(LocalDateTime.now().plusDays(4));
+//
+//            trip3.setCar(carService.getOne((long) 3));
+//            trip3.setEmployee(employeeService.getOne((long) 7));
+//            trip3.setStartingDateTime(LocalDateTime.now().plusDays(5));
+//            trip3.setEndingDateTime(LocalDateTime.now().plusDays(9));
+//
+//            for (Trip trip :
+//                    Arrays.asList(trip1, trip2, trip3)) {
+//                tripService.addOne(tripMapper.mapToDto(trip));
+//            }
+//            for (Trip trip :
+//                    Arrays.asList(trip1, trip2, trip3)) {
+//                tripService.addOne(tripMapper.mapToDto(trip));
+//            }
+//        } // TRIPS
     }
 }

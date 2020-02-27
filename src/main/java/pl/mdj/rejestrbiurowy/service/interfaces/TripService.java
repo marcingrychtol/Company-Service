@@ -1,6 +1,6 @@
 package pl.mdj.rejestrbiurowy.service.interfaces;
 
-import pl.mdj.rejestrbiurowy.entity.Trip;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 
-public interface TripService extends BasicService<Trip, Long> {
+public interface TripService extends BasicService<TripDto, Long> {
 }
