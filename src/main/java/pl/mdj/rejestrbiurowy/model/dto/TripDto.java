@@ -11,8 +11,10 @@ public class TripDto {
     private CarDto car;
     private Long employeeId;
     private EmployeeDto employee;
+
     private Date startingDate;
     private Date endingDate;
+
     private String additionalMessage;
 
     /**

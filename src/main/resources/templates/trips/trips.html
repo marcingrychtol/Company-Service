@@ -22,14 +22,19 @@
                     </h5>
                     <div class="card-body">
                         <p class="card-text">
+<!--                        TODO: to poniżej się źle wyświetla -->
                         <td th:text="'Od: ' + ${trip.getStartingDate().getDay()}"></td>
                         <td th:text="${trip.getStartingDate().getDate()}"></td>
                         <td th:text="${trip.getStartingDate().getMonth()}"></td>
                         </p>
                         <p class="card-text">
-                        <td th:text="'Do: ' + ${trip.getEndingDate().getDay()}"></td>
+                        <td th:text="'Do: ' + ${trip.getStartingDate().getDate()}"></td>
                         <td th:text="${trip.getEndingDate().getDate()}"></td>
                         <td th:text="${trip.getEndingDate().getMonth()}"></td>
+                        <td th:text="${trip.getEndingDate()}"></td>
+                        </p>
+                        <p class="card-text">
+                            <td th:text="${trip.getAdditionalMessage()}"></td>
                         </p>
                     </div>
                     <div class="card-footer">

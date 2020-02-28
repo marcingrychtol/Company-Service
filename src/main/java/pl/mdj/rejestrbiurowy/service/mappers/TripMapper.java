@@ -57,6 +57,10 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                         .getEndingDate()
                         .atStartOfDay(ZoneId.of("CET"))
                         .toInstant()));
+        dto.setAdditionalMessage(" ");
+        if (entity.getAdditionalMessage() != null){
+            dto.setAdditionalMessage(entity.getAdditionalMessage());
+        }
         return dto;
     }
 
@@ -103,6 +107,9 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                         .getEndingDate()
                         .toInstant(),
                         ZoneId.of("CET")));
+        if (dto.getAdditionalMessage() != null){
+            entity.setAdditionalMessage(dto.getAdditionalMessage());
+        }
         return entity;
     }
 
