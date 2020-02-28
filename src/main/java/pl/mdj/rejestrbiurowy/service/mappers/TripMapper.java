@@ -12,6 +12,9 @@ import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,14 +41,22 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
     @Override
     public TripDto mapToDto(Trip entity) {
         TripDto dto = new TripDto();
-        dto.setCarDto(carMapper
+        dto.setCar(carMapper
                 .mapToDto(entity
                         .getCar()));
-        dto.setEmployeeDto(employeeMapper
+        dto.setEmployee(employeeMapper
                 .mapToDto(entity
                         .getEmployee()));
-        dto.setStartingDate(entity.getStartingDate());
-        dto.setEndingDate(entity.getEndingDate());
+        dto.setStartingDate(Date
+                .from(entity
+                        .getStartingDate()
+                        .atStartOfDay(ZoneId.of("CET"))
+                        .toInstant()));
+        dto.setEndingDate(Date
+                .from(entity
+                        .getEndingDate()
+                        .atStartOfDay(ZoneId.of("CET"))
+                        .toInstant()));
         return dto;
     }
 
@@ -76,16 +87,22 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
         entity.setId(dto.getId());
         entity.setCar(carRepository
                 .findById(dto
-                        .getCarDto()
-                        .getId())
+                        .getCarId())
                 .orElse(new Car()));
         entity.setEmployee(employeeRepository
                 .findById(dto
-                        .getEmployeeDto()
-                        .getId())
+                        .getEmployeeId())
                 .orElse(new Employee()));
-        entity.setStartingDate(dto.getStartingDate());
-        entity.setEndingDate(dto.getEndingDate());
+        entity.setStartingDate(LocalDate
+                .ofInstant(dto
+                        .getStartingDate()
+                        .toInstant(),
+                        ZoneId.of("CET")));
+        entity.setEndingDate(LocalDate
+                .ofInstant(dto
+                        .getEndingDate()
+                        .toInstant(),
+                        ZoneId.of("CET")));
         return entity;
     }
 

@@ -15,27 +15,27 @@
                 <div class="shadow card border-success text-center rounded-0">
                     <h5 class="card-header bg-light">
                         <p class="card-text">
-                        <td th:text="${trip.getCarDto().getName()}"></td>
+                        <td th:text="${trip.getCar().getName()}"></td>
                         <br>
-                        <td th:text="${trip.getCarDto().getRegistration()}"></td>
+                        <td th:text="${trip.getCar().getRegistration()}"></td>
                         </p>
                     </h5>
                     <div class="card-body">
                         <p class="card-text">
-                        <td th:text="'Od: ' + ${trip.getStartingDate().getDayOfWeek()}"></td>
-                        <td th:text="${trip.getStartingDate().getDayOfMonth()}"></td>
+                        <td th:text="'Od: ' + ${trip.getStartingDate().getDay()}"></td>
+                        <td th:text="${trip.getStartingDate().getDate()}"></td>
                         <td th:text="${trip.getStartingDate().getMonth()}"></td>
                         </p>
                         <p class="card-text">
-                        <td th:text="'Do: ' + ${trip.getEndingDate().getDayOfWeek()}"></td>
-                        <td th:text="${trip.getEndingDate().getDayOfMonth()}"></td>
+                        <td th:text="'Do: ' + ${trip.getEndingDate().getDay()}"></td>
+                        <td th:text="${trip.getEndingDate().getDate()}"></td>
                         <td th:text="${trip.getEndingDate().getMonth()}"></td>
                         </p>
                     </div>
                     <div class="card-footer">
                         <p class="card-text">
-                        <td th:text="${trip.getEmployeeDto().getName()}"></td>
-                        <td th:text="${trip.getEmployeeDto().getSecondName()}"></td>
+                        <td th:text="${trip.getEmployee().getName()}"></td>
+                        <td th:text="${trip.getEmployee().getSecondName()}"></td>
                         </p>
                     </div>
                 </div>

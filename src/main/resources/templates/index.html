@@ -32,8 +32,8 @@
                         <h5 class="card-title">Pojazd</h5>
                     </div>
                     <div class="card-body">
-                        <select class="custom-select rounded-0" size="6" th:field="*{carDto}">
-                            <option th:each="car : ${cars}" th:value="${car}"
+                        <select class="custom-select rounded-0" size="6" th:field="*{carId}">
+                            <option th:each="car : ${cars}" th:value="${car.getId()}"
                                     th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">/option>
                         </select>
                     </div>
@@ -43,8 +43,8 @@
                         <h5 class="card-title">Osoba</h5>
                     </div>
                     <div class="card-body">
-                        <select class="custom-select rounded-0" size="6" th:field="*{employeeDto}">
-                            <option th:each="emp : ${employees}" th:value="${emp}"
+                        <select class="custom-select rounded-0" size="6" th:field="*{employeeId}">
+                            <option th:each="emp : ${employees}" th:value="${emp.getId()}"
                                     th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}"></option>
                         </select>
                     </div>
