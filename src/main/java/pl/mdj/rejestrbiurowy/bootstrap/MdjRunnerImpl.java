@@ -9,9 +9,15 @@ import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.*;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
+import pl.mdj.rejestrbiurowy.repository.CarRepository;
+import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
+import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.*;
+import pl.mdj.rejestrbiurowy.service.mappers.CarMapper;
+import pl.mdj.rejestrbiurowy.service.mappers.EmployeeMapper;
 import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,16 +31,14 @@ public class MdjRunnerImpl implements MdjRunner {
     private final static Logger LOG = LoggerFactory.getLogger(MdjRunnerImpl.class);
 
     @Autowired
-    private CarService carService;
+    private CarRepository carRepository;
 
     @Autowired
-    private EmployeeService employeeService;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    private TripService tripService;
+    private TripRepository tripRepository;
 
-    @Autowired
-    private TripMapper tripMapper;
 
     public void run() {
         {
@@ -68,11 +72,13 @@ public class MdjRunnerImpl implements MdjRunner {
             car4.setRegistration("KT 7777");
 
             for (Car car : Arrays.asList(car1, car2, car3, car4)) {
-                carService.addOne(car);
+                carRepository.save(car);
             }
         } //CARS
 
         {
+
+
             Employee employee1 = new Employee();
             Employee employee2 = new Employee();
             Employee employee3 = new Employee();
@@ -105,40 +111,39 @@ public class MdjRunnerImpl implements MdjRunner {
             employeeList.add(employee5);
 
             employeeList.stream()
-                    .forEach(e -> employeeService.addOne(e));
+                    .forEach(e -> employeeRepository.save(e));
 
         } // EMPLOYEES
 
         {
-            TripDto trip1 = new TripDto();
-            TripDto trip2 = new TripDto();
-            TripDto trip3 = new TripDto();
-            TripDto trip4 = new TripDto();
+            Trip trip1 = new Trip();
+            Trip trip2 = new Trip();
+            Trip trip3 = new Trip();
+            Trip trip4 = new Trip();
 
-            trip1.setCarId(carService.findOne(1L));
-            trip1.setEmployeeId(employeeService.findOne((long) 1));
-            trip1.setStartingDate(LocalDateTime.now());
-            trip1.setEndingDate(LocalDateTime.now().plusDays(1));
+            trip1.setCar(carRepository.findById((long) 2).orElse(new Car()));
+            trip1.setEmployee(employeeRepository.findById((long) 2).orElse(new Employee()));
+            trip1.setStartingDate(LocalDate.now());
+            trip1.setEndingDate(LocalDate.now().plusDays(1));
 
-            trip2.setCar(carService.findOne((long) 2));
+            trip2.setCar(carRepository.findById((long) 2).orElse(new Car()));
+            trip2.setEmployee(employeeRepository.findById((long) 2).orElse(new Employee()));
+            trip2.setStartingDate(LocalDate.now().plusDays(2));
+            trip2.setEndingDate(LocalDate.now().plusDays(4));
 
-            trip2.setEmployee(employeeService.findOne((long) 2));
-            trip2.setStartingDateTime(LocalDateTime.now().plusDays(2));
-            trip2.setEndingDateTime(LocalDateTime.now().plusDays(4));
+            trip4.setCar(carRepository.findById((long) 3).orElse(new Car()));
+            trip4.setEmployee(employeeRepository.findById((long) 3).orElse(new Employee()));
+            trip4.setStartingDate(LocalDate.now().plusDays(2));
+            trip4.setEndingDate(LocalDate.now().plusDays(4));
 
-            trip4.setCar(carService.findOne((long) 3));
-            trip4.setEmployee(employeeService.findOne((long) 3));
-            trip4.setStartingDateTime(LocalDateTime.now().plusDays(2));
-            trip4.setEndingDateTime(LocalDateTime.now().plusDays(4));
-
-            trip3.setCar(carService.findOne((long) 4));
-            trip3.setEmployee(employeeService.findOne((long) 4));
-            trip3.setStartingDateTime(LocalDateTime.now().plusDays(5));
-            trip3.setEndingDateTime(LocalDateTime.now().plusDays(9));
+            trip3.setCar(carRepository.findById((long) 4).orElse(new Car()));
+            trip3.setEmployee(employeeRepository.findById((long) 4).orElse(new Employee()));
+            trip3.setStartingDate(LocalDate.now().plusDays(5));
+            trip3.setEndingDate(LocalDate.now().plusDays(9));
 
             for (Trip trip :
                     Arrays.asList(trip1, trip2, trip3, trip4)) {
-                tripService.addOne(trip);
+                tripRepository.save(trip);
             }
         } // TRIPS
     }

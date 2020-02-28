@@ -20,43 +20,43 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
     }
 
     @Override
-    public CarDto mapToDto(Car inputEntity) {
+    public CarDto mapToDto(Car entity) {
         CarDto dto = new CarDto();
-        dto.setId(inputEntity.getId());
-        dto.setName(inputEntity.getName());
-        dto.setRegistration(inputEntity.getRegistration());
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setRegistration(entity.getRegistration());
         return dto;
     }
 
     @Override
-    public List<CarDto> mapToDto(List<Car> inputEntityList) {
-        return inputEntityList.stream()
+    public List<CarDto> mapToDto(List<Car> entityList) {
+        return entityList.stream()
                 .map(e -> mapToDto(e))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Car mapToEntity(CarDto inputDto) {
+    public Car mapToEntity(CarDto dto) {
         Car entity;
 
-        if (inputDto.getId() != null) {
-            entity = carRepository.findById(inputDto.getId()).orElse(new Car());
+        if (dto.getId() != null) {
+            entity = carRepository.findById(dto.getId()).orElse(new Car());
             if (entity.getId() != null) {
                 return entity;
             }
         }
 
         entity = new Car();
-        entity.setId(inputDto.getId());
-        entity.setName(inputDto.getName());
-        entity.setRegistration(inputDto.getRegistration());
+        entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        entity.setRegistration(dto.getRegistration());
 
         return entity;
     }
 
     @Override
-    public List<Car> mapToEntity(List<CarDto> inputDtoList) {
-        return inputDtoList.stream()
+    public List<Car> mapToEntity(List<CarDto> dtoList) {
+        return dtoList.stream()
                 .map(c -> mapToEntity(c))
                 .collect(Collectors.toList());
     }

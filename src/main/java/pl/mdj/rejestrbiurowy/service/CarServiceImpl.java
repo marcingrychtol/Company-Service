@@ -13,6 +13,7 @@ import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 import pl.mdj.rejestrbiurowy.service.mappers.CarMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -38,22 +39,26 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDto> getAll() {
-        return null;
+        return carMapper.mapToDto(carRepository.findAll());
     }
 
     @Override
     public CarDto findOne(Long id) {
-        return null;
+        return carMapper.mapToDto(Objects
+                .requireNonNull(carRepository
+                        .findById(id)
+                        .orElse(null)));  // TODO: to chyba tak nie może wyglądać ;)
     }
 
     @Override
     public CarDto addOne(CarDto carDto) {
-        return null;
+        carRepository.save(carMapper.mapToEntity(carDto));
+        return carDto;
     }
 
     @Override
     public void deleteById(Long id) {
-
+        carRepository.deleteById(id);
     }
 
 }

@@ -4,6 +4,7 @@ package pl.mdj.rejestrbiurowy.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,8 +19,8 @@ public class Trip {
     @ManyToOne
     @JoinColumn
     private Car car;
-    private LocalDateTime startingDateTime;
-    private LocalDateTime endingDateTime;
+    private LocalDate startingDate;
+    private LocalDate endingDate;
     private String additionalMessage;
     private Long mileage;
 

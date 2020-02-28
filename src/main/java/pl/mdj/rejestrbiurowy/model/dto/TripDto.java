@@ -1,20 +1,17 @@
 package pl.mdj.rejestrbiurowy.model.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class TripDto {
     private Long id;
-    private Long carId;
-    private Long employeeId;
-    private Date startingDate;
-    private Date endingDate;
+    private CarDto carDto;
+    private EmployeeDto employeeDto;
+    private LocalDate startingDate;
+    private LocalDate endingDate;
     private String additionalMessage;
 
     /**
@@ -23,10 +20,10 @@ public class TripDto {
      * @return
      */
     public boolean isComplete(){
-        if (carId == null) {
+        if (carDto == null) {
             return false;
         }
-        if (employeeId == null) {
+        if (employeeDto == null) {
             return false;
         }
         if (startingDate == null) {

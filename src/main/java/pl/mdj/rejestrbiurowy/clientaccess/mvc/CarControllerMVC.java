@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.mdj.rejestrbiurowy.model.entity.Car;
+import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 
 @Controller
@@ -28,7 +28,7 @@ public class CarControllerMVC {
 
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
-        model.addAttribute("newCar", new Car());
+        model.addAttribute("newCar", new CarDto());
         return ("cars/cars");
     }
 
@@ -37,12 +37,12 @@ public class CarControllerMVC {
 
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
-        model.addAttribute("newCar", new Car());
+        model.addAttribute("newCar", new CarDto());
         return ("cars/cars-edit");
     }
 
     @PostMapping("/add")
-    public String addCar(@ModelAttribute Car car){
+    public String addCar(@ModelAttribute CarDto car){
         carService.addOne(car);
         return REDIR_EDIT_CAR;
     }

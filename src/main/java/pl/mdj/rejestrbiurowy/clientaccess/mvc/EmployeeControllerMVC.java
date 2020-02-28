@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.mdj.rejestrbiurowy.model.entity.Employee;
+import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 
 @Controller
@@ -27,12 +27,12 @@ public class EmployeeControllerMVC {
     @GetMapping("/edit")
     public String editEmployees(Model model){
         model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("newEmployee", new Employee());
+        model.addAttribute("newEmployee", new EmployeeDto());
         return "employees/employees-edit";
     }
 
     @PostMapping("/add")
-    public String addEmployee(@ModelAttribute Employee employee){
+    public String addEmployee(@ModelAttribute EmployeeDto employee){
         employeeService.addOne(employee);
         return "redirect:/employees/edit";
     }

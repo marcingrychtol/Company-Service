@@ -32,8 +32,8 @@
                         <h5 class="card-title">Pojazd</h5>
                     </div>
                     <div class="card-body">
-                        <select class="custom-select rounded-0" size="6" th:field="*{carId}">
-                            <option th:each="car : ${cars}" th:value="${car.getId()}"
+                        <select class="custom-select rounded-0" size="6" th:field="*{carDto}">
+                            <option th:each="car : ${cars}" th:value="${car}"
                                     th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">/option>
                         </select>
                     </div>
@@ -43,8 +43,8 @@
                         <h5 class="card-title">Osoba</h5>
                     </div>
                     <div class="card-body">
-                        <select class="custom-select rounded-0" size="6" th:field="*{employeeId}">
-                            <option th:each="emp : ${employees}" th:value="${emp.getId()}"
+                        <select class="custom-select rounded-0" size="6" th:field="*{employeeDto}">
+                            <option th:each="emp : ${employees}" th:value="${emp}"
                                     th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}"></option>
                         </select>
                     </div>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" th:href="@{/employees}" class="shadow btn btn-outline-info btn-block btn-lg mt-3 rounded-0">Ciś knefel, a łobsztaluj!</button>
+            <button type="submit" class="shadow btn btn-outline-info btn-block btn-lg mt-3 rounded-0">Ciś knefel, a łobsztaluj!</button>
         </form>
     </div>
 </div>
