@@ -11,7 +11,7 @@
     <div class="row">
 
         <tr th:each="trip: ${trips}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-1 mb-1">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-1 mb-1 h-100">
                 <div class="shadow card border-info text-center rounded-0">
                     <h5 class="card-header bg-light">
                         <p class="card-text">
@@ -21,20 +21,10 @@
                         </p>
                     </h5>
                     <div class="card-body">
-                        <p class="card-text">
-<!--                        TODO: to poniżej się źle wyświetla -->
-<!--                        <td th:text="'Od: ' + ${trip.getStartingDate().getDay()}"></td>-->
-<!--                        <td th:text="${trip.getStartingDate().getDate()}"></td>-->
-<!--                        <td th:text="${trip.getStartingDate().getMonth()}"></td>-->
                         <td th:text="'Od: ' + ${trip.getStartingDate().toLocaleString().split(',')[0]}"></td>
-                        </p>
-                        <p class="card-text">
-<!--                        <td th:text="'Do: ' + ${trip.getStartingDate().getDate()}"></td>-->
-<!--                        <td th:text="${trip.getEndingDate().getDate()}"></td>-->
-<!--                        <td th:text="${trip.getEndingDate().getMonth()}"></td>-->
+                        <br/>
                         <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
-                        </p>
-                        <p class="card-text">
+                        <p class="card-text mt-1">
                             <td th:text="${trip.getAdditionalMessage()}"></td>
                         </p>
                     </div>
@@ -42,8 +32,11 @@
                         <p class="card-text">
                         <td th:text="${trip.getEmployee().getName()}"></td>
                         <td th:text="${trip.getEmployee().getSecondName()}"></td>
+                        <br/>
+                        <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
                         </p>
                     </div>
+                    <button type="submit" class="btn btn-info stretched-link rounded-0" value="add new employee">Edytuj</button>
                 </div>
             </div>
         </tr>
