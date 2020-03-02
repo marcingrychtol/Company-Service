@@ -40,6 +40,11 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public TripDto addOne(TripDto tripDto) {
+
+        if (tripDto.getEndingDate() == null){
+            tripDto.setEndingDate(tripDto.getStartingDate());
+        }
+
         tripRepository.save(tripMapper.mapToEntity(tripDto));
         return tripDto;
     }
