@@ -32,10 +32,8 @@ public class MdjRunnerImpl implements MdjRunner {
 
     @Autowired
     private CarRepository carRepository;
-
     @Autowired
     private EmployeeRepository employeeRepository;
-
     @Autowired
     private TripRepository tripRepository;
 

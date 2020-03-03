@@ -15,7 +15,7 @@
 
         <tr th:each="car: ${cars}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
-                <div class="shadow card border-success text-center rounded-0">
+                <div class="shadow card border-warning text-center rounded-0">
                     <h5 class="card-header bg-light">
 <!--                        <td th:text="${car.getId()}"></td>-->
                         <td th:text="${car.getName()}"></td>
@@ -32,7 +32,7 @@
                         </p>
 
                     </div>
-                    <a th:href="@{/}" class="btn btn-success stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
+                    <a th:href="@{/}" class="btn btn-warning stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
                 </div>
             </div>
         </tr>

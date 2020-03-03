@@ -11,8 +11,8 @@
     <groupId>pl.mdj</groupId>
     <artifactId>rcp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SKYNET</name>
-    <description>Welcome to SKYNET</description>
+    <name>MDJ-Service</name>
+    <description>Welcome to MDJ-Service</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -30,10 +30,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-security</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -83,14 +83,15 @@
             <version>3.0.1.RELEASE</version>
         </dependency>
 
+
     </dependencies>
 
     <build>
         <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -14,7 +14,7 @@
     <div class="row">
         <tr th:each="employee: ${employees}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
-                    <div class="shadow card border-danger text-center rounded-0">
+                    <div class="shadow card border-success text-center rounded-0">
                         <h5 class="card-header bg-light">
 <!--                            <td th:text="${employee.getId()}"></td>-->
                             <td th:text="${employee.getName()}"></td>
@@ -27,7 +27,7 @@
                             <td th:text="${employee.getPhoneNumber()}"></td>
                             <br>
 
-                        </div><a th:href="@{/}" class="btn btn-danger stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
+                        </div><a th:href="@{/}" class="btn btn-success stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
                     </div>
 <!--                    <div class="card border-light text-center">-->
 <!--                        <div class="card-footer">-->

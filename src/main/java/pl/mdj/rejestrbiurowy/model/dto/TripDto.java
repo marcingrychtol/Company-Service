@@ -1,6 +1,8 @@
 package pl.mdj.rejestrbiurowy.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -12,21 +14,23 @@ public class TripDto {
     private Long employeeId;
     private EmployeeDto employee;
 
+    @DateTimeFormat(pattern = "MM/dd/YYYY")
     private Date startingDate;
     private Date endingDate;
 
     private String additionalMessage;
 
     /**
-     *  Checks if Trip has all parameters - except endingDate. If ending date has not been set,
-     *  it is presumed to be the same as startingDate.
+     * Checks if Trip has all parameters - except endingDate. If ending date has not been set,
+     * it is presumed to be the same as startingDate.
+     *
      * @return
      */
-    public boolean isComplete(){
-        if (car == null) {
+    public boolean isComplete() {
+        if (carId == null) {
             return false;
         }
-        if (employee == null) {
+        if (employeeId == null) {
             return false;
         }
         if (startingDate == null) {
@@ -35,7 +39,7 @@ public class TripDto {
         return true;
     }
 
-    public boolean hasMessage(){
+    public boolean hasMessage() {
         if (additionalMessage == null) {
             return false;
         }

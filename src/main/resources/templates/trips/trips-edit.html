@@ -20,38 +20,39 @@
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                 <div class="shadow card border-danger text-center rounded-0">
                     <h5 class="card-header bg-light">
-                        <td th:text="${trip.getEmployeeDto().getName()}"></td>
+                        <td th:text="${trip.getEmployee().getName()}"></td>
                         <br>
-                        <td th:text="${trip.getEmployeeDto().getSecondName()}"></td>
+                        <td th:text="${trip.getEmployee().getSecondName()}"></td>
                     </h5>
                     <div class="card-body">
                         <p class="card-text">
-                        <td th:text="${trip.getStartingDate().getDayOfWeek()}"></td>
+                        <td th:text="${trip.getStartingDate().getDay()}"></td>
                         <br>
-                        <td th:text="${trip.getStartingDate().getDayOfMonth()}"></td>
+                        <td th:text="${trip.getStartingDate().getDate()}"></td>
                         <br>
                         <td th:text="${trip.getStartingDate().getMonth()}"></td>
                         </p>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
-                        <td th:text="${trip.getEndingDate().getDayOfWeek()}"></td>
+                        <td th:text="${trip.getEndingDate().getDay()}"></td>
                         <br>
-                        <td th:text="${trip.getEndingDate().getDayOfMonth()}"></td>
+                        <td th:text="${trip.getEndingDate().getDate()}"></td>
                         <br>
                         <td th:text="${trip.getEndingDate().getMonth()}"></td>
                         </p>
                     </div>
                     <div class="card-footer">
                         <p class="card-text">
-                        <td th:text="${trip.getCarDto().getName()}"></td>
+                        <td th:text="${trip.getCar().getName()}"></td>
                         <br>
-                        <td th:text="${trip.getCarDto().getRegistration()}"></td>
+                        <td th:text="${trip.getCar().getRegistration()}"></td>
                         </p>
                     </div>
                     <div class="card-body bg-light">
                         <a href="#" class="btn btn-outline-secondary btn-lg btn-block rounded-0">  Edytuj  </a>
                         <a th:href="@{/trips/delete/{id}(id=${trip.getId()})}" class="btn btn-outline-danger btn-sm btn-block">Usuń</a>
+<!--                        TODO: niy działo usuwanie-->
                     </div>
                 </div>
             </div>

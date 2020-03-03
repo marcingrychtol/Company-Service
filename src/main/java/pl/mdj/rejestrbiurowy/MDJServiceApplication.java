@@ -8,17 +8,17 @@ import pl.mdj.rejestrbiurowy.bootstrap.MdjRunner;
 
 @SpringBootApplication
 @NoArgsConstructor
-public class MDJRcpApplication {
+public class MDJServiceApplication {
 
-    private static MdjRunner mdjRunner; // TODO: #3
+    private static MdjRunner mdjRunner; // TODO: #3 use PostConstruct
 
     @Autowired
-    public MDJRcpApplication(MdjRunner mdjRunner) {
-        MDJRcpApplication.mdjRunner = mdjRunner;
+    public MDJServiceApplication(MdjRunner mdjRunner) {
+        MDJServiceApplication.mdjRunner = mdjRunner;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(MDJRcpApplication.class);
+        SpringApplication.run(MDJServiceApplication.class, args);
         mdjRunner.run();
     }
 

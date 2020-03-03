@@ -3,6 +3,7 @@ package pl.mdj.rejestrbiurowy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
@@ -40,6 +41,10 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public TripDto addOne(TripDto tripDto) {
+
+        if (!tripDto.isComplete()){
+            return null;
+        }
 
         if (tripDto.getEndingDate() == null){
             tripDto.setEndingDate(tripDto.getStartingDate());

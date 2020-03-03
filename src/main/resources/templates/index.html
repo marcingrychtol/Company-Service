@@ -20,20 +20,23 @@
 
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-warning text-white rounded-0 h-100">
-                        <div class="card-header">Dzień</div>
+                    <div class="shadow card bg-danger text-white rounded-0 h-100">
+                        <div class="card-header">Dzień - domyślnie dzisioj</div>
                         <div class="card-body">
-                            Kiedy wezna: <input id="startDate" th:field="*{startingDate}"/>
-                            Kiedy łoddom: <input id="endDate" th:field="*{endingDate}"/>
+                            <label for="startDate">Kiedy wezna: </label>
+                            <input id="startDate" th:field="*{startingDate}"/>
+                            <label for="endDate">Kiedy łoddom: </label>
+                            <input id="endDate" th:field="*{endingDate}"/>
+                            <small id="endDateHelp" class="form-text text-light">Domyślnie ten sam dzień, pole opcjonalne</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-success text-white rounded-0 h-100">
-                        <div class="card-header">Pojazd</div>
+                    <div class="shadow card bg-warning text-white rounded-0 h-100">
+                        <div class="card-header">Pojazd - pole wymagane</div>
                         <div class="card-body">
-                            <select class="custom-select rounded-0" size="6" th:field="*{carId}">
+                            <select class="custom-select rounded-0" size="7" th:field="*{carId}">
                                 <option th:each="car : ${cars}" th:value="${car.getId()}"
                                         th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">
                                 </option>
@@ -43,10 +46,10 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-danger text-white rounded-0 h-100">
-                        <div class="card-header">Osoba</div>
+                    <div class="shadow card bg-success text-white rounded-0 h-100">
+                        <div class="card-header">Osoba - pole wymagane</div>
                         <div class="card-body">
-                            <select class="custom-select rounded-0" size="6" th:field="*{employeeId}">
+                            <select class="custom-select rounded-0" size="7" th:field="*{employeeId}">
                                 <option th:each="emp : ${employees}" th:value="${emp.getId()}"
                                         th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
                                 </option>
@@ -57,7 +60,7 @@
 
                 <div class="col-12 col-md-6 col-lg-12 col-xl-3 p-1">
                     <div class="shadow card bg-secondary text-white rounded-0 h-100">
-                        <div class="card-header">Wiadomość</div>
+                        <div class="card-header">Opis - opcjonalnie</div>
                         <div class="card-body">
                             <textarea class="form-control rounded-0" rows="3"
                                       placeholder="Np. godziny wyjazdu, cel, klient..."
@@ -87,10 +90,10 @@
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     $('#startDate').datepicker({
         showOnFocus: true,
-        showRightIcon: false,
         header: false,
-        format: 'dddd dd/mm/yyyy',
-        value: today,
+        format: 'dd/mm/yyyy',
+        // TODO: handle months values
+        value: today.getDate().toString()+'/'+(today.getMonth() +1).toString()+'/'+today.getFullYear().toString(),
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         minDate: today,
@@ -101,9 +104,8 @@
     });
     $('#endDate').datepicker({
         showOnFocus: true,
-        showRightIcon: false,
         header: false,
-        format: 'dddd dd/mm/yyyy',
+        format: 'dd/mm/yyyy',
         // value: today,
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',

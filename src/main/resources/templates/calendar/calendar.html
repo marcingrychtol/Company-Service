@@ -12,7 +12,7 @@
     <div class="row">
         <tr th:each="day: ${dateList}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
-                <div class="shadow card border-warning text-center rounded-0">
+                <div class="shadow card border-danger text-center rounded-0">
                     <h5 class="card-header bg-light">
                         <td th:text="${day.getDayOfWeek()}"></td>
                     </h5>
