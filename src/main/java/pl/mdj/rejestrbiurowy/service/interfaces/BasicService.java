@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface BasicService<D, I> {
     List<D> getAll();
-    D findOne(I id);  // TODO: maybe change name properly
+    D findOne(I id);
     D addOne(D d);
     void deleteById(I id);
 }

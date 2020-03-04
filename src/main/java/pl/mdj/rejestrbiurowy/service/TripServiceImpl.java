@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
@@ -58,4 +59,10 @@ public class TripServiceImpl implements TripService {
     public void deleteById(Long id) {
         tripRepository.deleteById(id);
     }
+
+    public List<TripDto> findAllByEmployee_Id(Long id){
+        List<Trip> tripList = tripRepository.findAllByEmployee_Id(id);
+        return tripMapper.mapToDto(tripList);
+    }
+
 }

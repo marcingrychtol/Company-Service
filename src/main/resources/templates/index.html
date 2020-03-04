@@ -7,80 +7,88 @@
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
 </head>
-<body>
+<body class="bg-light">
 <div th:replace="fragments/nav-bar"></div>
 
 <div class="container">
-    <div class="alert alert-secondary alert-dismissible fade show mt-2 rounded-0" role="alert">
+    <div class="alert alert-dark alert-dismissible fade show mt-2 rounded-0" role="alert">
         <h1 class="display-4">Łobsztaluj se auto!</h1>
     </div>
 
+    <td th:unless="${errorMessage} == null">
+        <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+            <p  th:text="${errorMessage}"></p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </td>
+
     <div class="container">
+
         <form th:action="@{/trips/add}" th:object="${newTrip}" method="post">
 
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                     <div class="shadow card bg-danger text-white rounded-0 h-100">
-                        <div class="card-header">Dzień - domyślnie dzisioj</div>
+                        <div class="card-header">Dzień</div>
                         <div class="card-body">
                             <label for="startDate">Kiedy wezna: </label>
-                            <input id="startDate" th:field="*{startingDate}"/>
+                            <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                             <label for="endDate">Kiedy łoddom: </label>
-                            <input id="endDate" th:field="*{endingDate}"/>
-                            <small id="endDateHelp" class="form-text text-light">Domyślnie ten sam dzień, pole opcjonalne</small>
+                            <input class="bg-light rounded-0" placeholder="pole opcjonalne" id="endDate" th:field="*{endingDate}"/>
+                            <small id="endDateHelp" class="form-text text-light">pole opcjonalne</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                     <div class="shadow card bg-warning text-white rounded-0 h-100">
-                        <div class="card-header">Pojazd - pole wymagane</div>
+                        <div class="card-header">Pojazd</div>
                         <div class="card-body">
-                            <select class="custom-select rounded-0" size="7" th:field="*{carId}">
+                            <select class="custom-select bg-light rounded-0" size="6" th:field="*{carId}">
                                 <option th:each="car : ${cars}" th:value="${car.getId()}"
                                         th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">
                                 </option>
                             </select>
+                            <small id="carHelp" class="form-text text-light">pole wymagane</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                     <div class="shadow card bg-success text-white rounded-0 h-100">
-                        <div class="card-header">Osoba - pole wymagane</div>
+                        <div class="card-header">Osoba</div>
                         <div class="card-body">
-                            <select class="custom-select rounded-0" size="7" th:field="*{employeeId}">
+                            <select class="custom-select bg-light  rounded-0" size="6" th:field="*{employeeId}">
                                 <option th:each="emp : ${employees}" th:value="${emp.getId()}"
                                         th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
                                 </option>
                             </select>
+                            <small id="employeeHelp" class="form-text text-light">pole wymagane</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-12 col-xl-3 p-1">
                     <div class="shadow card bg-secondary text-white rounded-0 h-100">
-                        <div class="card-header">Opis - opcjonalnie</div>
+                        <div class="card-header">Opis </div>
                         <div class="card-body">
-                            <textarea class="form-control rounded-0" rows="3"
+                            <textarea class="form-control bg-light rounded-0" rows="2"
                                       placeholder="Np. godziny wyjazdu, cel, klient..."
                                       th:field="*{additionalMessage}"></textarea>
+                            <small id="messageHelp" class="form-text text-light">pole opcjonalne</small>
                         </div>
                     </div>
                 </div>
-
 
                 <button type="submit" class="shadow btn btn-info btn-block btn-lg mt-3 rounded-0">Ciś
                     knefel, a łobsztaluj!
                 </button>
 
             </div>
-
-
         </form>
-
     </div>
-
 </div>
 
 
@@ -90,9 +98,9 @@
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     $('#startDate').datepicker({
         showOnFocus: true,
+        showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
-        // TODO: handle months values
         value: today.getDate().toString()+'/'+(today.getMonth() +1).toString()+'/'+today.getFullYear().toString(),
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
@@ -104,6 +112,7 @@
     });
     $('#endDate').datepicker({
         showOnFocus: true,
+        showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
         // value: today,

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
+List<Trip> findAllByEmployee_Id(Long id);
 
 //    @EntityGraph(value = "Trip")
 }

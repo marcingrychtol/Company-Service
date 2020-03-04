@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.entity.Employee;
+import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
+import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 
 import java.text.SimpleDateFormat;
@@ -19,15 +22,27 @@ import java.util.Date;
 public class TripControllerMVC {
 
     TripService tripService;
+    EmployeeService employeeService;
+    CarService carService;
 
     @Autowired
-    public TripControllerMVC(TripService tripService) {
+    public TripControllerMVC(TripService tripService, EmployeeService employeeService, CarService carService) {
         this.tripService = tripService;
+        this.employeeService = employeeService;
+        this.carService = carService;
     }
 
     @GetMapping("")
-    public String getCalendar(Model model){
+    public String getAllTrips(Model model){
         model.addAttribute("trips", tripService.getAll());
+        return "trips/trips";
+    }
+
+    @GetMapping("/employee/{id}")
+    public String getTripsFilteredByEmployee(@PathVariable("id") Long id, Model model){
+        model.addAttribute("employee", employeeService.findOne(id));
+        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
+        model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
         return "trips/trips";
     }
 
@@ -39,8 +54,11 @@ public class TripControllerMVC {
             return "redirect:/trips/";
         }
 
-        model.addAttribute("tripVirtual", tripDto);
-        return "redirect:/";
+        model.addAttribute("errorMessage", "Rezerwacja nieskuteczna! Aby zarezerwować pojazd, musisz wypełnić wszystkie obowiązkowe pola.");
+        model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("cars", carService.getAll());
+        return "index";
     }
 
     @GetMapping("/edit")
@@ -50,7 +68,7 @@ public class TripControllerMVC {
     }
 
     @InitBinder
-    public void allowEmptyDateBinding( WebDataBinder binder )
+    public void customizeDateBinder( WebDataBinder binder )
     {
         // tell spring to set empty values as null instead of empty string.
         binder.registerCustomEditor( Date.class, new StringTrimmerEditor( true ));
@@ -63,16 +81,10 @@ public class TripControllerMVC {
         binder.registerCustomEditor(Date.class, editor);
     }
 
-
-
-
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")  // TODO: trzeba jakoś walidować usuwanie, bo wystarczy wpisać id do ścieżki
     public String DeleteTrip(@PathVariable Long id){
         tripService.deleteById(id);
         return "redirect:/trips/edit";
     }
-
-    // TODO @InitBinder
-
 
 }
