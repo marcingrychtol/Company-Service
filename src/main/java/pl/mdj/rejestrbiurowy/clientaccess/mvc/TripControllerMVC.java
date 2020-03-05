@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
@@ -14,6 +15,8 @@ import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -32,6 +35,8 @@ public class TripControllerMVC {
         this.carService = carService;
     }
 
+    //TODO: zrobić sortowanie po dacie
+
     @GetMapping("")
     public String getAllTrips(Model model){
         model.addAttribute("trips", tripService.getAll());
@@ -43,6 +48,28 @@ public class TripControllerMVC {
         model.addAttribute("employee", employeeService.findOne(id));
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
+        return "trips/trips";
+    }
+
+    @GetMapping("/car/{id}")
+    public String getTripsFilteredByCar(@PathVariable("id") Long id, Model model){
+        model.addAttribute("car", carService.findOne(id));
+        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
+        model.addAttribute("trips", tripService.findAllByCar_Id(id));
+        return "trips/trips";
+    }
+
+
+    @GetMapping("/day")
+    public String getTripsFilteredByDay(@ModelAttribute DateDto dateDto, Model model){
+
+        LocalDate date = LocalDate
+                .ofInstant(dateDto
+                                .getFilterDate()
+                                .toInstant(),
+                        ZoneId.of("CET"));
+        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
+        model.addAttribute("trips", tripService.findAllByStartingDateEquals(date));
         return "trips/trips";
     }
 

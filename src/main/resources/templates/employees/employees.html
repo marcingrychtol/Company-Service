@@ -12,22 +12,22 @@
 
 
     <div class="row">
-        <tr th:each="employee: ${employees}">
+        <tr th:each="emp: ${employees}">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
                     <div class="shadow card border-success text-center rounded-0">
                         <h5 class="card-header bg-light">
-<!--                            <td th:text="${employee.getId()}"></td>-->
-                            <td th:text="${employee.getName()}"></td>
-                            <td th:text="${employee.getSecondName()}"></td>
+<!--                            <td th:text="${emp.getId()}"></td>-->
+                            <td th:text="${emp.getName()}"></td>
+                            <td th:text="${emp.getSecondName()}"></td>
                         </h5>
                         <div class="card-body">
                             <p class="card-text">
-                            <td th:text="${employee.getEmail()}"></td>
+                            <td th:text="${emp.getEmail()}"></td>
                             <br>
-                            <td th:text="${employee.getPhoneNumber()}"></td>
+                            <td th:text="${emp.getPhoneNumber()}"></td>
                             <br>
 
-                        </div><a th:href="@{/}" class="btn btn-success stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
+                        </div><a th:href="@{/trips/employee/{id}(id=${emp.getId()})}" class="btn btn-success stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
                     </div>
 <!--                    <div class="card border-light text-center">-->
 <!--                        <div class="card-footer">-->

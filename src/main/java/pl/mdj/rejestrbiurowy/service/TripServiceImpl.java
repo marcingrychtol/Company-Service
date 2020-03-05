@@ -10,6 +10,7 @@ import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,6 +63,17 @@ public class TripServiceImpl implements TripService {
 
     public List<TripDto> findAllByEmployee_Id(Long id){
         List<Trip> tripList = tripRepository.findAllByEmployee_Id(id);
+        return tripMapper.mapToDto(tripList);
+    }
+
+    public List<TripDto> findAllByCar_Id(Long id){
+        List<Trip> tripList = tripRepository.findAllByCar_Id(id);
+        return tripMapper.mapToDto(tripList);
+    }
+
+
+    public List<TripDto> findAllByStartingDateEquals(LocalDate date){
+        List<Trip> tripList = tripRepository.findAllByStartingDateEquals(date);
         return tripMapper.mapToDto(tripList);
     }
 
