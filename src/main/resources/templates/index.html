@@ -32,13 +32,13 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                     <div class="shadow card bg-danger text-white rounded-0 h-100">
-                        <div class="card-header">Dzień</div>
+                        <div class="card-header">Dziyń</div>
                         <div class="card-body">
                             <label for="startDate">Kiedy wezna: </label>
                             <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                             <label for="endDate">Kiedy łoddom: </label>
-                            <input class="bg-light rounded-0" placeholder="pole opcjonalne" id="endDate" th:field="*{endingDate}"/>
-                            <small id="endDateHelp" class="form-text text-light">pole opcjonalne</small>
+                            <input class="bg-light rounded-0" placeholder="tego niy musisz" id="endDate" th:field="*{endingDate}"/>
+                            <small id="endDateHelp" class="form-text text-light"></small>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                                         th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">
                                 </option>
                             </select>
-                            <small id="carHelp" class="form-text text-light">pole wymagane</small>
+                            <small id="carHelp" class="form-text text-light">* pole wymagane</small>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                                         th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
                                 </option>
                             </select>
-                            <small id="employeeHelp" class="form-text text-light">pole wymagane</small>
+                            <small id="employeeHelp" class="form-text text-light">* pole wymagane</small>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                             <textarea class="form-control bg-light rounded-0" rows="2"
                                       placeholder="Np. godziny wyjazdu, cel, klient..."
                                       th:field="*{additionalMessage}"></textarea>
-                            <small id="messageHelp" class="form-text text-light">pole opcjonalne</small>
+<!--                            <small id="messageHelp" class="form-text text-light">pole opcjonalne</small>-->
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,6 @@
         showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
-        // value: today,
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         minDate: function () {

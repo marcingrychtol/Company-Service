@@ -5,7 +5,7 @@
     <div th:replace="fragments/bootstrap-styles"></div>
 </head>
 
-<body>
+<body class="bg-light">
 
 <div th:replace="fragments/nav-bar"></div>
 
@@ -32,7 +32,7 @@
                         </p>
 
                     </div>
-                    <a th:href="@{/trips/car/{id}(id=${car.getId()})}" class="btn btn-warning stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
+                    <a th:href="@{/trips/car/{id}(id=${car.getId()})}" class="btn btn-warning stretched-link btn-block text-white rounded-0">Pokaż rezerwacje</a>
                 </div>
             </div>
         </tr>

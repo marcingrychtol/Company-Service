@@ -9,53 +9,55 @@
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
 
 </head>
-<body>
+<body class="bg-light">
 <div th:replace="fragments/nav-bar"></div>
 
 
 <div class="container">
-    <form th:action="@{/trips/day}" th:object="${filterDateWrap}">
+    <form th:action="@{/trips/day}" th:object="${tripDto}">
 
-        <div class="row">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
                 <div class="shadow card bg-danger text-white rounded-0">
-                    <div class="card-header">Filtrowanie</div>
+                    <div class="card-header">Ja, sprowdź se w kalyndorzu</div>
                     <div class="card-body">
                         <label for="startDate">Wybier dziyń: </label>
-                        <input class="bg-light rounded-0" id="startDate" th:field="*{filterDate}"/>
+                        <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                     </div>
                 </div>
+                <button type="submit" th:href="@{/trips/day}"
+                         class="shadow btn btn-danger btn-block rounded-0">Ciś knefel</button>
             </div>
         </div>
     </form>
 
 </div>
 
-<div class="container">
+<!--<div class="container">-->
 
-    <div class="row">
-        <tr th:each="day: ${dateList}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
-                <div class="shadow card border-danger text-center rounded-0">
-                    <h5 class="card-header bg-light">
-                        <td th:text="${day.getDayOfWeek()}"></td>
-                    </h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                        <h1>
-                            <td th:text="${day.getDayOfMonth()}"></td>
-                        </h1>
-                        <td th:text="${day.getMonth()}"></td>
-                        <br>
+<!--    <div class="row">-->
+<!--        <tr th:each="day: ${dateList}">-->
+<!--            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">-->
+<!--                <div class="shadow card border-danger text-center rounded-0">-->
+<!--                    <h5 class="card-header bg-light">-->
+<!--                        <td th:text="${day.getDayOfWeek()}"></td>-->
+<!--                    </h5>-->
+<!--                    <div class="card-body">-->
+<!--                        <p class="card-text">-->
+<!--                        <h1>-->
+<!--                            <td th:text="${day.getDayOfMonth()}"></td>-->
+<!--                        </h1>-->
+<!--                        <td th:text="${day.getMonth()}"></td>-->
+<!--                        <br>-->
 
-                    </div>
-                    <a th:href="@{/calendar/pick}"
-                       class="btn btn-danger stretched-link btn-block text-white rounded-0">Pokaż dzień</a>
-                </div>
-            </div>
-        </tr>
-    </div>
-</div>
+<!--                    </div>-->
+<!--                    <a th:href="@{/calendar/pick}"-->
+<!--                       class="btn btn-danger stretched-link btn-block text-white rounded-0">Pokaż dzień</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </tr>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 <div th:replace="fragments/bootstrap-scripts"></div>
@@ -70,9 +72,6 @@
         value: today.getDate().toString() + '/' + (today.getMonth() + 1).toString() + '/' + today.getFullYear().toString(),
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
-    });
-    $('#datepicker').datepicker({
-        uiLibrary: 'bootstrap4'
     });
 </script>
 

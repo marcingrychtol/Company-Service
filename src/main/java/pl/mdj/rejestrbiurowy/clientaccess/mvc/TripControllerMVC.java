@@ -7,9 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
-import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
@@ -39,6 +37,9 @@ public class TripControllerMVC {
 
     @GetMapping("")
     public String getAllTrips(Model model){
+        model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("trips", tripService.getAll());
         return "trips/trips";
     }
@@ -48,6 +49,8 @@ public class TripControllerMVC {
         model.addAttribute("employee", employeeService.findOne(id));
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
+
+        addTripsMainSiteAttributesToModel(model);
         return "trips/trips";
     }
 
@@ -56,18 +59,37 @@ public class TripControllerMVC {
         model.addAttribute("car", carService.findOne(id));
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByCar_Id(id));
+
+        addTripsMainSiteAttributesToModel(model);
         return "trips/trips";
     }
 
-
     @GetMapping("/day")
-    public String getTripsFilteredByDay(@ModelAttribute DateDto dateDto, Model model){
+    public String getTripsFilteredByDay(@ModelAttribute TripDto tripDto, Model model){
 
-        LocalDate date = LocalDate
-                .ofInstant(dateDto
-                                .getFilterDate()
+        LocalDate date = LocalDate  // TODO - not the best way to do so
+                .ofInstant(tripDto
+                                .getStartingDate()
                                 .toInstant(),
                         ZoneId.of("CET"));
+
+
+        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
+        model.addAttribute("trips", tripService.findAllByStartingDateEquals(date));
+        addTripsMainSiteAttributesToModel(model);
+        return "trips/trips";
+    }
+
+    @GetMapping("/filter")
+    public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model){
+
+        LocalDate date = LocalDate  // TODO - not the best way to do so
+                .ofInstant(tripDto
+                                .getStartingDate()
+                                .toInstant(),
+                        ZoneId.of("CET"));
+
+
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByStartingDateEquals(date));
         return "trips/trips";
@@ -108,10 +130,16 @@ public class TripControllerMVC {
         binder.registerCustomEditor(Date.class, editor);
     }
 
-    @GetMapping("/delete/{id}")  // TODO: trzeba jakoś walidować usuwanie, bo wystarczy wpisać id do ścieżki
+    @GetMapping("/delete/{id}")  // TODO: trzeba jakoś walidować usuwanie, bo wystarczy wpisać id do ścieżki -- np. przez wysłanie obiektu z formularza
     public String DeleteTrip(@PathVariable Long id){
         tripService.deleteById(id);
         return "redirect:/trips/edit";
+    }
+
+    private void addTripsMainSiteAttributesToModel(Model model){
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("tripDto", new TripDto());
     }
 
 }

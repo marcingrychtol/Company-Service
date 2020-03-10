@@ -4,8 +4,82 @@
     <meta charset="UTF-8">
     <div th:replace="fragments/bootstrap-styles"></div>
 </head>
-<body>
+<body class="bg-light">
 <div th:replace="fragments/nav-bar"></div>
+
+<div class="container">
+    <div class="row p-1 mt-2">
+        <p>
+            <a class="shadow btn btn-secondary btn-block  rounded-0" data-toggle="collapse" href="#collapseExample" role="button"
+               aria-expanded="false" aria-controls="collapseExample">
+                Filtrowanie
+            </a>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="shadow card card-body bg-secondary rounded-0">
+                <form th:action="@{/trips/filter}" th:object="${tripDto}" method="post">
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
+                            <div class="shadow card border-white rounded-0 h-100">
+                                <div class="card-header">Dni</div>
+                                <div class="card-body">
+                                    <label for="startDate">Łod (abo yno): </label>
+                                    <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
+                                    <label for="endDate">Do: </label>
+                                    <input class="bg-light rounded-0" placeholder="tego niy trza" id="endDate"
+                                           th:field="*{endingDate}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
+                            <div class="shadow card border-white rounded-0 h-100">
+                                <div class="card-header">Auto</div>
+                                <div class="card-body">
+                                    <select class="custom-select bg-light rounded-0" size="6" th:field="*{carId}">
+                                        <option th:each="car : ${cars}" th:value="${car.getId()}"
+                                                th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
+                            <div class="shadow card border-white rounded-0 h-100">
+                                <div class="card-header">Hajer</div>
+                                <div class="card-body">
+                                    <select class="custom-select bg-light  rounded-0" size="6" th:field="*{employeeId}">
+                                        <option th:each="emp : ${employees}" th:value="${emp.getId()}"
+                                                th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-12 col-xl-3 p-1">
+                            <div class="shadow card border-white rounded-0 h-100">
+                                <div class="card-header">Opis</div>
+                                <div class="card-body">
+                            <textarea class="form-control bg-light rounded-0" rows="2"
+                                      placeholder="Np. godziny wyjazdu, cel, klient..."
+                                      th:field="*{additionalMessage}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="shadow btn btn-warning btn-block mt-3 rounded-0">Filtruj!
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="container">
     <div class="row">
@@ -25,7 +99,7 @@
                         <br/>
                         <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
                         <p class="card-text mt-1">
-                            <td th:text="${trip.getAdditionalMessage()}"></td>
+                        <td th:text="${trip.getAdditionalMessage()}"></td>
                         </p>
                     </div>
                     <div class="card-footer">
@@ -36,7 +110,9 @@
                         <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
                         </p>
                     </div>
-                    <button type="submit" class="btn btn-info stretched-link rounded-0" value="add new employee">Edytuj</button>
+                    <button type="submit" class="btn btn-info stretched-link rounded-0" value="add new employee">
+                        Edytuj
+                    </button>
                 </div>
             </div>
         </tr>
@@ -45,5 +121,34 @@
 </div>
 
 <div th:replace="fragments/bootstrap-scripts"></div>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<script>
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $('#startDate').datepicker({
+        showOnFocus: true,
+        showRightIcon: false,
+        header: false,
+        format: 'dd/mm/yyyy',
+        value: today.getDate().toString()+'/'+(today.getMonth() +1).toString()+'/'+today.getFullYear().toString(),
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'fontawesome',
+        minDate: today,
+
+        maxDate: function () {
+            return $('#endDate').val();
+        }
+    });
+    $('#endDate').datepicker({
+        showOnFocus: true,
+        showRightIcon: false,
+        header: false,
+        format: 'dd/mm/yyyy',
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'fontawesome',
+        minDate: function () {
+            return $('#startDate').val();
+        }
+    });
+</script>
 </body>
 </html>
