@@ -7,13 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
+import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
+import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 import pl.mdj.rejestrbiurowy.service.mappers.CarMapper;
+import pl.mdj.rejestrbiurowy.service.mappers.DateMapper;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -30,11 +38,15 @@ public class CarServiceImpl implements CarService {
 
     CarRepository carRepository;
     CarMapper carMapper;
+    TripRepository tripRepository;
+    DateMapper dateMapper;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper) {
+    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateMapper dateMapper) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
+        this.tripRepository = tripRepository;
+        this.dateMapper = dateMapper;
     }
 
     @Override
@@ -59,6 +71,17 @@ public class CarServiceImpl implements CarService {
     @Override
     public void deleteById(Long id) {
         carRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<CarDto> getAvailable(LocalDate date) {
+        List<Car> notAvailableCarList = tripRepository.findAllByStartingDateEquals(date).stream()
+                .map(Trip::getCar)
+                .collect(Collectors.toList());
+        return carRepository.findAll().stream()
+                .filter(c -> !notAvailableCarList.contains(c))
+                .map(c -> carMapper.mapToDto(c))
+                .collect(Collectors.toSet());
     }
 
 }

@@ -26,16 +26,18 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
     TripRepository tripRepository;
     CarMapper carMapper;
     EmployeeMapper employeeMapper;
+    DateMapper dateMapper;
 
     private static Logger LOG = LoggerFactory.getLogger(TripMapper.class);
 
     @Autowired
-    public TripMapper(CarRepository carRepository, EmployeeRepository employeeRepository, TripRepository tripRepository, CarMapper carMapper, EmployeeMapper employeeMapper) {
+    public TripMapper(CarRepository carRepository, EmployeeRepository employeeRepository, TripRepository tripRepository, CarMapper carMapper, EmployeeMapper employeeMapper, DateMapper dateMapper) {
         this.carRepository = carRepository;
         this.employeeRepository = employeeRepository;
         this.tripRepository = tripRepository;
         this.carMapper = carMapper;
         this.employeeMapper = employeeMapper;
+        this.dateMapper = dateMapper;
     }
 
     @Override
@@ -47,16 +49,8 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
         dto.setEmployee(employeeMapper
                 .mapToDto(entity
                         .getEmployee()));
-        dto.setStartingDate(Date
-                .from(entity
-                        .getStartingDate()
-                        .atStartOfDay(ZoneId.of("CET"))
-                        .toInstant()));
-        dto.setEndingDate(Date
-                .from(entity
-                        .getEndingDate()
-                        .atStartOfDay(ZoneId.of("CET"))
-                        .toInstant()));
+        dto.setStartingDate(dateMapper.toDate(entity.getStartingDate()));
+        dto.setEndingDate(dateMapper.toDate(entity.getEndingDate()));
         dto.setAdditionalMessage(" ");
         if (entity.getAdditionalMessage() != null){
             dto.setAdditionalMessage(entity.getAdditionalMessage());
@@ -97,16 +91,8 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                 .findById(dto
                         .getEmployeeId())
                 .orElse(new Employee()));
-        entity.setStartingDate(LocalDate
-                .ofInstant(dto
-                        .getStartingDate()
-                        .toInstant(),
-                        ZoneId.of("CET")));
-        entity.setEndingDate(LocalDate
-                .ofInstant(dto
-                        .getEndingDate()
-                        .toInstant(),
-                        ZoneId.of("CET")));
+        entity.setStartingDate(dateMapper.toLocalDate(dto.getStartingDate()));
+        entity.setEndingDate(dateMapper.toLocalDate(dto.getEndingDate()));
         if (dto.getAdditionalMessage() != null){
             entity.setAdditionalMessage(dto.getAdditionalMessage());
         }

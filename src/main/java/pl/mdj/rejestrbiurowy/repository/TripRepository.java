@@ -13,6 +13,7 @@ List<Trip> findAllByEmployee_Id(Long id);
 List<Trip> findAllByCar_Id(Long id);
 
 List<Trip> findAllByStartingDateEquals(LocalDate date);
+List<Trip> findAllByStartingDateIsNot(LocalDate date);
 
 //    @EntityGraph(value = "Trip")
 }

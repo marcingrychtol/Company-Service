@@ -1,5 +1,7 @@
 package pl.mdj.rejestrbiurowy.clientaccess.mvc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -21,6 +23,8 @@ import java.util.Date;
 @Controller
 @RequestMapping(path = "trips")
 public class TripControllerMVC {
+
+    private Logger LOG = LoggerFactory.getLogger(TripControllerMVC.class);
 
     TripService tripService;
     EmployeeService employeeService;
@@ -97,6 +101,8 @@ public class TripControllerMVC {
 
     @PostMapping("/add")
     public String addTrip(@ModelAttribute TripDto tripDto, Model model){
+
+        LOG.info(tripDto.getStartingDate().toString());
 
         if (tripDto.isComplete()){
             tripService.addOne(tripDto);

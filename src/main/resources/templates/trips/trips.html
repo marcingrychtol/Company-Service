@@ -7,6 +7,7 @@
 <body class="bg-light">
 <div th:replace="fragments/nav-bar"></div>
 
+<!-- filters below -->
 <div class="container">
     <div class="row p-1 mt-2">
         <p>
@@ -25,6 +26,7 @@
                                 <div class="card-header">Dni</div>
                                 <div class="card-body">
                                     <label for="startDate">Łod (abo yno): </label>
+<!--                                    TODO : wywalić domyślną datę-->
                                     <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                                     <label for="endDate">Do: </label>
                                     <input class="bg-light rounded-0" placeholder="tego niy trza" id="endDate"
