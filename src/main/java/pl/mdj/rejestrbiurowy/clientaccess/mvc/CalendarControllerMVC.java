@@ -47,18 +47,23 @@ public class CalendarControllerMVC {
     @GetMapping("")
     public String getCallendar(@ModelAttribute TripDto tripDto, Model model) {
 
-        LocalDate date;  // TODO: maybe that part should be moved do service, passing tripDto
+        LocalDate requestedDate;
         if (tripDto.getStartingDate() != null) {
             LOG.info(tripDto.getStartingDate().toString());
-            date = dateMapper.toLocalDate(tripDto.getStartingDate());
+            requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
         } else {
-            date = LocalDate.now();
+            requestedDate = LocalDate.now();
         }
 
-        model.addAttribute("date", date);
+        LocalDate today = LocalDate.now();
+
+        model.addAttribute("today", today);
+        model.addAttribute("year", requestedDate.getYear());
+        model.addAttribute("month", requestedDate.getMonthValue());
+        model.addAttribute("day", requestedDate.getDayOfMonth());
         model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("cars", carService.getAvailable(date));
-        model.addAttribute("trips", tripService.findAllByStartingDateEquals(date));
+        model.addAttribute("cars", carService.getAvailable(requestedDate));
+        model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));
         return "calendar/calendar";
     }
 
@@ -81,4 +86,6 @@ public class CalendarControllerMVC {
         //Register it as custom editor for the Date type
         binder.registerCustomEditor(Date.class, editor);
     }
+
+
 }

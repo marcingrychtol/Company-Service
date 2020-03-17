@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <div th:replace="fragments/bootstrap-styles"></div>
+    <div th:replace="fragments/datepicker-styles"></div>
+
 </head>
 <body class="bg-light">
 <div th:replace="fragments/nav-bar"></div>
@@ -19,14 +21,12 @@
         <div class="collapse" id="collapseExample">
             <div class="shadow card card-body bg-secondary rounded-0">
                 <form th:action="@{/trips/filter}" th:object="${tripDto}" method="post">
-
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                             <div class="shadow card border-white rounded-0 h-100">
                                 <div class="card-header">Dni</div>
                                 <div class="card-body">
                                     <label for="startDate">Łod (abo yno): </label>
-<!--                                    TODO : wywalić domyślną datę-->
                                     <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                                     <label for="endDate">Do: </label>
                                     <input class="bg-light rounded-0" placeholder="tego niy trza" id="endDate"
