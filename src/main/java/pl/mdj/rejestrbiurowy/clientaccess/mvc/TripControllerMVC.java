@@ -37,7 +37,7 @@ public class TripControllerMVC {
         this.carService = carService;
     }
 
-    //TODO: zrobić sortowanie po dacie
+    //TODO: need to make sorting by date
 
     @GetMapping("")
     public String getAllTrips(Model model){
@@ -118,6 +118,7 @@ public class TripControllerMVC {
 
     @GetMapping("/edit")
     public String editTrips(Model model){
+        model.addAttribute("deleteTrip", new TripDto());
         model.addAttribute("trips", tripService.getAll());
         return "trips/trips-edit";
     }
@@ -136,9 +137,9 @@ public class TripControllerMVC {
         binder.registerCustomEditor(Date.class, editor);
     }
 
-    @GetMapping("/delete/{id}")  // TODO: trzeba jakoś walidować usuwanie, bo wystarczy wpisać id do ścieżki -- np. przez wysłanie obiektu z formularza
-    public String DeleteTrip(@PathVariable Long id){
-        tripService.deleteById(id);
+    @PostMapping("/delete")
+    public String deleteTrip(@ModelAttribute TripDto tripDto){
+        tripService.deleteById(tripDto.getId());
         return "redirect:/trips/edit";
     }
 

@@ -20,6 +20,8 @@
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                 <div class="shadow card border-danger text-center rounded-0">
                     <h5 class="card-header bg-light">
+                        <td th:text="${trip.getId()}"></td>
+                        <br>
                         <td th:text="${trip.getEmployee().getName()}"></td>
                         <br>
                         <td th:text="${trip.getEmployee().getSecondName()}"></td>
@@ -51,7 +53,12 @@
                     </div>
                     <div class="card-body bg-light">
                         <a href="#" class="btn btn-outline-secondary btn-lg btn-block rounded-0">  Edytuj  </a>
-                        <a th:href="@{/trips/delete/{id}(id=${trip.getId()})}" class="btn btn-outline-danger btn-sm btn-block">Usuń</a>
+                        <form th:action="@{/trips/delete}" th:object="${deleteTrip}" method="post">
+                            <input type="hidden" name="id" th:value="${trip.id}">
+<!--                            <input type="hidden" name="carId" th:field="*{carId}" th:value="${trip.getCar().getId()}">-->
+<!--                            <input type="hidden" name="employeeId" th:field="*{employeeId}" th:value="${trip.getEmployee().getId()}">-->
+                            <button type="submit" class="btn btn-outline-danger btn-sm btn-block">Usuń</button>
+                        </form>
                     </div>
                 </div>
             </div>

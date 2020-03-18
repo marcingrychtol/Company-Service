@@ -59,7 +59,7 @@ public class CarServiceImpl implements CarService {
         return carMapper.mapToDto(Objects
                 .requireNonNull(carRepository
                         .findById(id)
-                        .orElse(null)));  // TODO: to chyba tak nie może wyglądać ;)
+                        .orElse(null)));  // TODO: well i think this wasn't supposted to work like that ;)
     }
 
     @Override

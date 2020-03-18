@@ -43,6 +43,11 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
     @Override
     public TripDto mapToDto(Trip entity) {
         TripDto dto = new TripDto();
+
+        if (entity.getId() != null){
+            dto.setId(entity.getId());
+        }
+
         dto.setCar(carMapper
                 .mapToDto(entity
                         .getCar()));
