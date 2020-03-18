@@ -18,7 +18,11 @@
                 <div class="row justify-content-md-center">
                     <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
                         <div class="shadow card bg-danger text-white rounded-0">
-                            <div class="card-header" th:text="'Dziosio momy: ' + ${today}">Dziosio momy: </div>
+                            <div class="card-header" th:text=
+                                    "'Dziosio momy: '
+                            + ${today.getDayOfWeek()}
+                            + ' '
+                            + ${today}">Dziosio momy: </div>
                             <div class="card-body">
                                 <label for="startDate">Zmiyń se dziyń: </label>
                                 <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
