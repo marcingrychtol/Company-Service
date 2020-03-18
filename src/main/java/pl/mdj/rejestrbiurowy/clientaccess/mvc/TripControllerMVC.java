@@ -68,22 +68,6 @@ public class TripControllerMVC {
         return "trips/trips";
     }
 
-    @GetMapping("/day")
-    public String getTripsFilteredByDay(@ModelAttribute TripDto tripDto, Model model){
-
-        LocalDate date = LocalDate  // TODO - not the best way to do so
-                .ofInstant(tripDto
-                                .getStartingDate()
-                                .toInstant(),
-                        ZoneId.of("CET"));
-
-
-        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
-        model.addAttribute("trips", tripService.findAllByStartingDateEquals(date));
-        addTripsMainSiteAttributesToModel(model);
-        return "trips/trips";
-    }
-
     @GetMapping("/filter")
     public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model){
 
