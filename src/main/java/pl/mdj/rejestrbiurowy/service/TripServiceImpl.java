@@ -34,7 +34,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripDto findOne(Long id) {
+    public TripDto findById(Long id) {
         return tripMapper.mapToDto(Objects
                 .requireNonNull(tripRepository
                         .findById(id)
