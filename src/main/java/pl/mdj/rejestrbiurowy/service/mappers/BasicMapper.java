@@ -7,13 +7,4 @@ public interface BasicMapper<E, D> {
     List<D> mapToDto(List<E> entityList);
     E mapToEntity(D dto);
     List<E> mapToEntity(List<D> dtoList);
-
-    // TODO: think about MapStruct https://mapstruct.org/
-
-//    default List<D> mapToDto(List<E> inputEntityList){
-//        return inputEntityList.stream()
-//                .map(o -> mapToDto(o))
-//                .collect(Collectors.toList());
-//    }
-
 }

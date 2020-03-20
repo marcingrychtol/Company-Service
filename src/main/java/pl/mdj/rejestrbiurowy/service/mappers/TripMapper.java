@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -44,22 +45,12 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
     public TripDto mapToDto(Trip entity) {
         TripDto dto = new TripDto();
 
-        if (entity.getId() != null){
-            dto.setId(entity.getId());
-        }
+        Optional.ofNullable(entity.getId()).ifPresent(dto::setId);
+        Optional.ofNullable(entity.getCar()).ifPresent(car -> dto.setCar(carMapper.mapToDto(car)));
+        Optional.ofNullable(entity.getEmployee()).ifPresent(employee -> dto.setEmployee(employeeMapper.mapToDto(employee)));
+        Optional.ofNullable(entity.getStartingDate()).ifPresent(date -> dto.setStartingDate(dateMapper.toDate(date)));
+        Optional.ofNullable(entity.getAdditionalMessage()).ifPresent(dto::setAdditionalMessage);
 
-        dto.setCar(carMapper
-                .mapToDto(entity
-                        .getCar()));
-        dto.setEmployee(employeeMapper
-                .mapToDto(entity
-                        .getEmployee()));
-        dto.setStartingDate(dateMapper.toDate(entity.getStartingDate()));
-        dto.setEndingDate(dateMapper.toDate(entity.getEndingDate()));
-        dto.setAdditionalMessage(" ");
-        if (entity.getAdditionalMessage() != null){
-            dto.setAdditionalMessage(entity.getAdditionalMessage());
-        }
         return dto;
     }
 
@@ -72,35 +63,14 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
 
     @Override
     public Trip mapToEntity(TripDto dto) {
+        Trip entity = new Trip();
 
-        Trip entity;
+        Optional.ofNullable(dto.getId()).ifPresent(entity::setId);
+        Optional.ofNullable(dto.getCar()).ifPresent(car -> entity.setCar(carMapper.mapToEntity(car)));
+        Optional.ofNullable(dto.getEmployee()).ifPresent(employee -> entity.setEmployee(employeeMapper.mapToEntity(employee)));
+        Optional.ofNullable(dto.getStartingDate()).ifPresent(date -> entity.setStartingDate(dateMapper.toLocalDate(date)));
+        Optional.ofNullable(dto.getAdditionalMessage()).ifPresent(entity::setAdditionalMessage);
 
-
-        if (dto.getId() != null) {
-            entity = tripRepository
-                    .findById(dto
-                            .getId())
-                    .orElse(new Trip());
-            if (entity.getId() != null) {
-                return entity;
-            }
-        }
-
-        entity = new Trip();
-        entity.setId(dto.getId());
-        entity.setCar(carRepository
-                .findById(dto
-                        .getCarId())
-                .orElse(new Car()));
-        entity.setEmployee(employeeRepository
-                .findById(dto
-                        .getEmployeeId())
-                .orElse(new Employee()));
-        entity.setStartingDate(dateMapper.toLocalDate(dto.getStartingDate()));
-        entity.setEndingDate(dateMapper.toLocalDate(dto.getEndingDate()));
-        if (dto.getAdditionalMessage() != null){
-            entity.setAdditionalMessage(dto.getAdditionalMessage());
-        }
         return entity;
     }
 

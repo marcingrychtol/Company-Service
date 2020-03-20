@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
-import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
+import pl.mdj.rejestrbiurowy.service.CarService;
 
 @Controller
 @RequestMapping(path = "cars")

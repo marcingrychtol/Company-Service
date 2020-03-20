@@ -1,13 +1,12 @@
 package pl.mdj.rejestrbiurowy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
-import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
 import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
 import java.time.LocalDate;
@@ -30,7 +29,7 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<TripDto> getAll() {
-        return tripMapper.mapToDto(tripRepository.findAll());
+        return tripMapper.mapToDto(tripRepository.findByOrderByStartingDateAsc());
     }
 
     @Override
@@ -62,19 +61,19 @@ public class TripServiceImpl implements TripService {
     }
 
     public List<TripDto> findAllByEmployee_Id(Long id){
-        List<Trip> tripList = tripRepository.findAllByEmployee_Id(id);
+        List<Trip> tripList = tripRepository.findAllByEmployee_IdOrderByStartingDateAsc(id);
         return tripMapper.mapToDto(tripList);
     }
 
     public List<TripDto> findAllByCar_Id(Long id){
-        List<Trip> tripList = tripRepository.findAllByCar_Id(id);
+        List<Trip> tripList = tripRepository.findAllByCar_IdOrderByStartingDateAsc(id);
         return tripMapper.mapToDto(tripList);
     }
-
 
     public List<TripDto> findAllByStartingDateEquals(LocalDate date){
         List<Trip> tripList = tripRepository.findAllByStartingDateEquals(date);
         return tripMapper.mapToDto(tripList);
     }
+
 
 }

@@ -1,6 +1,7 @@
-package pl.mdj.rejestrbiurowy.service.interfaces;
+package pl.mdj.rejestrbiurowy.service;
 
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
+import pl.mdj.rejestrbiurowy.service.interfaces.BasicService;
 
 import java.time.LocalDate;
 import java.util.Date;

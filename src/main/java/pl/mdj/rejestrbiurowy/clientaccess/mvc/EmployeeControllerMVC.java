@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
-import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
+import pl.mdj.rejestrbiurowy.service.EmployeeService;
 
 @Controller
 @RequestMapping("employees")

@@ -10,14 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
-import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
-import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
-import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
+import pl.mdj.rejestrbiurowy.service.CarService;
+import pl.mdj.rejestrbiurowy.service.EmployeeService;
+import pl.mdj.rejestrbiurowy.service.TripService;
+import pl.mdj.rejestrbiurowy.service.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 
 @Controller
@@ -29,15 +30,15 @@ public class TripControllerMVC {
     TripService tripService;
     EmployeeService employeeService;
     CarService carService;
+    DateMapper dateMapper;
 
     @Autowired
-    public TripControllerMVC(TripService tripService, EmployeeService employeeService, CarService carService) {
+    public TripControllerMVC(TripService tripService, EmployeeService employeeService, CarService carService, DateMapper dateMapper) {
         this.tripService = tripService;
         this.employeeService = employeeService;
         this.carService = carService;
+        this.dateMapper = dateMapper;
     }
-
-    //TODO: need to make sorting by date
 
     @GetMapping("")
     public String getAllTrips(Model model){
@@ -50,7 +51,7 @@ public class TripControllerMVC {
 
     @GetMapping("/employee/{id}")
     public String getTripsFilteredByEmployee(@PathVariable("id") Long id, Model model){
-        model.addAttribute("employee", employeeService.findOne(id));
+        model.addAttribute("employee", employeeService.findById(id));
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
 
@@ -60,7 +61,7 @@ public class TripControllerMVC {
 
     @GetMapping("/car/{id}")
     public String getTripsFilteredByCar(@PathVariable("id") Long id, Model model){
-        model.addAttribute("car", carService.findOne(id));
+        model.addAttribute("car", carService.findById(id));
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByCar_Id(id));
 
@@ -71,12 +72,8 @@ public class TripControllerMVC {
     @GetMapping("/filter")
     public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model){
 
-        LocalDate date = LocalDate  // TODO - not the best way to do so
-                .ofInstant(tripDto
-                                .getStartingDate()
-                                .toInstant(),
-                        ZoneId.of("CET"));
-
+        Optional<Date> optionalDate = Optional.ofNullable(tripDto.getStartingDate());
+        LocalDate date = dateMapper.toLocalDate(optionalDate.orElse(new Date()));
 
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByStartingDateEquals(date));

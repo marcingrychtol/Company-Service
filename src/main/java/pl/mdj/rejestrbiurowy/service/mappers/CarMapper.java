@@ -7,6 +7,7 @@ import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,42 +23,32 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
     @Override
     public CarDto mapToDto(Car entity) {
         CarDto dto = new CarDto();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setRegistration(entity.getRegistration());
+        Optional.ofNullable(entity.getId()).ifPresent(dto::setId);
+        Optional.ofNullable(entity.getName()).ifPresent(dto::setName);
+        Optional.ofNullable(entity.getRegistration()).ifPresent(dto::setRegistration);
         return dto;
     }
 
     @Override
     public List<CarDto> mapToDto(List<Car> entityList) {
         return entityList.stream()
-                .map(e -> mapToDto(e))
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Car mapToEntity(CarDto dto) {
-        Car entity;
-
-        if (dto.getId() != null) {
-            entity = carRepository.findById(dto.getId()).orElse(new Car());
-            if (entity.getId() != null) {
-                return entity;
-            }
-        }
-
-        entity = new Car();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setRegistration(dto.getRegistration());
-
+        Car entity = new Car();
+        Optional.ofNullable(dto.getId()).ifPresent(entity::setId);
+        Optional.ofNullable(dto.getName()).ifPresent(entity::setName);
+        Optional.ofNullable(dto.getRegistration()).ifPresent(entity::setRegistration);
         return entity;
     }
 
     @Override
     public List<Car> mapToEntity(List<CarDto> dtoList) {
         return dtoList.stream()
-                .map(c -> mapToEntity(c))
+                .map(this::mapToEntity)
                 .collect(Collectors.toList());
     }
 }

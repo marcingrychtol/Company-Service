@@ -7,19 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
-import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
-import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
 import pl.mdj.rejestrbiurowy.service.mappers.CarMapper;
 import pl.mdj.rejestrbiurowy.service.mappers.DateMapper;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,11 +53,12 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDto findOne(Long id) {
+    public CarDto findById(Long id) {
         return carMapper.mapToDto(Objects
                 .requireNonNull(carRepository
                         .findById(id)
                         .orElse(null)));  // TODO: well i think this wasn't supposted to work like that ;)
+        // maybe throw an exception? and give a response
     }
 
     @Override

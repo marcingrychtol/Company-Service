@@ -9,21 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import pl.mdj.rejestrbiurowy.clientaccess.mvc.interfaces.BasicController;
-import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
-import pl.mdj.rejestrbiurowy.model.entity.Trip;
-import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
-import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
-import pl.mdj.rejestrbiurowy.service.interfaces.TripService;
+import pl.mdj.rejestrbiurowy.service.CarService;
+import pl.mdj.rejestrbiurowy.service.EmployeeService;
+import pl.mdj.rejestrbiurowy.service.TripService;
 import pl.mdj.rejestrbiurowy.service.mappers.DateMapper;
-import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping(path ="/calendar")
@@ -49,7 +43,6 @@ public class CalendarControllerMVC {
 
         LocalDate requestedDate;
         if (tripDto.getStartingDate() != null) {
-            LOG.info(tripDto.getStartingDate().toString());
             requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
         } else {
             requestedDate = LocalDate.now();

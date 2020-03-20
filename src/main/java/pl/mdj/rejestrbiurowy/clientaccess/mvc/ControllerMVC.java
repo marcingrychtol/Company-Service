@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.clientaccess.mvc.interfaces.BasicController;
-import pl.mdj.rejestrbiurowy.service.interfaces.CarService;
-import pl.mdj.rejestrbiurowy.service.interfaces.EmployeeService;
+import pl.mdj.rejestrbiurowy.service.CarService;
+import pl.mdj.rejestrbiurowy.service.EmployeeService;
 
 @Controller
 @RequestMapping("/")

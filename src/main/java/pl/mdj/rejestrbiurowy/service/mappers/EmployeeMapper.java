@@ -7,7 +7,9 @@ import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,41 +25,40 @@ public class EmployeeMapper implements BasicMapper<Employee, EmployeeDto> {
     @Override
     public EmployeeDto mapToDto(Employee entity) {
         EmployeeDto dto = new EmployeeDto();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setSecondName(entity.getSecondName());
-        dto.setPhoneNumber(entity.getPhoneNumber());
-        dto.setEmail(entity.getEmail());
+
+        Optional.ofNullable(entity.getId()).ifPresent(dto::setId);
+        Optional.ofNullable(entity.getName()).ifPresent(dto::setName);
+        Optional.ofNullable(entity.getSecondName()).ifPresent(dto::setSecondName);
+        Optional.ofNullable(entity.getEmail()).ifPresent(dto::setEmail);
+        Optional.ofNullable(entity.getPhoneNumber()).ifPresent(dto::setPhoneNumber);
+
         return dto;
     }
 
     @Override
     public List<EmployeeDto> mapToDto(List<Employee> entityList) {
-        return entityList.stream().map(e -> mapToDto(e)).collect(Collectors.toList());
+        return entityList.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Employee mapToEntity(EmployeeDto dto) {
-        Employee entity;
+        Employee entity = new Employee();
 
-        if (dto.getId() != null) {
-            entity = employeeRepository.findById(dto.getId()).orElse(new Employee());
-            if (entity.getId() != null) {
-                return entity;
-            }
-        }
+        Optional.ofNullable(dto.getId()).ifPresent(entity::setId);
+        Optional.ofNullable(dto.getEmail()).ifPresent(entity::setEmail);
+        Optional.ofNullable(dto.getName()).ifPresent(entity::setName);
+        Optional.ofNullable(dto.getSecondName()).ifPresent(entity::setSecondName);
+        Optional.ofNullable(dto.getPhoneNumber()).ifPresent(entity::setPhoneNumber);
 
-        entity = new Employee();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setSecondName(dto.getSecondName());
-        entity.setPhoneNumber(dto.getPhoneNumber());
-        entity.setEmail(dto.getEmail());
         return entity;
     }
 
     @Override
     public List<Employee> mapToEntity(List<EmployeeDto> dtoList) {
-        return dtoList.stream().map(d -> mapToEntity(d)).collect(Collectors.toList());
+        return dtoList.stream()
+                .map(this::mapToEntity)
+                .collect(Collectors.toList());
     }
 }
