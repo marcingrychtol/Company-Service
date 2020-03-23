@@ -1,9 +1,13 @@
 package pl.mdj.rejestrbiurowy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
@@ -41,17 +45,25 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripDto addOne(TripDto tripDto) {
+    public TripDto addOne(TripDto tripDto) throws EntityNotCompleteException, EntityConflictException {
 
         if (!tripDto.isComplete()){
-            return null;
+            throw new EntityNotCompleteException("Rezerwacja niemożliwa, należy uzupełnić wszystkie wymagane parametry!");
         }
 
-        if (tripDto.getEndingDate() == null){
-            tripDto.setEndingDate(tripDto.getStartingDate());
+        Trip trip = tripMapper.mapToEntity(tripDto);
+
+        ExampleMatcher tripMatcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withIgnorePaths("additionalMessage");
+        Example<Trip> tripExample = Example.of(trip, tripMatcher);
+        if (tripRepository.exists(tripExample)){
+            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
         }
 
-        tripRepository.save(tripMapper.mapToEntity(tripDto));
+
+
+        tripRepository.save(trip);
         return tripDto;
     }
 

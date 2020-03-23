@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
 
@@ -43,7 +45,11 @@ public class CarControllerMVC {
 
     @PostMapping("/add")
     public String addCar(@ModelAttribute CarDto car){
-        carService.addOne(car);
+        try {
+            carService.addOne(car);
+        } catch (EntityNotCompleteException | EntityConflictException e) {
+            e.printStackTrace();
+        }
         return REDIR_EDIT_CAR;
     }
 

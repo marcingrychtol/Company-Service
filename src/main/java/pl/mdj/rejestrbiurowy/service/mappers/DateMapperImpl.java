@@ -20,4 +20,47 @@ public class DateMapperImpl implements DateMapper {
         return LocalDate.ofInstant(date.toInstant(), ZoneId.of("CET"));
     }
 
+    @Override
+    public String dayOfWeekPL(LocalDate localDate) {
+        switch (localDate.getDayOfWeek()){
+            case MONDAY: return "Poniedziałek";
+            case TUESDAY: return "Wtorek";
+            case WEDNESDAY: return "Środa";
+            case THURSDAY: return "Czwartek";
+            case FRIDAY: return "Piątek";
+            case SATURDAY: return "Sobota";
+            case SUNDAY: return "Niedziela";
+            default: return null;
+        }
+    }
+
+    @Override
+    public String dayOfWeekPL(Date date) {
+        return dayOfWeekPL(toLocalDate(date));
+    }
+
+    @Override
+    public String monthPL(LocalDate localDate) {
+        switch (localDate.getMonth()){
+            case JANUARY: return "Stycznia";
+            case FEBRUARY: return "Lutego";
+            case MARCH: return "Marca";
+            case APRIL: return "Kwietnia";
+            case MAY: return "Maja";
+            case JUNE: return "Czerwieca";
+            case JULY: return "Lipca";
+            case AUGUST: return "Sierpienia";
+            case SEPTEMBER: return "Wrzesienia";
+            case OCTOBER: return "Października";
+            case NOVEMBER: return "Listopada";
+            case DECEMBER: return "Grudnia";
+            default:return null;
+        }
+    }
+
+    @Override
+    public String monthPL(Date date) {
+        return dayOfWeekPL(toLocalDate(date));
+    }
+
 }

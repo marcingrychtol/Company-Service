@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 
@@ -33,7 +35,11 @@ public class EmployeeControllerMVC {
 
     @PostMapping("/add")
     public String addEmployee(@ModelAttribute EmployeeDto employee){
-        employeeService.addOne(employee);
+        try {
+            employeeService.addOne(employee);
+        } catch (EntityNotCompleteException | EntityConflictException e) {
+            e.printStackTrace();
+        }
         return "redirect:/employees/edit";
     }
 

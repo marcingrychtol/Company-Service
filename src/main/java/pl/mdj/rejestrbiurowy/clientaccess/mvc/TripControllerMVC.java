@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
@@ -84,17 +86,25 @@ public class TripControllerMVC {
     public String addTrip(@ModelAttribute TripDto tripDto, Model model){
 
         LOG.info(tripDto.getStartingDate().toString());
+        LocalDate requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
 
-        if (tripDto.isComplete()){
+        try {
             tripService.addOne(tripDto);
-            return "redirect:/trips/";
+            model.addAttribute("successMessage","Rezerwacja dodana poprawnie!");
+        } catch (EntityNotCompleteException | EntityConflictException e) {
+            LOG.info(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("errorMessage", "Rezerwacja nieskuteczna! Aby zarezerwować pojazd, musisz wypełnić wszystkie obowiązkowe pola.");
-        model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("cars", carService.getAll());
-        return "index";
+        model.addAttribute("today", LocalDate.now());
+        model.addAttribute("year", requestedDate.getYear());
+        model.addAttribute("month", requestedDate.getMonthValue());
+        model.addAttribute("day", requestedDate.getDayOfMonth());
+        model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("cars", carService.getAvailable(requestedDate));
+        model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));
+
+        return "redirect:/calendar/"; // TODO: to nie może być redirect!!
     }
 
     @GetMapping("/edit")

@@ -20,7 +20,7 @@
                         <div class="shadow card bg-danger text-white rounded-0">
                             <div class="card-header" th:text=
                                     "'Dziosio momy: '
-                            + ${today.getDayOfWeek()}
+                            + ${todayPlDay}
                             + ' '
                             + ${today}">Dziosio momy: </div>
                             <div class="card-body">
@@ -34,6 +34,25 @@
                 </div>
 
     </form>
+
+
+    <td th:unless="${successMessage} == null">
+        <div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
+            <p  th:text="${successMessage}"></p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </td>
+
+    <td th:unless="${errorMessage} == null">
+        <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+            <p  th:text="${errorMessage}"></p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </td>
 
     <div class="alert alert-dark alert-dismissible fade show mt-2 rounded-0" role="alert">
         <h1 class="display-4">Dostympne auta:</h1>
