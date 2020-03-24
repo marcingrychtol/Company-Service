@@ -9,9 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.model.dto.CarDto;
+import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
@@ -53,7 +57,13 @@ public class TripControllerMVC {
 
     @GetMapping("/employee/{id}")
     public String getTripsFilteredByEmployee(@PathVariable("id") Long id, Model model){
-        model.addAttribute("employee", employeeService.findById(id));
+        EmployeeDto employee;
+        try {
+            employee = employeeService.findById(id);
+            model.addAttribute("employee", employee);
+        } catch (CannotFindEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
 
@@ -63,7 +73,15 @@ public class TripControllerMVC {
 
     @GetMapping("/car/{id}")
     public String getTripsFilteredByCar(@PathVariable("id") Long id, Model model){
-        model.addAttribute("car", carService.findById(id));
+        CarDto carDto;
+        try {
+            carDto = carService.findById(id);
+            model.addAttribute("car", carDto);
+        } catch (CannotFindEntityException e) {
+            LOG.info(e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByCar_Id(id));
 
@@ -97,6 +115,7 @@ public class TripControllerMVC {
         }
 
         model.addAttribute("today", LocalDate.now());
+        model.addAttribute("todayFullDayPL", dateMapper.dayOfWeekPL(LocalDate.now()));
         model.addAttribute("year", requestedDate.getYear());
         model.addAttribute("month", requestedDate.getMonthValue());
         model.addAttribute("day", requestedDate.getDayOfMonth());
@@ -104,7 +123,7 @@ public class TripControllerMVC {
         model.addAttribute("cars", carService.getAvailable(requestedDate));
         model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));
 
-        return "redirect:/calendar/"; // TODO: to nie może być redirect!!
+        return "calendar/calendar";
     }
 
     @GetMapping("/edit")

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
@@ -53,12 +54,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDto findById(Long id) {
-        return carMapper.mapToDto(Objects
-                .requireNonNull(carRepository
-                        .findById(id)
-                        .orElse(null)));  // TODO: well i think this wasn't supposted to work like that ;)
-        // maybe throw an exception? and give a response
+    public CarDto findById(Long id) throws CannotFindEntityException {
+        Optional<Car> carOptional = carRepository.findById(id);
+        if (carOptional.isPresent()){
+            return carMapper.mapToDto(carOptional.get());
+        } else {
+            throw new CannotFindEntityException("Cannot find car of id: " + id);
+        }
     }
 
     @Override

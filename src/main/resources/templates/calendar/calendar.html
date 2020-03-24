@@ -20,7 +20,7 @@
                         <div class="shadow card bg-danger text-white rounded-0">
                             <div class="card-header" th:text=
                                     "'Dziosio momy: '
-                            + ${todayPlDay}
+                            + ${todayFullDayPL}
                             + ' '
                             + ${today}">Dziosio momy: </div>
                             <div class="card-body">
@@ -45,14 +45,7 @@
         </div>
     </td>
 
-    <td th:unless="${errorMessage} == null">
-        <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-            <p  th:text="${errorMessage}"></p>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    </td>
+    <div th:replace="fragments/error-message"></div>
 
     <div class="alert alert-dark alert-dismissible fade show mt-2 rounded-0" role="alert">
         <h1 class="display-4">Dostympne auta:</h1>
@@ -134,7 +127,7 @@
         showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
-        value: today.getDate().toString() + '/' + (today.getMonth()).toString() + '/' + today.getFullYear().toString(),
+        value: [(${day})] + '/' + [(${month})] + '/' + [(${year})],
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
 

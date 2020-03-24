@@ -63,4 +63,13 @@ public class DateMapperImpl implements DateMapper {
         return dayOfWeekPL(toLocalDate(date));
     }
 
+    @Override
+    public String valueWithZero(int i) {
+        if (i < 10){
+            return "0"+i;
+        }
+        return String.valueOf(i);
+    }
+
+
 }

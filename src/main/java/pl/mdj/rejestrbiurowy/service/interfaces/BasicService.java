@@ -1,6 +1,7 @@
 package pl.mdj.rejestrbiurowy.service.interfaces;
 
 
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface BasicService<D, I> {
     List<D> getAll();
-    D findById(I id);
+    D findById(I id) throws CannotFindEntityException;
     D addOne(D d) throws EntityNotCompleteException, EntityConflictException;
     void deleteById(I id);
 }

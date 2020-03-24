@@ -3,12 +3,16 @@ package pl.mdj.rejestrbiurowy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
+import pl.mdj.rejestrbiurowy.model.entity.Car;
+import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.service.mappers.EmployeeMapper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,11 +33,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto findById(Long id) {
-        return employeeMapper.mapToDto(Objects
-                .requireNonNull(employeeRepository
-                        .findById(id)
-                        .orElse(null)));
+    public EmployeeDto findById(Long id) throws CannotFindEntityException{
+        Optional<Employee> optional = employeeRepository.findById(id);
+        if (optional.isPresent()){
+            return employeeMapper.mapToDto(optional.get());
+        } else {
+            throw new CannotFindEntityException("Cannot find employee of id: " + id);
+        }
     }
 
     @Override

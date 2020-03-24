@@ -10,5 +10,5 @@ public interface DateMapper {
     String dayOfWeekPL(Date date);
     String monthPL(LocalDate localDate);
     String monthPL(Date date);
-
+    String valueWithZero(int i);
 }
