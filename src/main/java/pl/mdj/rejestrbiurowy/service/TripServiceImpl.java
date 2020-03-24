@@ -6,9 +6,11 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
@@ -16,6 +18,7 @@ import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,11 +40,13 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripDto findById(Long id) {
-        return tripMapper.mapToDto(Objects
-                .requireNonNull(tripRepository
-                        .findById(id)
-                        .orElse(null)));
+    public TripDto findById(Long id) throws CannotFindEntityException {
+        Optional<Trip> optional = tripRepository.findById(id);
+        if (optional.isPresent()){
+            return tripMapper.mapToDto(optional.get());
+        } else {
+            throw new CannotFindEntityException("Cannot find employee of id: " + id);
+        }
     }
 
     @Override
