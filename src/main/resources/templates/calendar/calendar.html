@@ -14,7 +14,7 @@
 
 
 <div class="container">
-    <form th:action="@{/calendar}" th:object="${tripDto}">
+    <form id="chooseDate" th:action="@{/calendar}" th:object="${tripDto}">
                 <div class="row justify-content-md-center">
                     <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
                         <div class="shadow card bg-danger text-white rounded-0">
@@ -28,7 +28,7 @@
                                 <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                             </div>
                         </div>
-                        <button type="submit" class="shadow btn btn-danger btn-block rounded-0">Ciś knefel
+                        <button name="submitButton" type="submit" class="shadow btn btn-danger btn-block rounded-0">Ciś knefel
                         </button>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
         showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
-        value: [(${day})] + '/' + [(${month})] + '/' + [(${year})],
+        value: [(${day})] + "/" + [(${month})] + "/" + [(${year})],
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
 
@@ -146,6 +146,12 @@
             return $('#startDate').val();
         }
     });
+
+    $('#startDate').change(
+        function(){
+            $('#chooseDate').submit(); // TODO: dodać jakiegoś ifa != today
+        });
+
 </script>
 </body>
 </html>

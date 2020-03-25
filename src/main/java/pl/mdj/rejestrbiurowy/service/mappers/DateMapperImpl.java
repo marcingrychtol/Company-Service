@@ -66,7 +66,7 @@ public class DateMapperImpl implements DateMapper {
     @Override
     public String valueWithZero(int i) {
         if (i < 10){
-            return "0"+i;
+            return "\"0\"+"+i;
         }
         return String.valueOf(i);
     }
