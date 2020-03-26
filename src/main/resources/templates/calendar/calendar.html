@@ -28,8 +28,8 @@
                                 <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                             </div>
                         </div>
-                        <button name="submitButton" type="submit" class="shadow btn btn-danger btn-block rounded-0">Ciś knefel
-                        </button>
+<!--                        <button name="submitButton" type="submit" class="shadow btn btn-danger btn-block rounded-0">Ciś knefel-->
+<!--                        </button>-->
                     </div>
                 </div>
 
@@ -147,9 +147,13 @@
         }
     });
 
+    var x = document.getElementById("startDate").value;
+
     $('#startDate').change(
         function(){
-            $('#chooseDate').submit(); // TODO: dodać jakiegoś ifa != today
+            if (x != document.getElementById("startDate").value) {
+            $('#chooseDate').submit();
+            }
         });
 
 </script>
