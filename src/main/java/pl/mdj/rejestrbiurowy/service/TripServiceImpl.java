@@ -60,7 +60,9 @@ public class TripServiceImpl implements TripService {
 
         ExampleMatcher tripMatcher = ExampleMatcher.matching()
                 .withIgnorePaths("id")
-                .withIgnorePaths("additionalMessage");
+                .withIgnorePaths("additionalMessage")
+                .withIgnorePaths("employee")
+                .withIgnorePaths("endingDate");
         Example<Trip> tripExample = Example.of(trip, tripMatcher);
         if (tripRepository.exists(tripExample)){
             throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");

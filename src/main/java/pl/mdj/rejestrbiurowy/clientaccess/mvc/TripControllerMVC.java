@@ -117,8 +117,8 @@ public class TripControllerMVC {
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("todayFullDayPL", dateMapper.dayOfWeekPL(LocalDate.now()));
         model.addAttribute("year", requestedDate.getYear());
-        model.addAttribute("month", requestedDate.getMonthValue());
-        model.addAttribute("day", requestedDate.getDayOfMonth());
+        model.addAttribute("month", dateMapper.valueWithZero(requestedDate.getMonthValue()));
+        model.addAttribute("day",  dateMapper.valueWithZero(requestedDate.getDayOfMonth()));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailable(requestedDate));
         model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));

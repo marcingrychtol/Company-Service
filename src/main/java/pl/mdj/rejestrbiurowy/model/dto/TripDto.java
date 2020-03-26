@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 public class TripDto {
-    private Long id;
+    private Long id; // only individual database registry id
     private Long carId;
     private CarDto car;
     private Long employeeId;
@@ -17,6 +17,7 @@ public class TripDto {
     @DateTimeFormat(pattern = "MM/dd/YYYY")
     private Date startingDate;
     private Date endingDate;
+    private Integer durationDays;
 
     private String additionalMessage;
 
