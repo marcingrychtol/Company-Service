@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.service.interfaces;
+package pl.mdj.rejestrbiurowy.service;
 
 
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;

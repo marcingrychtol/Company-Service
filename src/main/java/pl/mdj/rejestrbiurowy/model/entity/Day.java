@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -26,6 +27,12 @@ import java.util.List;
  */
 
 @Entity
+@Table(
+        name = "day",
+        indexes = {
+                @Index(name = "DATE_INDX_0", columnList = "date")
+        }
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,6 +42,12 @@ public class Day {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "date", nullable=false)
+    private LocalDate date;
+
+    /**
+     * Used to store reservation list.
+     */
     @ManyToMany
     private List<Trip> tripList;
 }
