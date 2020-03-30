@@ -24,30 +24,27 @@ import java.util.List;
  * and then ask database for reservation objects of that list.
  *
  * Brilliant.
+ *
+ * Warning - id is not generated automaticly
  */
 
 @Entity
-@Table(
-        name = "day",
-        indexes = {
-                @Index(name = "DATE_INDX_0", columnList = "date")
-        }
-)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Day {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "date", nullable=false)
-    private LocalDate date;
+    private LocalDate id;
 
     /**
      * Used to store reservation list.
      */
-    @ManyToMany
-    private List<Trip> tripList;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "day_trip",
+            joinColumns = @JoinColumn(name = "day_id"),
+            inverseJoinColumns = @JoinColumn(name = "trip_id")
+    )
+    private List<Trip> trips;
 }

@@ -5,20 +5,26 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.*;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
+import pl.mdj.rejestrbiurowy.model.mappers.CarMapper;
+import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
+import pl.mdj.rejestrbiurowy.model.mappers.TripMapper;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
-import pl.mdj.rejestrbiurowy.service.interfaces.*;
-import pl.mdj.rejestrbiurowy.service.mappers.CarMapper;
-import pl.mdj.rejestrbiurowy.service.mappers.EmployeeMapper;
-import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
+import pl.mdj.rejestrbiurowy.service.CarService;
+import pl.mdj.rejestrbiurowy.service.CarServiceImpl;
+import pl.mdj.rejestrbiurowy.service.EmployeeService;
+import pl.mdj.rejestrbiurowy.service.TripService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,13 +36,24 @@ public class MdjRunnerImpl implements MdjRunner {
 
     private final static Logger LOG = LoggerFactory.getLogger(MdjRunnerImpl.class);
 
-    @Autowired
-    private CarRepository carRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private TripRepository tripRepository;
+    private CarService carService;
+    private CarMapper carMapper;
+    private EmployeeService employeeService;
+    private EmployeeMapper employeeMapper;
+    private TripService tripService;
+    private TripMapper tripMapper;
+    private DateMapper dateMapper;
 
+    @Autowired
+    public MdjRunnerImpl(CarService carService, CarMapper carMapper, EmployeeService employeeService, EmployeeMapper employeeMapper, TripService tripService, TripMapper tripMapper, DateMapper dateMapper) {
+        this.carService = carService;
+        this.carMapper = carMapper;
+        this.employeeService = employeeService;
+        this.employeeMapper = employeeMapper;
+        this.tripService = tripService;
+        this.tripMapper = tripMapper;
+        this.dateMapper = dateMapper;
+    }
 
     public void run() {
         {
@@ -70,7 +87,11 @@ public class MdjRunnerImpl implements MdjRunner {
             car4.setRegistration("KT 7777");
 
             for (Car car : Arrays.asList(car1, car2, car3, car4)) {
-                carRepository.save(car);
+                try {
+                    carService.addOne(carMapper.mapToDto(car));
+                } catch (EntityNotCompleteException | EntityConflictException e) {
+                    LOG.error(e.getMessage());
+                }
             }
         } //CARS
 
@@ -109,39 +130,51 @@ public class MdjRunnerImpl implements MdjRunner {
             employeeList.add(employee5);
 
             employeeList.stream()
-                    .forEach(e -> employeeRepository.save(e));
+                    .forEach(e -> {
+                        try {
+                            employeeService.addOne(employeeMapper.mapToDto(e));
+                        } catch (EntityNotCompleteException | EntityConflictException ex) {
+                            LOG.error(ex.getMessage());
+                        }
+                    });
 
         } // EMPLOYEES
 
         {
-            Trip trip1 = new Trip();
-            Trip trip2 = new Trip();
-            Trip trip3 = new Trip();
-            Trip trip4 = new Trip();
+            TripDto trip1 = new TripDto();
+            TripDto trip2 = new TripDto();
+            TripDto trip3 = new TripDto();
+            TripDto trip4 = new TripDto();
 
-            trip1.setCar(carRepository.findById((long) 2).orElse(new Car()));
-            trip1.setEmployee(employeeRepository.findById((long) 2).orElse(new Employee()));
-            trip1.setStartingDate(LocalDate.now());
-            trip1.setEndingDate(LocalDate.now().plusDays(1));
+            try {
+                trip1.setCarId((long) 2);
+                trip1.setEmployeeId((long) 2);
+                trip1.setStartingDate(dateMapper.toDate(LocalDate.now()));
+                trip1.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(1)));
 
-            trip2.setCar(carRepository.findById((long) 2).orElse(new Car()));
-            trip2.setEmployee(employeeRepository.findById((long) 2).orElse(new Employee()));
-            trip2.setStartingDate(LocalDate.now().plusDays(2));
-            trip2.setEndingDate(LocalDate.now().plusDays(4));
+                trip2.setCarId((long) 2);
+                trip2.setEmployeeId((long) 2);
+                trip2.setStartingDate(dateMapper.toDate(LocalDate.now().plusDays(2)));
+                trip2.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(4)));
 
-            trip4.setCar(carRepository.findById((long) 3).orElse(new Car()));
-            trip4.setEmployee(employeeRepository.findById((long) 3).orElse(new Employee()));
-            trip4.setStartingDate(LocalDate.now().plusDays(2));
-            trip4.setEndingDate(LocalDate.now().plusDays(4));
+                trip4.setCarId((long) 3);
+                trip4.setEmployeeId((long) 3);
+                trip4.setStartingDate(dateMapper.toDate(LocalDate.now().plusDays(2)));
+                trip4.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(4)));
 
-            trip3.setCar(carRepository.findById((long) 4).orElse(new Car()));
-            trip3.setEmployee(employeeRepository.findById((long) 4).orElse(new Employee()));
-            trip3.setStartingDate(LocalDate.now().plusDays(5));
-            trip3.setEndingDate(LocalDate.now().plusDays(9));
+                trip3.setCarId((long) 4);
+                trip3.setEmployeeId((long) 4);
+                trip3.setStartingDate(dateMapper.toDate(LocalDate.now().plusDays(5)));
+                trip3.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(9)));
 
-            for (Trip trip :
-                    Arrays.asList(trip1, trip2, trip3, trip4)) {
-                tripRepository.save(trip);
+                for (TripDto trip :
+                        Arrays.asList(trip1, trip2, trip3, trip4)) {
+
+                    tripService.addOne(trip);
+
+                }
+            } catch (EntityNotCompleteException | EntityConflictException e) {
+                LOG.error(e.getMessage());
             }
         } // TRIPS
     }

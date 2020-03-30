@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.service.mappers;
+package pl.mdj.rejestrbiurowy.model.mappers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +12,6 @@ import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,8 +42,6 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
     public TripDto mapToDto(Trip entity) {
         TripDto dto = new TripDto();
 
-
-
         Optional.ofNullable(entity.getId())
                 .ifPresent(dto::setId);
         Optional.ofNullable(entity.getCar())
@@ -59,6 +54,23 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                 .ifPresent(date -> dto.setEndingDate(dateMapper.toDate(date)));
         Optional.ofNullable(entity.getAdditionalMessage())
                 .ifPresent(dto::setAdditionalMessage);
+        Optional.ofNullable(entity.getCancelled())
+                .ifPresent(dto::setCancelled);
+
+        Optional.ofNullable(entity.getCreatedTime())
+                .ifPresent(created -> dto
+                        .setCreatedTime(dateMapper
+                                .localDateTimeToString(created)));
+
+        Optional.ofNullable(entity.getLastModifiedTime())
+                .ifPresent(created -> dto
+                        .setLastModifiedTime(dateMapper
+                                .localDateTimeToString(created)));
+
+        Optional.ofNullable(entity.getCancelledTime())
+                .ifPresent(created -> dto
+                        .setCancelledTime(dateMapper
+                                .localDateTimeToString(created)));
 
         return dto;
     }
@@ -102,6 +114,9 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                 .ifPresent(date -> entity.setEndingDate(dateMapper.toLocalDate(date)));
         Optional.ofNullable(dto.getAdditionalMessage())
                 .ifPresent(entity::setAdditionalMessage);
+
+        // creation an modification times and etc. are not transfered
+        // cancellation info is not transfered this way
 
         return entity;
     }

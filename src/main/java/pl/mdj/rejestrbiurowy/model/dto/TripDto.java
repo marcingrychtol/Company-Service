@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -18,6 +19,11 @@ public class TripDto {
     private Date startingDate;
     private Date endingDate;
     private Integer durationDays;
+
+    private String createdTime;
+    private String lastModifiedTime;
+    private String cancelledTime;
+    private Boolean cancelled;
 
     private String additionalMessage;
 

@@ -1,8 +1,9 @@
-package pl.mdj.rejestrbiurowy.service.mappers;
+package pl.mdj.rejestrbiurowy.model.mappers;
 
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -66,9 +67,25 @@ public class DateMapperImpl implements DateMapper {
     @Override
     public String valueWithZero(int i) {
         if (i < 10){
+            return "0"+i;
+        }
+        return String.valueOf(i);
+    }
+
+    @Override
+    public String valueWithZeroForJS(int i) {
+        if (i < 10){
             return "\"0\"+"+i;
         }
         return String.valueOf(i);
+    }
+
+    @Override
+    public String localDateTimeToString(LocalDateTime dateTime) {
+        return String.format("%s/%s/%d",
+                valueWithZero(dateTime.getDayOfMonth()),
+                valueWithZero(dateTime.getMonthValue()),
+                dateTime.getYear());
     }
 
 

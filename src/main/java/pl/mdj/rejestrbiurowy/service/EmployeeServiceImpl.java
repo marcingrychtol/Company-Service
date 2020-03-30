@@ -5,13 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
-import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
-import pl.mdj.rejestrbiurowy.service.mappers.EmployeeMapper;
+import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

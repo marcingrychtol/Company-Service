@@ -3,21 +3,20 @@ package pl.mdj.rejestrbiurowy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
-import pl.mdj.rejestrbiurowy.model.entity.Employee;
+import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
-import pl.mdj.rejestrbiurowy.service.mappers.TripMapper;
+import pl.mdj.rejestrbiurowy.model.mappers.TripMapper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,11 +26,13 @@ public class TripServiceImpl implements TripService {
 
     TripRepository tripRepository;
     TripMapper tripMapper;
+    DayService dayService;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository, TripMapper tripMapper) {
+    public TripServiceImpl(TripRepository tripRepository, TripMapper tripMapper, DayService dayService) {
         this.tripRepository = tripRepository;
         this.tripMapper = tripMapper;
+        this.dayService = dayService;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class TripServiceImpl implements TripService {
             throw new EntityNotCompleteException("Rezerwacja niemożliwa, należy uzupełnić wszystkie wymagane parametry!");
         }
 
-        Trip trip = tripMapper.mapToEntity(tripDto);
+        Trip trip = tripMapper.mapToEntity(tripDto);  // Need to save Entity, not Dto
 
         ExampleMatcher tripMatcher = ExampleMatcher.matching()
                 .withIgnorePaths("id")
@@ -69,6 +70,11 @@ public class TripServiceImpl implements TripService {
             throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
         }
 
+        trip.setCreatedTime(LocalDateTime.now());
+        trip.setLastModifiedTime(trip.getCreatedTime());
+
+        List<Day> days = dayService.getDaysBetween(trip.getStartingDate(), trip.getEndingDate());
+        // TODO: complete algorithm
 
 
         tripRepository.save(trip);

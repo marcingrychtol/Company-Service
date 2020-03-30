@@ -6,6 +6,7 @@ import pl.mdj.rejestrbiurowy.model.entity.Day;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface DayRepository extends JpaRepository<Day, Long> {
-    List<Day> findAllByDateBetweenOrderByDateAsc(LocalDate date, LocalDate date2);
+public interface DayRepository extends JpaRepository<Day, LocalDate> {
+//    List<Day> findAllByIdBetweenOrderByIdAsc(LocalDate date, LocalDate date2);
+//    should dop everything by one day
 }

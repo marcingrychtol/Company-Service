@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.service.mappers;
+package pl.mdj.rejestrbiurowy.model.mappers;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
-package pl.mdj.rejestrbiurowy.service.mappers;
+package pl.mdj.rejestrbiurowy.model.mappers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface DateMapper {
@@ -11,4 +12,6 @@ public interface DateMapper {
     String monthPL(LocalDate localDate);
     String monthPL(Date date);
     String valueWithZero(int i);
+    String valueWithZeroForJS(int i);
+    String localDateTimeToString(LocalDateTime dateTime);
 }

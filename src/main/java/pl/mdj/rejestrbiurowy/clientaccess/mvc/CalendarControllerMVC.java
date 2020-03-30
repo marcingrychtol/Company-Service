@@ -13,7 +13,7 @@ import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
-import pl.mdj.rejestrbiurowy.service.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -51,8 +51,8 @@ public class CalendarControllerMVC {
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("todayFullDayPL", dateMapper.dayOfWeekPL(LocalDate.now()));
         model.addAttribute("year", requestedDate.getYear());
-        model.addAttribute("month", dateMapper.valueWithZero(requestedDate.getMonthValue()));
-        model.addAttribute("day", dateMapper.valueWithZero(requestedDate.getDayOfMonth()));
+        model.addAttribute("month", dateMapper.valueWithZeroForJS(requestedDate.getMonthValue()));
+        model.addAttribute("day", dateMapper.valueWithZeroForJS(requestedDate.getDayOfMonth()));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailable(requestedDate));
         model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));

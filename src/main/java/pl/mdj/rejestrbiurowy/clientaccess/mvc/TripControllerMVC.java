@@ -15,11 +15,10 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
-import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
-import pl.mdj.rejestrbiurowy.service.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -117,8 +116,8 @@ public class TripControllerMVC {
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("todayFullDayPL", dateMapper.dayOfWeekPL(LocalDate.now()));
         model.addAttribute("year", requestedDate.getYear());
-        model.addAttribute("month", dateMapper.valueWithZero(requestedDate.getMonthValue()));
-        model.addAttribute("day",  dateMapper.valueWithZero(requestedDate.getDayOfMonth()));
+        model.addAttribute("month", dateMapper.valueWithZeroForJS(requestedDate.getMonthValue()));
+        model.addAttribute("day",  dateMapper.valueWithZeroForJS(requestedDate.getDayOfMonth()));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailable(requestedDate));
         model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));

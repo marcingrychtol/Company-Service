@@ -21,9 +21,10 @@ public class Car {
     private String registration;
     @Enumerated(EnumType.STRING)
     private CarFuel fuel;
+
     private LocalDate insuranceExpiration;
     private LocalDate inspectionExpiration;
-    private int mileage;
+    private Long mileage;
 
     public Car(String name, String registration) {
         this.name = name;

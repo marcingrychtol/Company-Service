@@ -13,7 +13,8 @@
 <div class="container">
     <div class="row p-1 mt-2">
         <p>
-            <a class="shadow btn btn-secondary btn-block  rounded-0" data-toggle="collapse" href="#collapseExample" role="button"
+            <a class="shadow btn btn-secondary btn-block  rounded-0" data-toggle="collapse" href="#collapseExample"
+               role="button"
                aria-expanded="false" aria-controls="collapseExample">
                 Filtrowanie
             </a>
@@ -112,6 +113,13 @@
                         <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
                         </p>
                     </div>
+                    <div class="card-footer">
+                        <p class="card-text">
+                        <td th:text="'Utworzono: ' + ${trip.getCreatedTime()}"></td><br/>
+                        <td th:text="'Zmodyfikowano: ' + ${trip.getLastModifiedTime()}"></td>
+                        </p>
+                    </div>
+
                     <button type="submit" class="btn btn-info stretched-link rounded-0" value="add new employee">
                         Edytuj
                     </button>
@@ -131,7 +139,7 @@
         showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
-        value: today.getDate().toString()+'/'+(today.getMonth() +1).toString()+'/'+today.getFullYear().toString(),
+        value: today.getDate().toString() + '/' + (today.getMonth() + 1).toString() + '/' + today.getFullYear().toString(),
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         minDate: today,
