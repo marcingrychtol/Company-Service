@@ -64,25 +64,25 @@ public class MdjRunnerImpl implements MdjRunner {
 
             car1.setCarCategory(CarCategory.COMPANY);
             car1.setFuel(CarFuel.BENZYNA);
-            car1.setMileage(270253);
+            car1.setMileage((long)270253);
             car1.setName("Dacia Dokker");
             car1.setRegistration("SL 98765");
 
             car2.setCarCategory(CarCategory.PRIVATE_BIG);
             car2.setFuel(CarFuel.BENZYNA);
-            car2.setMileage(30000);
+            car2.setMileage((long)30000);
             car2.setName("Skoda Octavia");
             car2.setRegistration("NN 8524");
 
             car3.setCarCategory(CarCategory.PRIVATE_SMALL);
             car3.setFuel(CarFuel.DIESEL);
-            car3.setMileage(300000);
+            car3.setMileage((long)300000);
             car3.setName("Audi A4");
             car3.setRegistration("WZ 6545");
 
             car4.setCarCategory(CarCategory.COMPANY);
             car4.setFuel(CarFuel.DIESEL);
-            car4.setMileage(180500);
+            car4.setMileage((long)180500);
             car4.setName("VW LT");
             car4.setRegistration("KT 7777");
 
