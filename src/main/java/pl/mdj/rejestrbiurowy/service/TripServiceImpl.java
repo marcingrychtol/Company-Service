@@ -1,5 +1,7 @@
 package pl.mdj.rejestrbiurowy.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -16,12 +18,15 @@ import pl.mdj.rejestrbiurowy.model.mappers.TripMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class TripServiceImpl implements TripService {
+
+    Logger LOG = LoggerFactory.getLogger(TripService.class);
 
     TripRepository tripRepository;
     TripMapper tripMapper;
@@ -63,16 +68,11 @@ public class TripServiceImpl implements TripService {
         trip.setCreatedTime(LocalDateTime.now());
         trip.setLastModifiedTime(trip.getCreatedTime());
 
-        tripRepository.save(trip);
+        tripRepository.save(trip);  // in this order to generate id before using save() inside DayService
         dayService.addTripToDay(trip);
 
         return tripDto;
 
-//        public void addUserToOrganisation(Long patientId, Long organisationId) {
-//        Organisation organisation = organisations.findOne(organisationId);
-//        User user = users.findOne(patientId);
-//        organisation.getPatients().add(user);
-//        organisations.save(organisation);
     }
 
     @Override
@@ -91,8 +91,15 @@ public class TripServiceImpl implements TripService {
     }
 
     public List<TripDto> findAllByDate(LocalDate date){
-        List<Trip> tripList = tripRepository.findAllByStartingDateEquals(date); // TODO: needs rebuild due to new Day algorithm
-        return tripMapper.mapToDto(tripList);
+
+        Day day;
+        try {
+            day = dayService.findById(date);
+        } catch (CannotFindEntityException e) {
+            LOG.info(e.getMessage());
+            return new ArrayList<>();
+        }
+        return tripMapper.mapToDto(day.getTrips());
     }
 
     private void checkConflict(Trip trip) throws EntityConflictException {         // TODO: check conflict musi sprawdzać w bazie dni

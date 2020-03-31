@@ -9,16 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
+import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
+import pl.mdj.rejestrbiurowy.repository.DayRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.CarMapper;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -37,14 +37,16 @@ public class CarServiceImpl implements CarService {
     CarRepository carRepository;
     CarMapper carMapper;
     TripRepository tripRepository;
+    DayRepository dayRepository;
     DateMapper dateMapper;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateMapper dateMapper) {
+    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateMapper dateMapper, DayRepository dayRepository) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
         this.tripRepository = tripRepository;
         this.dateMapper = dateMapper;
+        this.dayRepository = dayRepository;
     }
 
     @Override
@@ -75,11 +77,19 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Set<CarDto> getAvailable(LocalDate date) {
-        List<Car> notAvailableCarList = tripRepository.findAllByStartingDateEquals(date).stream()
-                .map(Trip::getCar)
-                .collect(Collectors.toList());
+        // TODO: not working with new day algorithm
+        Optional<Day> day = dayRepository.findById(date);
+        List<Car> notAvailableCars;
+        if (day.isPresent()){
+            notAvailableCars = day.get().getTrips().stream()
+                    .map(Trip::getCar)
+                    .collect(Collectors.toList());
+        } else {
+            return new HashSet<>();
+        }
+
         return carRepository.findAll().stream()
-                .filter(c -> !notAvailableCarList.contains(c))
+                .filter(c -> !notAvailableCars.contains(c))
                 .map(c -> carMapper.mapToDto(c))
                 .collect(Collectors.toSet());
     }

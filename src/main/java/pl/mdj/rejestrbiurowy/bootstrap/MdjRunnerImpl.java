@@ -153,7 +153,7 @@ public class MdjRunnerImpl implements MdjRunner {
                 trip1.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(1)));
 
                 trip2.setCarId((long) 2);
-                trip2.setEmployeeId((long) 2);
+                trip2.setEmployeeId((long) 1);
                 trip2.setStartingDate(dateMapper.toDate(LocalDate.now().plusDays(2)));
                 trip2.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(4)));
 
