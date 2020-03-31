@@ -66,8 +66,19 @@ public class DayServiceImpl implements DayService {
 
     @Override
     public List<Day> getDaysBetween(LocalDate startingDate, LocalDate endingDate) {
+
         List<LocalDate> dates = new ArrayList<>();
-        // TODO: come up with adding algorithm
-        return null;
+        int i = 0;
+        do {
+            dates.add(startingDate.plusDays(i)); // should work, because LocalDate is immutable
+            i++;
+        } while (startingDate.plusDays(i).compareTo(endingDate)<0);
+
+        List<Day> days = new ArrayList<>();
+        for (LocalDate date :
+                dates) {
+            days.add(dayRepository.findById(date).orElse(new Day()));
+        }
+        return days;
     }
 }

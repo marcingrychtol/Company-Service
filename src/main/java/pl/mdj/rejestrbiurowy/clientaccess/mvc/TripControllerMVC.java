@@ -95,7 +95,7 @@ public class TripControllerMVC {
         LocalDate date = dateMapper.toLocalDate(optionalDate.orElse(new Date()));
 
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
-        model.addAttribute("trips", tripService.findAllByStartingDateEquals(date));
+        model.addAttribute("trips", tripService.findAllByDate(date));
         return "trips/trips";
     }
 
@@ -120,7 +120,7 @@ public class TripControllerMVC {
         model.addAttribute("day",  dateMapper.valueWithZeroForJS(requestedDate.getDayOfMonth()));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailable(requestedDate));
-        model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));
+        model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
         return "calendar/calendar";
     }

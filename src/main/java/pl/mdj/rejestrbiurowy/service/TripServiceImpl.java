@@ -23,7 +23,6 @@ import java.util.Optional;
 @Transactional
 public class TripServiceImpl implements TripService {
 
-
     TripRepository tripRepository;
     TripMapper tripMapper;
     DayService dayService;
@@ -59,23 +58,13 @@ public class TripServiceImpl implements TripService {
 
         Trip trip = tripMapper.mapToEntity(tripDto);  // Need to save Entity, not Dto
 
-        ExampleMatcher tripMatcher = ExampleMatcher.matching()
-                .withIgnorePaths("id")
-                .withIgnorePaths("additionalMessage")
-                .withIgnorePaths("employee")
-                .withIgnorePaths("endingDate");
-
-        Example<Trip> tripExample = Example.of(trip, tripMatcher);
-        if (tripRepository.exists(tripExample)){
-            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
-        }
+        checkConflict(trip); // throws exception
 
         trip.setCreatedTime(LocalDateTime.now());
         trip.setLastModifiedTime(trip.getCreatedTime());
 
         List<Day> days = dayService.getDaysBetween(trip.getStartingDate(), trip.getEndingDate());
-        // TODO: complete algorithm
-
+        days.stream().forEach(day -> day.getTrips().add(trip));
 
         tripRepository.save(trip);
         return tripDto;
@@ -96,9 +85,22 @@ public class TripServiceImpl implements TripService {
         return tripMapper.mapToDto(tripList);
     }
 
-    public List<TripDto> findAllByStartingDateEquals(LocalDate date){
-        List<Trip> tripList = tripRepository.findAllByStartingDateEquals(date);
+    public List<TripDto> findAllByDate(LocalDate date){
+        List<Trip> tripList = tripRepository.findAllByStartingDateEquals(date); // TODO: needs rebuild due to new Day algorithm
         return tripMapper.mapToDto(tripList);
+    }
+
+    private void checkConflict(Trip trip) throws EntityConflictException {
+        ExampleMatcher tripMatcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withIgnorePaths("additionalMessage")
+                .withIgnorePaths("employee")
+                .withIgnorePaths("endingDate");
+
+        Example<Trip> tripExample = Example.of(trip, tripMatcher);
+        if (tripRepository.exists(tripExample)){
+            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
+        }
     }
 
 

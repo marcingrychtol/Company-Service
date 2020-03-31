@@ -55,7 +55,7 @@ public class CalendarControllerMVC {
         model.addAttribute("day", dateMapper.valueWithZeroForJS(requestedDate.getDayOfMonth()));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailable(requestedDate));
-        model.addAttribute("trips", tripService.findAllByStartingDateEquals(requestedDate));
+        model.addAttribute("trips", tripService.findAllByDate(requestedDate));
         return "calendar/calendar";
     }
 
