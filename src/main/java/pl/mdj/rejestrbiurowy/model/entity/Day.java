@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,4 +48,9 @@ public class Day {
             inverseJoinColumns = @JoinColumn(name = "trip_id")
     )
     private List<Trip> trips;
+
+    public Day(LocalDate date){
+        this.id = date;
+        trips = new ArrayList<>();
+    }
 }

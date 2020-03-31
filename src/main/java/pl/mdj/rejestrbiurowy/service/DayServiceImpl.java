@@ -7,6 +7,7 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
+import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.DayRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 
@@ -45,7 +46,6 @@ public class DayServiceImpl implements DayService {
 
     @Override
     public Day addOne(Day day) throws EntityNotCompleteException, EntityConflictException {
-
         dayRepository.save(day);
         return day;
     }
@@ -56,7 +56,7 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
-    public boolean addAll(List<Day> days) throws EntityNotCompleteException, EntityConflictException {
+    public boolean saveAll(List<Day> days) throws EntityNotCompleteException, EntityConflictException {
         for (Day day :
                 days) {
             addOne(day);
@@ -65,20 +65,25 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
-    public List<Day> getDaysBetween(LocalDate startingDate, LocalDate endingDate) {
+    public void addTripToDay(Trip trip) throws EntityNotCompleteException, EntityConflictException {
 
         List<LocalDate> dates = new ArrayList<>();
         int i = 0;
         do {
-            dates.add(startingDate.plusDays(i)); // should work, because LocalDate is immutable
+            dates.add(trip.getStartingDate().plusDays(i)); // should work, because LocalDate is immutable
             i++;
-        } while (startingDate.plusDays(i).compareTo(endingDate)<0);
+        } while (trip.getStartingDate().plusDays(i).compareTo(trip.getEndingDate())<=0);
 
-        List<Day> days = new ArrayList<>();
         for (LocalDate date :
                 dates) {
-            days.add(dayRepository.findById(date).orElse(new Day()));
+            if(!dayRepository.existsById(date)){
+                dayRepository.save(new Day(date));
+            }
         }
-        return days;
+
+        List<Day> days = dayRepository.findAllByIdBetweenOrderByIdAsc(trip.getStartingDate(), trip.getEndingDate());
+        days.stream()
+                .forEach(day -> day.getTrips().add(trip));
+        saveAll(days);
     }
 }

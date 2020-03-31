@@ -92,6 +92,8 @@
                 <div class="shadow card border-info text-center rounded-0">
                     <h5 class="card-header bg-light">
                         <p class="card-text">
+                        <td th:text="${trip.getId()}"></td>
+                        <br>
                         <td th:text="${trip.getCar().getName()}"></td>
                         <br>
                         <td th:text="${trip.getCar().getRegistration()}"></td>

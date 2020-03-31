@@ -63,11 +63,16 @@ public class TripServiceImpl implements TripService {
         trip.setCreatedTime(LocalDateTime.now());
         trip.setLastModifiedTime(trip.getCreatedTime());
 
-        List<Day> days = dayService.getDaysBetween(trip.getStartingDate(), trip.getEndingDate());
-        days.stream().forEach(day -> day.getTrips().add(trip));
-
         tripRepository.save(trip);
+        dayService.addTripToDay(trip);
+
         return tripDto;
+
+//        public void addUserToOrganisation(Long patientId, Long organisationId) {
+//        Organisation organisation = organisations.findOne(organisationId);
+//        User user = users.findOne(patientId);
+//        organisation.getPatients().add(user);
+//        organisations.save(organisation);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class TripServiceImpl implements TripService {
         return tripMapper.mapToDto(tripList);
     }
 
-    private void checkConflict(Trip trip) throws EntityConflictException {
+    private void checkConflict(Trip trip) throws EntityConflictException {         // TODO: check conflict musi sprawdzać w bazie dni
         ExampleMatcher tripMatcher = ExampleMatcher.matching()
                 .withIgnorePaths("id")
                 .withIgnorePaths("additionalMessage")

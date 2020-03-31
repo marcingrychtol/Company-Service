@@ -1,6 +1,7 @@
 package pl.mdj.rejestrbiurowy.model.entity;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
 
@@ -24,6 +25,7 @@ public class Car {
 
     private LocalDate insuranceExpiration;
     private LocalDate inspectionExpiration;
+    @Nullable
     private Long mileage;
 
     public Car(String name, String registration) {
