@@ -11,6 +11,7 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
@@ -102,17 +103,40 @@ public class TripServiceImpl implements TripService {
         return tripMapper.mapToDto(day.getTrips());
     }
 
-    private void checkConflict(Trip trip) throws EntityConflictException {         // TODO: check conflict musi sprawdzać w bazie dni
-        ExampleMatcher tripMatcher = ExampleMatcher.matching()
-                .withIgnorePaths("id")
-                .withIgnorePaths("additionalMessage")
-                .withIgnorePaths("employee")
-                .withIgnorePaths("endingDate");
+    private void checkConflict(Trip trip) throws EntityConflictException {
+//        ExampleMatcher tripMatcher = ExampleMatcher.matching()
+//                .withIgnorePaths("id")
+//                .withIgnorePaths("additionalMessage")
+//                .withIgnorePaths("employee")
+//                .withIgnorePaths("startingDate")
+//                .withIgnorePaths("endingDate");
+//
+//        Example<Trip> tripExample = Example.of(trip, tripMatcher);
+//        if (daytripRepository.exists(tripExample)){
+//            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
+//        }
+        Car car = trip.getCar();
+        List<LocalDate> datesToCheck = dayService.getDates(trip);
+        List<LocalDate> unavailableDates = new ArrayList<>();
+        List<Trip> existingTrips = new ArrayList<>();
 
-        Example<Trip> tripExample = Example.of(trip, tripMatcher);
-        if (tripRepository.exists(tripExample)){
-            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
+
+        for (LocalDate date :datesToCheck) {
+
+            try {
+                existingTrips = dayService.findById(date).getTrips();
+            } catch (CannotFindEntityException e) { }
+
+            for (Trip existingTrip :
+                    existingTrips) {
+                if (car == existingTrip.getCar()){ unavailableDates.add(date); }
+            }
         }
+
+        if (!unavailableDates.isEmpty()){
+            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty w dniach: " + unavailableDates.toString());
+        }
+
     }
 
 

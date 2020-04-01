@@ -67,12 +67,7 @@ public class DayServiceImpl implements DayService {
     @Override
     public void addTripToDay(Trip trip) throws EntityNotCompleteException, EntityConflictException {
 
-        List<LocalDate> dates = new ArrayList<>();
-        int i = 0;
-        do {
-            dates.add(trip.getStartingDate().plusDays(i)); // should work, because LocalDate is immutable
-            i++;
-        } while (trip.getStartingDate().plusDays(i).compareTo(trip.getEndingDate())<=0);
+        List<LocalDate> dates = getDates(trip);
 
         for (LocalDate date :
                 dates) {
@@ -85,5 +80,15 @@ public class DayServiceImpl implements DayService {
         days.stream()
                 .forEach(day -> day.getTrips().add(trip));
         saveAll(days);
+    }
+
+    public List<LocalDate> getDates(Trip trip){
+        List<LocalDate> dates = new ArrayList<>();
+        int i = 0;
+        do {
+            dates.add(trip.getStartingDate().plusDays(i)); // should work, because LocalDate is immutable
+            i++;
+        } while (trip.getStartingDate().plusDays(i).compareTo(trip.getEndingDate())<=0);
+        return dates;
     }
 }

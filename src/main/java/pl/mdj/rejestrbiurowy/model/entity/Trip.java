@@ -21,7 +21,7 @@ public class Trip {
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
-    private Boolean cancelled = false;
+    private Boolean cancelled = false; // TODO: implement
 
     private LocalDate startingDate;
     private LocalDate endingDate;

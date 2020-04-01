@@ -77,7 +77,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Set<CarDto> getAvailable(LocalDate date) {
-        // TODO: not working with new day algorithm
         Optional<Day> day = dayRepository.findById(date);
         List<Car> notAvailableCars;
         if (day.isPresent()){
