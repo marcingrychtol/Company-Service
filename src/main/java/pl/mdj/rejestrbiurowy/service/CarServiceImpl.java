@@ -76,7 +76,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Set<CarDto> getAvailable(LocalDate date) {
+    public List<CarDto> getAvailable(LocalDate date) {
         Optional<Day> day = dayRepository.findById(date);
         List<Car> notAvailableCars;
         if (day.isPresent()){
@@ -84,13 +84,13 @@ public class CarServiceImpl implements CarService {
                     .map(Trip::getCar)
                     .collect(Collectors.toList());
         } else {
-            return new HashSet<>();
+            notAvailableCars = new ArrayList<>();
         }
 
         return carRepository.findAll().stream()
                 .filter(c -> !notAvailableCars.contains(c))
                 .map(c -> carMapper.mapToDto(c))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
 }
