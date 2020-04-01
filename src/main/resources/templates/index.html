@@ -25,7 +25,7 @@
         </div>
     </td>
 
-    <div class="container">
+    <div class="container-fluid">
 
         <form th:action="@{/trips/add}" th:object="${newTrip}" method="post">
 
@@ -91,17 +91,17 @@
             </div>
         </form>
     </div>
-    <div class="container pt-1">
+    <div class="container-fluid pt-1">
         <div class="row">
             <tr th:each="day :${calendarPreview}">
-                <div class="col-3 p-1">
+                <div class="col-6 col-md-4 col-lg-3  p-1">
                     <div class="shadow card rounded-0 h-100">
                         <div class="card-header">
                             <p th:text="${day.getId().getDayOfWeek()}"></p>
                             <p th:text="${day.getId().toString()}"></p>
                         </div>
                         <div class="card-body">
-                            <div class="container">
+                            <div class="container-fluid">
                                 <div class="row">
                                     <table>
                                         <tr th:each="car :${day.getCarDtoList()}">
