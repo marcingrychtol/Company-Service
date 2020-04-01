@@ -3,8 +3,6 @@ package pl.mdj.rejestrbiurowy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
@@ -115,8 +113,9 @@ public class TripServiceImpl implements TripService {
 //        if (daytripRepository.exists(tripExample)){
 //            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
 //        }
+
         Car car = trip.getCar();
-        List<LocalDate> datesToCheck = dayService.getDates(trip);
+        List<LocalDate> datesToCheck = dayService.getLocalDatesBetween(trip.getStartingDate(), trip.getEndingDate());
         List<LocalDate> unavailableDates = new ArrayList<>();
         List<Trip> existingTrips = new ArrayList<>();
 

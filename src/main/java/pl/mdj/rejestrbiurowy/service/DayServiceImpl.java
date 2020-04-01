@@ -6,10 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
+import pl.mdj.rejestrbiurowy.model.mappers.DayMapper;
 import pl.mdj.rejestrbiurowy.repository.DayRepository;
-import pl.mdj.rejestrbiurowy.repository.TripRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,15 +22,12 @@ import java.util.Optional;
 public class DayServiceImpl implements DayService {
 
     DayRepository dayRepository;
+    DayMapper dayMapper;
 
     @Autowired
-    public DayServiceImpl(DayRepository dayRepository) {
+    public DayServiceImpl(DayRepository dayRepository, DayMapper dayMapper) {
         this.dayRepository = dayRepository;
-    }
-
-    @Override
-    public List<Day> getAll() {
-        return dayRepository.findAll();
+        this.dayMapper = dayMapper;
     }
 
     @Override
@@ -44,51 +42,55 @@ public class DayServiceImpl implements DayService {
 
     }
 
-    @Override
-    public Day addOne(Day day) throws EntityNotCompleteException, EntityConflictException {
+    private void saveOne(Day day) throws EntityNotCompleteException, EntityConflictException {
         dayRepository.save(day);
-        return day;
     }
 
-    @Override
-    public void deleteById(LocalDate id) {
 
-    }
-
-    @Override
-    public boolean saveAll(List<Day> days) throws EntityNotCompleteException, EntityConflictException {
-        for (Day day :
-                days) {
-            addOne(day);
+    private void saveAll(List<Day> days) throws EntityNotCompleteException, EntityConflictException {
+        for (Day day : days) {
+            saveOne(day);
         }
-        return true;
     }
 
     @Override
     public void addTripToDay(Trip trip) throws EntityNotCompleteException, EntityConflictException {
 
-        List<LocalDate> dates = getDates(trip);
+        fillGapsWithinRequest(trip.getStartingDate(), trip.getEndingDate());
+        List<Day> days = getDaysBetween(trip.getStartingDate(), trip.getEndingDate());
+        days.forEach(day -> day.getTrips().add(trip));
+        saveAll(days);
+    }
 
+    @Override
+    public List<DayDto> getDaysDtoBetween(LocalDate start, LocalDate end) {
+        return dayMapper.mapToDto(getDaysBetween(start, end));
+    }
+
+    @Override
+    public List<LocalDate> getLocalDatesBetween(LocalDate start, LocalDate end){
+        List<LocalDate> dates = new ArrayList<>();
+        int i = 0;
+        do {
+            dates.add(start.plusDays(i)); // should work, because LocalDate is immutable
+            i++;
+        } while (start.plusDays(i).compareTo(end)<=0);
+        return dates;
+    }
+
+    private List<Day> getDaysBetween(LocalDate start, LocalDate end) {
+        fillGapsWithinRequest(start, end);
+        return dayRepository.findAllByIdBetweenOrderByIdAsc(start, end);
+    }
+
+    private void fillGapsWithinRequest(LocalDate start, LocalDate end){
+        List<LocalDate> dates = getLocalDatesBetween(start, end);
         for (LocalDate date :
                 dates) {
             if(!dayRepository.existsById(date)){
                 dayRepository.save(new Day(date));
             }
         }
-
-        List<Day> days = dayRepository.findAllByIdBetweenOrderByIdAsc(trip.getStartingDate(), trip.getEndingDate());
-        days.stream()
-                .forEach(day -> day.getTrips().add(trip));
-        saveAll(days);
-    }
-
-    public List<LocalDate> getDates(Trip trip){
-        List<LocalDate> dates = new ArrayList<>();
-        int i = 0;
-        do {
-            dates.add(trip.getStartingDate().plusDays(i)); // should work, because LocalDate is immutable
-            i++;
-        } while (trip.getStartingDate().plusDays(i).compareTo(trip.getEndingDate())<=0);
-        return dates;
     }
 }
+

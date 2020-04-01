@@ -79,13 +79,12 @@ public class CarServiceImpl implements CarService {
     public List<CarDto> getAvailable(LocalDate date) {
         Optional<Day> day = dayRepository.findById(date);
         List<Car> notAvailableCars;
-        if (day.isPresent()){
-            notAvailableCars = day.get().getTrips().stream()
-                    .map(Trip::getCar)
-                    .collect(Collectors.toList());
-        } else {
-            notAvailableCars = new ArrayList<>();
-        }
+
+        notAvailableCars = day.map(
+                    d -> d.getTrips().stream()
+                            .map(Trip::getCar)
+                            .collect(Collectors.toList())
+        ).orElseGet(ArrayList::new);
 
         return carRepository.findAll().stream()
                 .filter(c -> !notAvailableCars.contains(c))

@@ -60,11 +60,6 @@ public class CalendarControllerMVC {
     }
 
 
-    @GetMapping("/day/{id}")
-    public String getDay(@PathVariable String id, Model model) {
-        return "calendar/day";
-    }
-
     @InitBinder
     public void customizeDateBinder( WebDataBinder binder )
     {

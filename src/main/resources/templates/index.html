@@ -18,7 +18,7 @@
 
     <td th:unless="${errorMessage} == null">
         <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-            <p  th:text="${errorMessage}"></p>
+            <p th:text="${errorMessage}"></p>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -37,7 +37,8 @@
                             <label for="startDate">Kiedy wezna: </label>
                             <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                             <label for="endDate">Kiedy łoddom: </label>
-                            <input class="bg-light rounded-0" placeholder="tego niy musisz" id="endDate" th:field="*{endingDate}"/>
+                            <input class="bg-light rounded-0" placeholder="tego niy musisz" id="endDate"
+                                   th:field="*{endingDate}"/>
                             <small id="endDateHelp" class="form-text text-light"></small>
                         </div>
                     </div>
@@ -73,12 +74,12 @@
 
                 <div class="col-12 col-md-6 col-lg-12 col-xl-3 p-1">
                     <div class="shadow card bg-secondary text-white rounded-0 h-100">
-                        <div class="card-header">Opis </div>
+                        <div class="card-header">Opis</div>
                         <div class="card-body">
                             <textarea class="form-control bg-light rounded-0" rows="2"
                                       placeholder="Np. godziny wyjazdu, cel, klient..."
                                       th:field="*{additionalMessage}"></textarea>
-<!--                            <small id="messageHelp" class="form-text text-light">pole opcjonalne</small>-->
+                            <!--                            <small id="messageHelp" class="form-text text-light">pole opcjonalne</small>-->
                         </div>
                     </div>
                 </div>
@@ -89,6 +90,37 @@
 
             </div>
         </form>
+    </div>
+    <div class="container pt-1">
+        <div class="row">
+            <tr th:each="day :${calendarPreview}">
+                <div class="col-3 p-1">
+                    <div class="shadow card rounded-0 h-100">
+                        <div class="card-header">
+                            <p th:text="${day.getId().getDayOfWeek()}"></p>
+                            <p th:text="${day.getId().toString()}"></p>
+                        </div>
+                        <div class="card-body">
+                            <div class="container">
+                                <div class="row">
+                                    <table>
+                                        <tr th:each="car :${day.getCarDtoList()}">
+                                            <div class="col-12 rounded-0 p-0">
+                                                <div class="shadow card rounded-0 h-100">
+                                                    <div class="card-body">
+                                                        <p th:text="${car.getName()}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tr>
+        </div>
     </div>
 </div>
 
@@ -102,7 +134,7 @@
         showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
-        value: today.getDate().toString()+'/'+(today.getMonth() +1).toString()+'/'+today.getFullYear().toString(),
+        value: today.getDate().toString() + '/' + (today.getMonth() + 1).toString() + '/' + today.getFullYear().toString(),
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         minDate: today,

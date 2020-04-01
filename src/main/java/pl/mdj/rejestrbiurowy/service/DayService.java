@@ -1,15 +1,18 @@
 package pl.mdj.rejestrbiurowy.service;
 
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface DayService extends BasicService<Day, LocalDate> {
-    boolean saveAll(List<Day> days) throws EntityNotCompleteException, EntityConflictException;
+public interface DayService {
+    Day findById(LocalDate id) throws CannotFindEntityException;
     void addTripToDay(Trip trip) throws EntityNotCompleteException, EntityConflictException;
-    List<LocalDate> getDates(Trip trip);
+    List<LocalDate> getLocalDatesBetween(LocalDate start, LocalDate end);
+    List<DayDto> getDaysDtoBetween(LocalDate start, LocalDate end);
 }
