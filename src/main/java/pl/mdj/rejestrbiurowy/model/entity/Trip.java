@@ -40,6 +40,7 @@ public class Trip {
         }
         return days;
     }
+
 }
 
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.clientaccess.mvc.interfaces.BasicController;
+import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.DayService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
@@ -23,28 +24,29 @@ public class ControllerMVC implements BasicController {
     EmployeeService employeeService;
     CarService carService;
     DayService dayService;
+    DateMapper dateMapper;
 
     @Autowired
-    public ControllerMVC(EmployeeService employeeService, CarService carService, DayService dayService) {
+    public ControllerMVC(EmployeeService employeeService, CarService carService, DayService dayService, DateMapper dateMapper) {
         this.employeeService = employeeService;
         this.carService = carService;
         this.dayService = dayService;
+        this.dateMapper = dateMapper;
     }
 
     @GetMapping("/")
     public String getHome(Model model){
+        LocalDate today = LocalDate.now();
+        model.addAttribute("todayFullDayPL", dateMapper.dayOfWeekPL(LocalDate.now()));
+        model.addAttribute("year", today.getYear());
+        model.addAttribute("month", dateMapper.valueWithZeroForJS(today.getMonthValue()));
+        model.addAttribute("day", dateMapper.valueWithZeroForJS(today.getDayOfMonth()));
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("cars", carService.getAll());
-        model.addAttribute("calendarPreview", getDataForIndexCalendarView());
         return "index";
     }
 
-    private List<DayDto> getDataForIndexCalendarView(){
-        LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY);
-        LocalDate end = start.plusDays(28);
-        return dayService.getDaysDtoBetween(start, end);
-    }
     
 
 }

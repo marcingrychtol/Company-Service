@@ -75,8 +75,12 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        tripRepository.deleteById(id);
+    public void cancelById(Long id) {
+        tripRepository.findById(id).ifPresent(trip -> {
+            trip.setCancelled(true);
+            trip.setCancelledTime(LocalDateTime.now());
+            tripRepository.save(trip);
+        });
     }
 
     public List<TripDto> findAllByEmployee_Id(Long id){
@@ -102,17 +106,6 @@ public class TripServiceImpl implements TripService {
     }
 
     private void checkConflict(Trip trip) throws EntityConflictException {
-//        ExampleMatcher tripMatcher = ExampleMatcher.matching()
-//                .withIgnorePaths("id")
-//                .withIgnorePaths("additionalMessage")
-//                .withIgnorePaths("employee")
-//                .withIgnorePaths("startingDate")
-//                .withIgnorePaths("endingDate");
-//
-//        Example<Trip> tripExample = Example.of(trip, tripMatcher);
-//        if (daytripRepository.exists(tripExample)){
-//            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty!");
-//        }
 
         Car car = trip.getCar();
         List<LocalDate> datesToCheck = dayService.getLocalDatesBetween(trip.getStartingDate(), trip.getEndingDate());

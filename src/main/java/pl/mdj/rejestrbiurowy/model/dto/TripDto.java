@@ -17,6 +17,7 @@ public class TripDto {
 
     @DateTimeFormat(pattern = "MM/dd/YYYY")
     private Date startingDate;
+    @DateTimeFormat(pattern = "MM/dd/YYYY")
     private Date endingDate;
     private Integer durationDays;
 

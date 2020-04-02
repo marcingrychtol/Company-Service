@@ -45,7 +45,7 @@ public class EmployeeControllerMVC {
 
     @GetMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable String id){
-        employeeService.deleteById(Long.parseLong(id));
+        employeeService.cancelById(Long.parseLong(id));
         return "redirect:/employees/edit";
     }
 }

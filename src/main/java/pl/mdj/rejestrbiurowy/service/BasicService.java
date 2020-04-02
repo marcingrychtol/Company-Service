@@ -16,5 +16,5 @@ public interface BasicService<D, I> {
     List<D> getAll();
     D findById(I id) throws CannotFindEntityException;
     D addOne(D d) throws EntityNotCompleteException, EntityConflictException;
-    void deleteById(I id);
+    void cancelById(I id);
 }

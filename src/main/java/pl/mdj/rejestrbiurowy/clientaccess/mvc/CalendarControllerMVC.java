@@ -9,15 +9,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.model.dto.DateDto;
+import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
+import pl.mdj.rejestrbiurowy.service.DayService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping(path ="/calendar")
@@ -29,17 +34,19 @@ public class CalendarControllerMVC {
     CarService carService;
     EmployeeService employeeService;
     DateMapper dateMapper;
+    DayService dayService;
 
     @Autowired
-    public CalendarControllerMVC(TripService tripService, CarService carService, EmployeeService employeeService, DateMapper dateMapper) {
+    public CalendarControllerMVC(TripService tripService, CarService carService, EmployeeService employeeService, DateMapper dateMapper, DayService dayService) {
         this.tripService = tripService;
         this.carService = carService;
         this.employeeService = employeeService;
         this.dateMapper = dateMapper;
+        this.dayService = dayService;
     }
 
-    @GetMapping("")
-    public String getCalendar(@ModelAttribute TripDto tripDto, Model model) {
+    @GetMapping("/browse")
+    public String getCalendarBrowser(@ModelAttribute TripDto tripDto, @ModelAttribute DateDto dateDto, Model model) {
 
         LocalDate requestedDate;
         if (tripDto.getStartingDate() != null) {
@@ -48,14 +55,19 @@ public class CalendarControllerMVC {
             requestedDate = LocalDate.now();
         }
 
-        model.addAttribute("today", LocalDate.now());
-        model.addAttribute("todayFullDayPL", dateMapper.dayOfWeekPL(LocalDate.now()));
-        model.addAttribute("year", requestedDate.getYear());
-        model.addAttribute("month", dateMapper.valueWithZeroForJS(requestedDate.getMonthValue()));
-        model.addAttribute("day", dateMapper.valueWithZeroForJS(requestedDate.getDayOfMonth()));
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailable(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
+        return "calendar/calendar-browser";
+    }
+
+    @GetMapping("")
+    public String getCalendar(Model model) {
+        model.addAttribute("calendarPreview", getDataForIndexCalendarView());
+        model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("dateDto", new DateDto());
         return "calendar/calendar";
     }
 
@@ -75,4 +87,9 @@ public class CalendarControllerMVC {
     }
 
 
+    private List<DayDto> getDataForIndexCalendarView(){
+        LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate end = start.plusDays(28);
+        return dayService.getDaysDtoBetween(start, end);
+    }
 }

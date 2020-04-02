@@ -8,6 +8,6 @@ import java.util.List;
 
 @Data
 public class DayDto {
-    private LocalDate id;
+    private DateDto id;
     private List<CarDto> carDtoList = new ArrayList<>();
 }

@@ -11,7 +11,7 @@
 <body class="bg-light">
 <div th:replace="fragments/nav-bar"></div>
 
-<div class="container">
+<div class="container-fluid">
     <div class="alert alert-dark alert-dismissible fade show mt-2 rounded-0" role="alert">
         <h1 class="display-4">Łobsztaluj se auto!</h1>
     </div>
@@ -91,37 +91,6 @@
             </div>
         </form>
     </div>
-    <div class="container-fluid pt-1">
-        <div class="row">
-            <tr th:each="day :${calendarPreview}">
-                <div class="col-6 col-md-4 col-lg-3  p-1">
-                    <div class="shadow card rounded-0 h-100">
-                        <div class="card-header">
-                            <p th:text="${day.getId().getDayOfWeek()}"></p>
-                            <p th:text="${day.getId().toString()}"></p>
-                        </div>
-                        <div class="card-body">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <table>
-                                        <tr th:each="car :${day.getCarDtoList()}">
-                                            <div class="col-12 rounded-0 p-0">
-                                                <div class="shadow card rounded-0 h-100">
-                                                    <div class="card-body">
-                                                        <p th:text="${car.getName()}"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </tr>
-        </div>
-    </div>
 </div>
 
 
@@ -134,7 +103,7 @@
         showRightIcon: false,
         header: false,
         format: 'dd/mm/yyyy',
-        value: today.getDate().toString() + '/' + (today.getMonth() + 1).toString() + '/' + today.getFullYear().toString(),
+        value: [(${day})] + "/" + [(${month})] + "/" + [(${year})],
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         minDate: today,
@@ -154,6 +123,8 @@
             return $('#startDate').val();
         }
     });
+
+
 </script>
 </body>
 </html>

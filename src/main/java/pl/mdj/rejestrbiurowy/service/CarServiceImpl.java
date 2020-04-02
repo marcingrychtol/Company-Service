@@ -71,7 +71,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void cancelById(Long id) {
         carRepository.deleteById(id);
     }
 

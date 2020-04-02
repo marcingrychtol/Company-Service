@@ -1,6 +1,7 @@
 package pl.mdj.rejestrbiurowy.model.mappers;
 
 import org.springframework.stereotype.Component;
+import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,7 +62,7 @@ public class DateMapperImpl implements DateMapper {
 
     @Override
     public String monthPL(Date date) {
-        return dayOfWeekPL(toLocalDate(date));
+        return monthPL(toLocalDate(date));
     }
 
     @Override
@@ -86,6 +87,21 @@ public class DateMapperImpl implements DateMapper {
                 valueWithZero(dateTime.getDayOfMonth()),
                 valueWithZero(dateTime.getMonthValue()),
                 dateTime.getYear());
+    }
+
+    @Override
+    public DateDto getDateDto(LocalDate localDate) {
+        DateDto dateDto = new DateDto();
+        dateDto.setLocalDate(localDate);
+        dateDto.setDate(toDate(localDate));
+        dateDto.setDayOfWeekPL(dayOfWeekPL(localDate));
+        dateDto.setDayValueWithZero(valueWithZero(localDate.getDayOfMonth()));
+        dateDto.setDayValueWithZeroJS(valueWithZeroForJS(localDate.getDayOfMonth()));
+        dateDto.setMonthPL(monthPL(localDate));
+        dateDto.setMonthValueWithZero(valueWithZero(localDate.getMonthValue()));
+        dateDto.setMonthValueWithZeroJS(valueWithZeroForJS(localDate.getMonthValue()));
+        dateDto.setYear(String.valueOf(localDate.getYear()));
+        return dateDto;
     }
 
 

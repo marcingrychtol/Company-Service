@@ -113,16 +113,13 @@ public class TripControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("today", LocalDate.now());
-        model.addAttribute("todayFullDayPL", dateMapper.dayOfWeekPL(LocalDate.now()));
-        model.addAttribute("year", requestedDate.getYear());
-        model.addAttribute("month", dateMapper.valueWithZeroForJS(requestedDate.getMonthValue()));
-        model.addAttribute("day",  dateMapper.valueWithZeroForJS(requestedDate.getDayOfMonth()));
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailable(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
-        return "calendar/calendar";
+        return "calendar/calendar-browser";
     }
 
     @GetMapping("/edit")
@@ -148,7 +145,7 @@ public class TripControllerMVC {
 
     @PostMapping("/delete")
     public String deleteTrip(@ModelAttribute TripDto tripDto){
-        tripService.deleteById(tripDto.getId());
+        tripService.cancelById(tripDto.getId());
         return "redirect:/trips/edit";
     }
 
