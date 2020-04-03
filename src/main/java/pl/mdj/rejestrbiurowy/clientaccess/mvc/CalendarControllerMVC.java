@@ -45,7 +45,7 @@ public class CalendarControllerMVC {
         this.dayService = dayService;
     }
 
-    @GetMapping("/browse")
+    @GetMapping("/browser")
     public String getCalendarBrowser(@ModelAttribute TripDto tripDto, @ModelAttribute DateDto dateDto, Model model) {
 
         LocalDate requestedDate;
@@ -90,7 +90,7 @@ public class CalendarControllerMVC {
 
 
     private List<DayDto> getDataForIndexCalendarView(int i){
-        LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate start = LocalDate.now();
         LocalDate end = start.plusDays(i-1);
         return dayService.getDaysDtoBetween(start, end);
     }

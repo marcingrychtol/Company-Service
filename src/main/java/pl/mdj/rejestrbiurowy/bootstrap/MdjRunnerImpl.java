@@ -61,7 +61,6 @@ public class MdjRunnerImpl implements MdjRunner {
             Car car2 = new Car();
             Car car3 = new Car();
             Car car4 = new Car();
-            Car car5 = new Car();
             Car car6 = new Car();
 
             car1.setCarCategory(CarCategory.COMPANY);
@@ -88,25 +87,20 @@ public class MdjRunnerImpl implements MdjRunner {
             car4.setName("VW LT");
             car4.setRegistration("KT 7777");
 
-            car5.setCarCategory(CarCategory.COMPANY);
-            car5.setFuel(CarFuel.DIESEL);
-            car5.setMileage((long)345);
-            car5.setName("VW Caddy");
-            car5.setRegistration("gfdgfd 7777");
-
             car6.setCarCategory(CarCategory.COMPANY);
             car6.setFuel(CarFuel.DIESEL);
             car6.setMileage((long)4654);
             car6.setName("Honda Civic");
             car6.setRegistration("KT 354345");
 
-            for (Car car : Arrays.asList(car1, car2, car3, car4, car5, car6)) {
+            for (Car car : Arrays.asList(car1, car2, car3, car4, car6)) {
                 try {
                     carService.addOne(carMapper.mapToDto(car));
                 } catch (EntityNotCompleteException | EntityConflictException e) {
                     LOG.error(e.getMessage());
                 }
             }
+
         } //CARS
 
         {

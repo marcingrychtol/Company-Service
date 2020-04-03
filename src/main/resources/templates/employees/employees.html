@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <div th:replace="fragments/bootstrap-styles"></div>
 </head>
-<body class="bg-light">
+<body class="bg-dark">
 
 <div th:replace="fragments/nav-bar"></div>
 
-<div class="container">
+<div class="container-fluid pt-2">
 
 
     <div class="row">
         <tr th:each="emp: ${employees}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
-                    <div class="shadow card border-success text-center rounded-0">
-                        <h5 class="card-header bg-light">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
+                    <div class="shadow card text-white bg-success text-center rounded-0">
+                        <h5 class="card-header">
 <!--                            <td th:text="${emp.getId()}"></td>-->
                             <td th:text="${emp.getName()}"></td>
                             <td th:text="${emp.getSecondName()}"></td>

@@ -6,7 +6,7 @@
     <div th:replace="fragments/datepicker-styles"></div>
 
 </head>
-<body class="bg-light">
+<body class="bg-dark">
 <div th:replace="fragments/nav-bar"></div>
 
 <!-- filters below -->
@@ -84,13 +84,13 @@
 </div>
 
 
-<div class="container">
+<div class="container-fluid pt-2">
     <div class="row">
 
         <tr th:each="trip: ${trips}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-1 mb-1 h-100">
-                <div class="shadow card border-info text-center rounded-0">
-                    <h5 class="card-header bg-light">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-1 mb-1 h-100">
+                <div class="shadow card text-white bg-info text-center rounded-0">
+                    <h5 class="card-header">
                         <p class="card-text">
                         <td th:text="${trip.getId()}"></td>
                         <br>

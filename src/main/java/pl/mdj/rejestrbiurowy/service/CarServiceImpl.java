@@ -66,7 +66,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarDto addOne(CarDto carDto) {
-        carRepository.save(carMapper.mapToEntity(carDto));
+        carRepository.save(carMapper.mapToEntity(carDto));  // TODO: check duplicates
         return carDto;
     }
 

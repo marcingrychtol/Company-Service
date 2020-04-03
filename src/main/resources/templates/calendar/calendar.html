@@ -9,15 +9,15 @@
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
 
 </head>
-<body class="bg-light">
+<body class="bg-dark">
 <div th:replace="fragments/nav-bar"></div>
 
 <div class="container-fluid pt-2">
     <div class="row">
         <tr th:each="day :${calendarPreview}">
             <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1">
-                <div class="shadow card text-white bg-dark rounded-0 h-100 p-1">
-                    <form id="dayForm" th:action="@{/calendar/browse}" th:object="${dateDto}" method="get">
+                <div class="shadow card text-white bg-secondary rounded-0 h-100 p-1">
+                    <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
                         <div class="card-header">
                             <input type="hidden" name="localDate" th:value="${day.id.localDate}">
                             <button type="submit" id="dayButton" th:text="${day.getId().getDayOfWeekPL()} + ' ' + ${day.getId().getLocalDate().toString()}" class="btn btn-sm text-white stretched-link rounded-0"></button>

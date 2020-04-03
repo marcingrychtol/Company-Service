@@ -9,11 +9,11 @@
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
 
 </head>
-<body class="bg-light">
+<body class="bg-dark">
 <div th:replace="fragments/nav-bar"></div>
 
 
-<div class="container">
+<div class="container-fluid pt-2">
     <form id="chooseDate" th:action="@{/calendar/browse}" th:object="${tripDto}">
                 <div class="row justify-content-md-center">
                     <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
@@ -49,45 +49,43 @@
 
     <div th:replace="fragments/error-message"></div>
 
-    <div class="alert alert-dark alert-dismissible fade show mt-2 rounded-0" role="alert">
+    <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-2 rounded-0" role="alert">
         <h1 class="display-4">Dostympne auta:</h1>
     </div>
 
     <div class="row">
         <tr th:each="car: ${cars}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-2">
-                <div class="shadow card border-warning text-center rounded-0">
-                    <h5 class="card-header bg-light">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
+                <div class="shadow card text-white bg-info text-center rounded-0">
+                    <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
+                    <h5 class="card-header">
                         <!--                        <td th:text="${car.getId()}"></td>-->
                         <td th:text="${car.getName()}"></td>
                     </h5>
                     <div class="card-body">
                         <p class="card-text">
-                            <!--                        <td th:text="${car.getFuel()}"></td>-->
-                            <!--                        <br>-->
-                            <!--                        <td th:text="${car.getCarCategory()}"></td>-->
-                            <!--                        <br>-->
-                            <!--                        <td th:text="${car.getMileage()}"></td>-->
-                            <!--                        <br>-->
                         <td th:text="${car.getRegistration()}"></td>
                         </p>
                     </div>
-                    <a th:href="@{/trips/car/{id}(id=${car.getId()})}"
-                       class="btn btn-warning stretched-link btn-block text-white rounded-0">Pokaż rezerwacje</a>
+                        <input type="hidden" name="carId" th:value="${car.getId()}">
+                        <input type="hidden" name="startingDate" th:value="${requestedDate.date}">
+                    <button type="submit"
+                       class="btn btn-info stretched-link btn-block text-white rounded-0">Rezerwuj</button>
+                    </form>
                 </div>
             </div>
         </tr>
     </div>
 
-    <div class="alert alert-dark alert-dismissible fade show mt-2 rounded-0" role="alert">
+    <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-2 rounded-0" role="alert">
         <h1 class="display-4">Dzisio jadom:</h1>
     </div>
 
     <div class="row">
         <tr th:each="trip: ${trips}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1 mt-1 mb-1 h-100">
-                <div class="shadow card border-info text-center rounded-0">
-                    <h5 class="card-header bg-light">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-1 mb-1 h-100">
+                <div class="shadow card text-white bg-danger text-center rounded-0">
+                    <h5 class="card-header">
                         <p class="card-text">
                         <td th:text="${trip.getId()}"></td>
                         <br>
@@ -112,7 +110,7 @@
                         <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
                         </p>
                     </div>
-                    <button type="submit" class="btn btn-info stretched-link rounded-0" value="add new employee">
+                    <button type="submit" class="btn btn-danger stretched-link rounded-0" value="add new employee">
                         Edytuj
                     </button>
                 </div>
