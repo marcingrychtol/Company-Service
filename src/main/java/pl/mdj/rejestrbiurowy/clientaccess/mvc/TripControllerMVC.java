@@ -116,7 +116,7 @@ public class TripControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("cars", carService.getAvailable(requestedDate));
+        model.addAttribute("cars", carService.getAvailableCars(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
         return "calendar/calendar-browser";

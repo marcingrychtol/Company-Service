@@ -15,19 +15,28 @@
 <div class="container-fluid pt-2">
     <div class="row">
         <tr th:each="day :${calendarPreview}">
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-0">
-                <div class="shadow card rounded-0 h-100">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1">
+                <div class="shadow card text-white bg-dark rounded-0 h-100 p-1">
                     <form id="dayForm" th:action="@{/calendar/browse}" th:object="${dateDto}" method="get">
+                        <div class="card-header">
+                            <input type="hidden" name="localDate" th:value="${day.id.localDate}">
+                            <button type="submit" id="dayButton" th:text="${day.getId().getDayOfWeekPL()} + ' ' + ${day.getId().getLocalDate().toString()}" class="btn btn-sm text-white stretched-link rounded-0"></button>
+                        </div>
                         <div class="card-body">
                             <div class="container-fluid">
-                                <input type="hidden" name="localDate" th:value="${day.id.localDate}">
-                                <button type="submit" id="dayButton" th:text="${day.getId().getLocalDate().toString()}" class="btn btn-sm stretched-link rounded-0"></button>
                                 <div class="row">
                                     <table>
-                                        <tr th:each="car :${day.getCarDtoList()}">
+                                        <tr th:each="carN :${day.getNotAvailableCars()}">
+                                        <div class="col-12 rounded-0 p-0">
+                                            <div class="shadow card text-white bg-danger rounded-0 h-100">
+                                                <p th:text="${carN.getName()}"></p>
+                                            </div>
+                                        </div>
+                                        </tr>
+                                        <tr th:each="carA :${day.getAvailableCars()}">
                                             <div class="col-12 rounded-0 p-0">
-                                                <div class="shadow card rounded-0 h-100">
-                                                    <p th:text="${car.getName()}"></p>
+                                                <div class="shadow card text-white bg-info rounded-0 h-100">
+                                                    <p th:text="${carA.getName()}"></p>
                                                 </div>
                                             </div>
                                         </tr>

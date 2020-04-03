@@ -76,20 +76,27 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDto> getAvailable(LocalDate date) {
-        Optional<Day> day = dayRepository.findById(date);
-        List<Car> notAvailableCars;
+    public List<CarDto> getAvailableCars(LocalDate date) {
 
-        notAvailableCars = day.map(
-                    d -> d.getTrips().stream()
-                            .map(Trip::getCar)
-                            .collect(Collectors.toList())
-        ).orElseGet(ArrayList::new);
+        List<CarDto> notAvailableCars = getNotAvailableCars(date);
 
         return carRepository.findAll().stream()
-                .filter(c -> !notAvailableCars.contains(c))
                 .map(c -> carMapper.mapToDto(c))
+                .filter(c -> !notAvailableCars.contains(c))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CarDto> getNotAvailableCars(LocalDate date) {
+        Optional<Day> day = dayRepository.findById(date);
+
+        return  day.map(
+                d -> d.getTrips().stream()
+                        .map(Trip::getCar)
+                        .map(car -> carMapper.mapToDto(car))
+                        .collect(Collectors.toList())
+        ).orElseGet(ArrayList::new);
+
     }
 
 }

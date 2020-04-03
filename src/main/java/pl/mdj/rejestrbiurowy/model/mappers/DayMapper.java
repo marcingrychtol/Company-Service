@@ -6,6 +6,8 @@ import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.DayRepository;
+import pl.mdj.rejestrbiurowy.service.CarService;
+import pl.mdj.rejestrbiurowy.service.DayService;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,23 +18,27 @@ public class DayMapper implements BasicMapper<Day, DayDto> {
 
     CarMapper carMapper;
     DayRepository dayRepository;
+    CarService carService;
     DateMapper dateMapper;
 
     @Autowired
-    public DayMapper(CarMapper carMapper, DayRepository dayRepository, DateMapper dateMapper) {
+    public DayMapper(CarMapper carMapper, DayRepository dayRepository, DateMapper dateMapper, CarService carService) {
         this.carMapper = carMapper;
         this.dayRepository = dayRepository;
         this.dateMapper = dateMapper;
+        this.carService = carService;
     }
 
     @Override
     public DayDto mapToDto(Day entity) {
         DayDto dto = new DayDto();
         dto.setId(dateMapper.getDateDto(entity.getId()));
-        dto.setCarDtoList(entity.getTrips().stream()
-                .map(Trip::getCar)
-                .map(car -> carMapper.mapToDto(car))
-                .collect(Collectors.toList()));
+//        dto.setAvailableCars(entity.getTrips().stream()
+//                .map(Trip::getCar)
+//                .map(car -> carMapper.mapToDto(car))
+//                .collect(Collectors.toList()));
+        dto.setAvailableCars(carService.getAvailableCars(entity.getId()));
+        dto.setNotAvailableCars(carService.getNotAvailableCars(entity.getId()));
         return dto;
     }
 

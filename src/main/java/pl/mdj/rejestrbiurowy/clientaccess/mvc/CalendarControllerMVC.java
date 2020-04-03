@@ -49,7 +49,10 @@ public class CalendarControllerMVC {
     public String getCalendarBrowser(@ModelAttribute TripDto tripDto, @ModelAttribute DateDto dateDto, Model model) {
 
         LocalDate requestedDate;
-        if (tripDto.getStartingDate() != null) {
+
+        if (dateDto.getLocalDate() != null){
+            requestedDate = dateDto.getLocalDate();
+        } else if (tripDto.getStartingDate() != null){
             requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
         } else {
             requestedDate = LocalDate.now();
@@ -58,14 +61,14 @@ public class CalendarControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("cars", carService.getAvailable(requestedDate));
+        model.addAttribute("cars", carService.getAvailableCars(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
         return "calendar/calendar-browser";
     }
 
     @GetMapping("")
     public String getCalendar(Model model) {
-        model.addAttribute("calendarPreview", getDataForIndexCalendarView());
+        model.addAttribute("calendarPreview", getDataForIndexCalendarView(72));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         return "calendar/calendar";
@@ -77,19 +80,18 @@ public class CalendarControllerMVC {
     {
         // tell spring to set empty values as null instead of empty string.
         binder.registerCustomEditor( Date.class, new StringTrimmerEditor( true ));
-
         //The date format to parse or output your dates
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         //Create a new CustomDateEditor
-        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
+        CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
         //Register it as custom editor for the Date type
-        binder.registerCustomEditor(Date.class, editor);
+        binder.registerCustomEditor(Date.class, dateEditor);
     }
 
 
-    private List<DayDto> getDataForIndexCalendarView(){
+    private List<DayDto> getDataForIndexCalendarView(int i){
         LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY);
-        LocalDate end = start.plusDays(28);
+        LocalDate end = start.plusDays(i-1);
         return dayService.getDaysDtoBetween(start, end);
     }
 }
