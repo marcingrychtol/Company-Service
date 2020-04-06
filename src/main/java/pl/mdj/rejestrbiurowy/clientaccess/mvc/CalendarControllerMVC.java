@@ -19,7 +19,6 @@ import pl.mdj.rejestrbiurowy.service.TripService;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +62,7 @@ public class CalendarControllerMVC {
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("cars", carService.getAvailableCars(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
-        return "calendar/calendar-browser";
+        return "main/browser";
     }
 
     @GetMapping("")
@@ -71,7 +70,7 @@ public class CalendarControllerMVC {
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(72));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
-        return "calendar/calendar";
+        return "main/calendar";
     }
 
 

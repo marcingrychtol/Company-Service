@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.clientaccess.mvc.interfaces.BasicController;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
@@ -19,10 +18,8 @@ import pl.mdj.rejestrbiurowy.service.DayService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -49,7 +46,7 @@ public class ControllerMVC implements BasicController {
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("cars", carService.getAll());
-        return "index";
+        return "main/booking";
     }
 
     @GetMapping("/booking")
@@ -59,7 +56,7 @@ public class ControllerMVC implements BasicController {
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("cars", carService.getAll());
-        return "index";
+        return "main/booking";
     }
 
 

@@ -23,14 +23,14 @@ public class EmployeeControllerMVC {
     @GetMapping("")
     public String getEmployees(Model model){
         model.addAttribute("employees", employeeService.getAll());
-        return "employees/employees";
+        return "main/employees";
     }
 
     @GetMapping("/edit")
     public String editEmployees(Model model){
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
-        return "employees/employees-edit";
+        return "edit/employees-edit";
     }
 
     @PostMapping("/add")

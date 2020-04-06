@@ -51,7 +51,7 @@ public class TripControllerMVC {
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("trips", tripService.getAll());
-        return "trips/trips";
+        return "main/trips";
     }
 
     @GetMapping("/employee/{id}")
@@ -67,7 +67,7 @@ public class TripControllerMVC {
         model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
 
         addTripsMainSiteAttributesToModel(model);
-        return "trips/trips";
+        return "main/trips";
     }
 
     @GetMapping("/car/{id}")
@@ -85,7 +85,7 @@ public class TripControllerMVC {
         model.addAttribute("trips", tripService.findAllByCar_Id(id));
 
         addTripsMainSiteAttributesToModel(model);
-        return "trips/trips";
+        return "main/trips";
     }
 
     @GetMapping("/filter")
@@ -96,7 +96,7 @@ public class TripControllerMVC {
 
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByDate(date));
-        return "trips/trips";
+        return "main/trips";
     }
 
     @PostMapping("/add")
@@ -119,14 +119,14 @@ public class TripControllerMVC {
         model.addAttribute("cars", carService.getAvailableCars(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
-        return "calendar/calendar-browser";
+        return "main/browser";
     }
 
     @GetMapping("/edit")
     public String editTrips(Model model){
         model.addAttribute("deleteTrip", new TripDto());
         model.addAttribute("trips", tripService.getAll());
-        return "trips/trips-edit";
+        return "edit/trips-edit";
     }
 
     @InitBinder

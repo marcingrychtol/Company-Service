@@ -31,7 +31,7 @@ public class CarControllerMVC {
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
-        return ("cars/cars");
+        return ("main/cars");
     }
 
     @GetMapping(path = "/edit")
@@ -40,7 +40,7 @@ public class CarControllerMVC {
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
-        return ("cars/cars-edit");
+        return ("edit/cars-edit");
     }
 
     @PostMapping("/add")
