@@ -9,53 +9,39 @@
 
 <div th:replace="fragments/nav-bar"></div>
 
-<!--<div class="container">-->
-<!--    <form th:action="@{/trips/day}" th:object="${tripDto}">-->
-
-<!--        <div class="row justify-content-md-center">-->
-<!--            <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">-->
-<!--                <div class="shadow card bg-danger text-white rounded-0">-->
-<!--                    <div class="card-header">Ja, sprowdź se w kalyndorzu</div>-->
-<!--                    <div class="card-body">-->
-<!--                        <label for="startDate">Wybier dziyń: </label>-->
-<!--                        <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <button type="submit" th:href="@{/trips/day}"-->
-<!--                        class="shadow btn btn-danger btn-block rounded-0">Ciś knefel</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-
-<!--</div>-->
-
 <div class="container-fluid pt-2">
 
     <div class="row">
 
         <tr th:each="car: ${cars}">
             <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
-                <div class="shadow card text-white bg-warning text-center rounded-0">
+                <div class="shadow card text-white bg-warning text-center rounded-0 h-100">
                     <h5 class="card-header">
-<!--                        <td th:text="${car.getId()}"></td>-->
                         <td th:text="${car.getName()}"></td>
                     </h5>
                     <div class="card-body">
                         <p class="card-text">
-<!--                        <td th:text="${car.getFuel()}"></td>-->
-<!--                        <br>-->
-<!--                        <td th:text="${car.getCarCategory()}"></td>-->
-<!--                        <br>-->
-<!--                        <td th:text="${car.getMileage()}"></td>-->
-<!--                        <br>-->
+
                         <td th:text="${car.getRegistration()}"></td>
                         </p>
 
                     </div>
-                    <a th:href="@{/trips/car/{id}(id=${car.getId()})}" class="btn btn-warning stretched-link btn-block text-white rounded-0">Pokaż rezerwacje</a>
+                    <a th:href="@{/trips/car/{id}(id=${car.getId()})}"
+                       class="btn btn-warning stretched-link btn-block text-white rounded-0">Pokaż rezerwacje</a>
                 </div>
             </div>
         </tr>
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
+            <div class="shadow card text-warning border-warning bg-dark text-center rounded-0 h-100">
+                <div class="card-body">
+                    <h4 class="card-text">
+                    Dodej auto jak mosz mało
+                    </h4>
+                </div>
+                <a th:href="@{/cars}"
+                    class="btn btn-outline-dark bg-dark stretched-link btn-block text-warning rounded-0">+</a>
+            </div>
+        </div>
     </div>
 
 </div>

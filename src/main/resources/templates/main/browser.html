@@ -15,76 +15,71 @@
 
 <div class="container-fluid pt-2">
     <form id="chooseDate" th:action="@{/calendar/browse}" th:object="${tripDto}">
-                <div class="row justify-content-md-center">
-                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
-                        <div class="shadow card bg-danger text-white rounded-0">
-                            <div class="card-header" th:text=
-                                    "'Dziosio momy: '
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
+                <div class="shadow card bg-danger text-white rounded-0">
+                    <div class="card-header" th:text=
+                            "'Dziosio momy: '
                             + ${today.getDayOfWeekPL()}
                             + ' '
                             + ${today.getLocalDate().toString()}"></div>
-                            <div class="card-header" th:text=
-                                    "'Przeglondosz: '
+                    <div class="card-header" th:text=
+                            "'Przeglondosz: '
                             + ${requestedDate.getDayOfWeekPL()}
                             + ' '
                             + ${requestedDate.getLocalDate().toString()}"></div>
-                            <div class="card-body">
-                                <label for="startDate">Zmiyń se dziyń: </label>
-                                <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <label for="startDate">Zmiyń se dziyń: </label>
+                        <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                     </div>
                 </div>
+            </div>
+        </div>
     </form>
 
 
-    <td th:unless="${successMessage} == null">
-        <div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
-            <p  th:text="${successMessage}"></p>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    </td>
+    <div th:replace="fragments/message-error"></div>
+    <div th:replace="fragments/message-success"></div>
 
-    <div th:replace="fragments/error-message"></div>
-
-    <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-2 rounded-0" role="alert">
-        <h1 class="display-4">Dostympne auta:</h1>
+    <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-2 rounded-0"
+         role="alert">
+        <h5 class="display-4">Dostympne auta:</h5>
     </div>
 
-    <div class="row">
+    <div class="row px-2">
         <tr th:each="car: ${cars}">
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 m-1">
                 <div class="shadow card text-white bg-info text-center rounded-0">
                     <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
-                    <h5 class="card-header">
-                        <!--                        <td th:text="${car.getId()}"></td>-->
-                        <td th:text="${car.getName()}"></td>
-                    </h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                        <td th:text="${car.getRegistration()}"></td>
-                        </p>
-                    </div>
+                        <h5 class="card-header">
+                            <!--                        <td th:text="${car.getId()}"></td>-->
+                            <td th:text="${car.getName()}"></td>
+                        </h5>
+                        <div class="card-body">
+                            <p class="card-text">
+                            <td th:text="${car.getRegistration()}"></td>
+                            </p>
+                        </div>
                         <input type="hidden" name="carId" th:value="${car.getId()}">
                         <input type="hidden" name="startingDate" th:value="${requestedDate.getLocalDateFormatted()}">
-                    <button type="submit"
-                       class="btn btn-info stretched-link btn-block text-white rounded-0">Rezerwuj</button>
+                        <button type="submit"
+                                class="btn btn-info stretched-link btn-block text-white rounded-0">Rezerwuj
+                        </button>
                     </form>
                 </div>
             </div>
         </tr>
     </div>
 
-    <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-2 rounded-0" role="alert">
-        <h1 class="display-4">Dzisio jadom:</h1>
+    <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-3 rounded-0"
+         role="alert">
+        <h5 class="display-4">Dzisio jadom:</h5>
     </div>
 
-    <div class="row">
+    <div class="row px-2">
         <tr th:each="trip: ${trips}">
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-1 mb-1 h-100">
-                <div class="shadow card text-white bg-danger text-center rounded-0">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 m-1">
+                <div class="shadow card text-white bg-danger text-center rounded-0 h-100">
                     <h5 class="card-header">
                         <p class="card-text">
                         <td th:text="${trip.getId()}"></td>
@@ -98,9 +93,6 @@
                         <td th:text="'Od: ' + ${trip.getStartingDate().toLocaleString().split(',')[0]}"></td>
                         <br/>
                         <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
-                        <p class="card-text mt-1">
-                        <td th:text="${trip.getAdditionalMessage()}"></td>
-                        </p>
                     </div>
                     <div class="card-footer">
                         <p class="card-text">
@@ -108,6 +100,11 @@
                         <td th:text="${trip.getEmployee().getSecondName()}"></td>
                         <br/>
                         <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mt-1">
+                        <td th:text="${trip.getAdditionalMessage()}"></td>
                         </p>
                     </div>
                     <button type="submit" class="btn btn-danger stretched-link rounded-0" value="add new employee">
@@ -158,9 +155,9 @@
     var x = document.getElementById("startDate").value;
 
     $('#startDate').change(
-        function(){
+        function () {
             if (x != document.getElementById("startDate").value) {
-            $('#chooseDate').submit();
+                $('#chooseDate').submit();
             }
         });
 

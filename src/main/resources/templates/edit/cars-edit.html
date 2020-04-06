@@ -5,7 +5,7 @@
     <div th:replace="fragments/bootstrap-styles"></div>
 </head>
 
-<body class="bg-dark">
+<body>
 
 <div th:replace="fragments/nav-bar"></div>
 <div th:replace="fragments/alert"></div>
@@ -13,27 +13,8 @@
 <div class="container-fluid pt-2">
 
     <div class="row">
-        <div class="col-12">
-            <form th:action="@{/cars/add}" th:object="${newCar}" method="post">
-                <div class="form-group rounded-0">
-                    <label for="carNameInput1">Nazwa pojazdu:</label>
-                    <input type="text" class="form-control rounded-0" th:field="*{name}" id="carNameInput1">
-                    <small id="carNameHelp1" class="form-text text-muted">Marka, model</small>
-                </div>
-                <div class="form-group rounded-0">
-                    <label for="carRegistrationInput1">Numer rejestracyjny:</label>
-                    <input type="text" class="form-control rounded-0" th:field="*{registration}" id="carRegistrationInput1">
-                </div>
-                <button type="submit" class="btn btn-success rounded-0" value="add new car">Dodaj do bazy</button>
-            </form>
-        </div>
-    </div>
-
-
-    <div class="row">
-
         <tr th:each="car: ${cars}">
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
                 <div class="shadow card border-success text-center rounded-0">
                     <h5 class="card-header bg-success text-light">
                         <td th:text="${car.getId()}"></td>
@@ -41,21 +22,51 @@
                     </h5>
                     <div class="card-body bg-light">
                         <p class="card-text">
-<!--                        <td th:text="${car.getFuel()}"></td>-->
-<!--                        <br>-->
-<!--                        <td th:text="${car.getCarCategory()}"></td>-->
-<!--                        <br>-->
-<!--                        <td th:text="${car.getMileage()}"></td>-->
-<!--                        <br>-->
                         <td th:text="${car.getRegistration()}"></td>
                         </p>
-                        <a href="#" class="btn btn-outline-secondary btn-lg btn-block rounded-0">  Edytuj  </a>
-                        <a th:href="@{/cars/delete/{id}(id=${car.getId()})}" class="btn btn-outline-danger btn-sm btn-block rounded-0">Usuń</a>
+                        <button type="button" class="btn btn-outline-secondary btn-lg btn-block rounded-0"
+                                data-toggle="modal" th:attr="data-target='#car'+${car.getId()}"> Edytuj
+                        </button>
+                        <a th:href="@{/cars/delete/{id}(id=${car.getId()})}"
+                           class="btn btn-outline-danger btn-sm btn-block rounded-0">Usuń</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="'car'+${car.getId()}" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="@{/cars/add}" th:object="${newCar}" method="post">
+                            <div class="modal-body">
+                                <div class="form-group rounded-0">
+                                    <label for="carNameInput1">Nazwa pojazdu:</label>
+                                    <input type="text" class="form-control rounded-0" th:field="*{name}" id="carNameInput1">
+                                    <small id="carNameHelp1" class="form-text text-muted">Marka, model</small>
+                                </div>
+                                <div class="form-group rounded-0">
+                                    <label for="carRegistrationInput1">Numer rejestracyjny:</label>
+                                    <input type="text" class="form-control rounded-0" th:field="*{registration}"
+                                           id="carRegistrationInput1">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </tr>
     </div>
+
 
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

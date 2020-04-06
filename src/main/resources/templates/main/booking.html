@@ -16,14 +16,9 @@
         <h1 class="display-4">Łobsztaluj se auto!</h1>
     </div>
 
-    <td th:unless="${errorMessage} == null">
-        <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-            <p th:text="${errorMessage}"></p>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    </td>
+    <div th:replace="fragments/message-error"></div>
+    <div th:replace="fragments/message-success"></div>
+    <div th:replace="fragments/message-info"></div>
 
     <div class="container-fluid">
 

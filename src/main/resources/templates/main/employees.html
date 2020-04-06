@@ -16,7 +16,6 @@
             <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
                     <div class="shadow card text-white bg-success text-center rounded-0">
                         <h5 class="card-header">
-<!--                            <td th:text="${emp.getId()}"></td>-->
                             <td th:text="${emp.getName()}"></td>
                             <td th:text="${emp.getSecondName()}"></td>
                         </h5>
@@ -26,16 +25,23 @@
                             <br>
                             <td th:text="${emp.getPhoneNumber()}"></td>
                             <br>
-
-                        </div><a th:href="@{/trips/employee/{id}(id=${emp.getId()})}" class="btn btn-success stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
+                        </div>
+                        <a th:href="@{/trips/employee/{id}(id=${emp.getId()})}"
+                           class="btn btn-success stretched-link btn-block rounded-0">Pokaż rezerwacje</a>
                     </div>
-<!--                    <div class="card border-light text-center">-->
-<!--                        <div class="card-footer">-->
-<!--                            <a href="#" class="btn btn-light stretched-link btn-block btn-sm">Pokaż rezerwacje</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
             </div>
         </tr>
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
+            <div class="shadow card text-success border-success bg-dark text-center rounded-0 h-100">
+                <div class="card-body">
+                    <h4 class="card-text">
+                        Dodej hajera jak mosz mało
+                    </h4>
+                </div>
+                <a th:href="@{/cars}"
+                   class="btn btn-outline-dark bg-dark stretched-link btn-block text-success rounded-0">+</a>
+            </div>
+        </div>
     </div>
 
 

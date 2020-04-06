@@ -83,13 +83,16 @@
     </div>
 </div>
 
+<div th:replace="fragments/message-error"></div>
+<div th:replace="fragments/message-success"></div>
+<div th:replace="fragments/message-info"></div>
 
 <div class="container-fluid pt-2">
     <div class="row">
 
         <tr th:each="trip: ${trips}">
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-1 mb-1 h-100">
-                <div class="shadow card text-white bg-info text-center rounded-0">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 p-1 mt-2">
+                <div class="shadow card text-white bg-info text-center rounded-0 h-100">
                     <h5 class="card-header">
                         <p class="card-text">
                         <td th:text="${trip.getId()}"></td>
@@ -103,9 +106,6 @@
                         <td th:text="'Od: ' + ${trip.getStartingDate().toLocaleString().split(',')[0]}"></td>
                         <br/>
                         <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
-                        <p class="card-text mt-1">
-                        <td th:text="${trip.getAdditionalMessage()}"></td>
-                        </p>
                     </div>
                     <div class="card-footer">
                         <p class="card-text">
@@ -113,6 +113,11 @@
                         <td th:text="${trip.getEmployee().getSecondName()}"></td>
                         <br/>
                         <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mt-1">
+                        <td th:text="${trip.getAdditionalMessage()}"></td>
                         </p>
                     </div>
                     <div class="card-footer">
@@ -128,6 +133,17 @@
                 </div>
             </div>
         </tr>
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
+            <div class="shadow card text-info border-info bg-dark text-center rounded-0 h-100">
+                <div class="card-body">
+                    <h4 class="card-text">
+                        Dodej rajza jak mosz mało
+                    </h4>
+                </div>
+                <a th:href="@{/}"
+                   class="btn btn-outline-dark bg-dark stretched-link btn-block text-info rounded-0">+</a>
+            </div>
+        </div>
     </div>
 
 </div>
