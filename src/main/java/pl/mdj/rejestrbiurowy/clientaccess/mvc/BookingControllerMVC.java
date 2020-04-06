@@ -1,5 +1,7 @@
 package pl.mdj.rejestrbiurowy.clientaccess.mvc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
+import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.clientaccess.mvc.interfaces.BasicController;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
@@ -23,7 +27,9 @@ import java.util.Date;
 
 @Controller
 @RequestMapping("/")
-public class ControllerMVC implements BasicController {
+public class BookingControllerMVC implements BasicController {
+
+    Logger LOG = LoggerFactory.getLogger(BookingControllerMVC.class);
 
     EmployeeService employeeService;
     CarService carService;
@@ -31,7 +37,7 @@ public class ControllerMVC implements BasicController {
     DateMapper dateMapper;
 
     @Autowired
-    public ControllerMVC(EmployeeService employeeService, CarService carService, DayService dayService, DateMapper dateMapper) {
+    public BookingControllerMVC(EmployeeService employeeService, CarService carService, DayService dayService, DateMapper dateMapper) {
         this.employeeService = employeeService;
         this.carService = carService;
         this.dayService = dayService;
@@ -41,8 +47,12 @@ public class ControllerMVC implements BasicController {
     @GetMapping("/")
     public String getHome(Model model){
         LocalDate requestedDate = LocalDate.now();
+
+        CarDto carDto = new CarDto();
+        TripDto requestedTrip = new TripDto();
+        requestedTrip.setCar(carDto);
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
-        model.addAttribute("requestedTrip", new TripDto());
+        model.addAttribute("requestedTrip", requestedTrip);
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("cars", carService.getAll());
@@ -51,6 +61,16 @@ public class ControllerMVC implements BasicController {
 
     @GetMapping("/booking")
     public String getHomeBooking(@ModelAttribute TripDto tripDto, Model model){
+
+        CarDto carDto = new CarDto();
+        try {
+            carDto = carService.findById(tripDto.getCarId());
+        } catch (CannotFindEntityException e) {
+            LOG.warn("No car with ID: " + tripDto.getCarId());
+        }
+
+        tripDto.setCar(carDto);
+
         model.addAttribute("requestedDate", dateMapper.getDateDto(dateMapper.toLocalDate(tripDto.getStartingDate())));
         model.addAttribute("requestedTrip", tripDto);
         model.addAttribute("newTrip", new TripDto());

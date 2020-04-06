@@ -68,7 +68,7 @@
                         </p>
                     </div>
                         <input type="hidden" name="carId" th:value="${car.getId()}">
-                        <input type="hidden" name="startingDate" th:value="${requestedDate.date}">
+                        <input type="hidden" name="startingDate" th:value="${requestedDate.getLocalDateFormatted()}">
                     <button type="submit"
                        class="btn btn-info stretched-link btn-block text-white rounded-0">Rezerwuj</button>
                     </form>

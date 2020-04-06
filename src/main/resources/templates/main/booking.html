@@ -12,7 +12,7 @@
 <div th:replace="fragments/nav-bar"></div>
 
 <div class="container-fluid">
-    <div class="alert alert-dark alert-dismissible fade show mt-2 rounded-0" role="alert">
+    <div class="alert alert-dark text-white bg-secondary border-secondary mt-2 rounded-0" role="alert">
         <h1 class="display-4">Łobsztaluj se auto!</h1>
     </div>
 
@@ -48,12 +48,22 @@
                     <div class="shadow card bg-warning text-white rounded-0 h-100">
                         <div class="card-header">Pojazd</div>
                         <div class="card-body">
-                            <select class="custom-select bg-light rounded-0" size="6" th:field="*{carId}">
-                                <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                        th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">
-                                </option>
-                            </select>
-                            <small id="carHelp" class="form-text text-light">* pole wymagane</small>
+                            <td th:unless="${requestedTrip.getCarId() != null}">
+                                <select class="custom-select bg-light rounded-0" size="6" th:field="*{carId}">
+                                    <option th:each="car : ${cars}" th:value="${car.getId()}"
+                                            th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">
+                                    </option>
+                                </select>
+                                <small id="carHelp" class="form-text text-light">* pole wymagane</small>
+                            </td>
+                            <td th:unless="${requestedTrip.getCarId() == null}">
+                                <h5 th:text="${requestedTrip.getCarId()}
+                                 + '. ' +
+                                 ${requestedTrip.getCar().getName()}
+                                 + ' ' +
+                                 ${requestedTrip.getCar().getRegistration()}"></h5>
+                                <input type="hidden" name="carId" th:value="${requestedTrip.getCarId()}">
+                            </td>
                         </div>
                     </div>
                 </div>
