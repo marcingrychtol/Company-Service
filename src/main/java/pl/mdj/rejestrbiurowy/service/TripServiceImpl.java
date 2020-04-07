@@ -13,6 +13,7 @@ import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
+import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.TripMapper;
@@ -56,7 +57,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripDto addOne(TripDto tripDto) throws EntityNotCompleteException, EntityConflictException {
+    public void addOne(TripDto tripDto) throws EntityNotCompleteException, EntityConflictException {
 
         if (!tripDto.isComplete()){
             throw new EntityNotCompleteException("Rezerwacja niemożliwa, należy uzupełnić wszystkie wymagane parametry!");
@@ -72,13 +73,11 @@ public class TripServiceImpl implements TripService {
         tripRepository.save(trip);  // in this order to generate id before using save() inside DayService
         dayService.addTripToDay(trip);
 
-        return tripDto;
-
     }
 
     @Override
-    public void cancelById(Long id) {
-        tripRepository.findById(id).ifPresent(trip -> {
+    public void cancelByDto(TripDto tripDto) {
+        tripRepository.findById(tripDto.getId()).ifPresent(trip -> {
             trip.setCancelled(true);
             trip.setCancelledTime(LocalDateTime.now());
             tripRepository.save(trip);
@@ -86,8 +85,11 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException {
-
+    public void update(TripDto tripDto) {
+        tripRepository.findById(tripDto.getId()).ifPresent(trip -> {
+            trip.setAdditionalMessage(tripDto.getAdditionalMessage());
+            tripRepository.save(trip);
+        });
     }
 
     public List<TripDto> findAllByEmployee_Id(Long id){

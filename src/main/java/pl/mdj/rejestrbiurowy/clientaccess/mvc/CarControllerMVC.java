@@ -3,6 +3,7 @@ package pl.mdj.rejestrbiurowy.clientaccess.mvc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,16 +30,14 @@ public class CarControllerMVC {
     @GetMapping("")
     public String getAll(Model model){
 
-        model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
         return ("main/cars");
     }
 
     @GetMapping(path = "/manager")
-    public String postEdit(@ModelAttribute CarDto carDto, Model model){
+    public String postEdit(Model model){
 
-        model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
@@ -49,11 +48,11 @@ public class CarControllerMVC {
 
         try {
             carService.update(carDto);
+            model.addAttribute("successMessage", "Dane zmodyfikowane poprawnie!");
         } catch (EntityConflictException | WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
@@ -63,16 +62,29 @@ public class CarControllerMVC {
     public String addCar(@ModelAttribute CarDto car, Model model){
         try {
             carService.addOne(car);
+            model.addAttribute("successMessage", "Pojazd dodano poprawnie!");
         } catch (EntityNotCompleteException | EntityConflictException e) {
-            e.printStackTrace();
+            model.addAttribute("errorMessage", e.getMessage());
         }
-        return REDIR_MANAGER_CARS;
-    }
+
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("newCar", new CarDto());
+        return ("manager/manager-cars");    }
 
     @PostMapping("/delete")
-    public String deleteCar(@PathVariable String id){
-        carService.cancelById(Long.parseLong(id));
-        return REDIR_MANAGER_CARS;
+    public String deleteCar(@ModelAttribute CarDto carDto, Model model){
+        try {
+            carService.cancelByDto(carDto);
+            model.addAttribute("successMessage", "Pojazd usunięto!");
+        } catch (WrongInputDataException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        } catch (DataIntegrityViolationException e){
+            model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji");
+        }
+
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("newCar", new CarDto());
+        return ("manager/manager-cars");
     }
 
 

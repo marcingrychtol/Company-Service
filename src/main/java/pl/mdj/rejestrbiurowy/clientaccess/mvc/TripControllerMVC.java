@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
@@ -48,6 +49,7 @@ public class TripControllerMVC {
     @GetMapping("")
     public String getAllTrips(Model model){
         model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("filterTrip", new TripDto());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("trips", tripService.getAll());
@@ -99,6 +101,54 @@ public class TripControllerMVC {
         return "main/trips";
     }
 
+    @GetMapping("/manager")
+    public String manageTrips(Model model){
+
+
+        model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("filterTrip", new TripDto());
+        model.addAttribute("trips", tripService.getAll());
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        return "main/trips";
+    }
+
+    @PostMapping("/cancel")
+    public String cancelTrip(@ModelAttribute TripDto tripDto, Model model){
+
+        try {
+            tripService.cancelByDto(tripDto);
+            model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
+        } catch (WrongInputDataException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("filterTrip", new TripDto());
+        model.addAttribute("trips", tripService.getAll());
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        return "main/trips";
+    }
+
+    @PostMapping("/edit")
+    public String editTrip(@ModelAttribute TripDto tripDto, Model model){
+
+        try {
+            tripService.update(tripDto);
+            model.addAttribute("successMessage", "Poprawnie zmieniono rezerwację!");
+        } catch (WrongInputDataException | EntityConflictException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("filterTrip", new TripDto());
+        model.addAttribute("trips", tripService.getAll());
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        return "main/trips";
+    }
+
     @PostMapping("/add")
     public String addTrip(@ModelAttribute TripDto tripDto, Model model){
 
@@ -116,17 +166,11 @@ public class TripControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("filterTrip", new TripDto());
         model.addAttribute("cars", carService.getAvailableCars(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
         return "main/browser";
-    }
-
-    @GetMapping("/edit")
-    public String editTrips(Model model){
-        model.addAttribute("deleteTrip", new TripDto());
-        model.addAttribute("trips", tripService.getAll());
-        return "edit/trips-edit";
     }
 
     @InitBinder
@@ -141,12 +185,6 @@ public class TripControllerMVC {
         CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
         //Register it as custom editor for the Date type
         binder.registerCustomEditor(Date.class, editor);
-    }
-
-    @PostMapping("/delete")
-    public String deleteTrip(@ModelAttribute TripDto tripDto){
-        tripService.cancelById(tripDto.getId());
-        return "redirect:/trips/edit";
     }
 
     private void addTripsMainSiteAttributesToModel(Model model){

@@ -93,8 +93,7 @@
                 <div class="shadow card text-white bg-info text-center rounded-0 h-100">
                     <h5 class="card-header">
                         <p class="card-text">
-                        <td th:text="${trip.getId()}"></td>
-                        <br>
+                        <td th:text="${trip.getId()}+'. '"></td>
                         <td th:text="${trip.getCar().getName()}"></td>
                         <br>
                         <td th:text="${trip.getCar().getRegistration()}"></td>
@@ -120,14 +119,139 @@
                     </div>
                     <div class="card-footer">
                         <p class="card-text">
-                        <td th:text="'Utworzono: ' + ${trip.getCreatedTime()}"></td><br/>
+                        <td th:text="'Utworzono: ' + ${trip.getCreatedTime()}"></td>
+                        <br/>
                         <td th:text="'Zmodyfikowano: ' + ${trip.getLastModifiedTime()}"></td>
                         </p>
                     </div>
 
-                    <button type="submit" class="btn btn-info stretched-link rounded-0" value="add new employee">
+                    <button type="button" class="btn btn-outline-light bg-info text-white rounded-0"
+                            data-toggle="modal"
+                            th:attr="data-target='#tripEdit'+${trip.getId()}">
                         Edytuj
                     </button>
+                    <button type="button" class="btn btn-danger text-white rounded-0"
+                            data-toggle="modal"
+                            th:attr="data-target='#tripCancel'+${trip.getId()}">
+                        Anuluj
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="'tripEdit'+${trip.getId()}" data-backdrop="static" tabindex="-1"
+                 role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="carEditModalTitle">Edycja rezerwacji</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="@{/trips/edit}" th:object="${tripDto}" method="post">
+                            <div class="modal-body">
+                                <p>
+                                    W tym miejscu możesz jedynie zmienić opis rezerwacji.
+                                    W celu zmiany parametrów, anuluj tę rezerwację, a następnie utwórz nową.
+                                </p>
+                                <div class="shadow card text-white bg-info text-center rounded-0 h-100">
+                                    <h5 class="card-header">
+                                        <p class="card-text">
+                                        <td th:text="${trip.getId()}+'. '"></td>
+                                        <td th:text="${trip.getCar().getName()}"></td>
+                                        <br>
+                                        <td th:text="${trip.getCar().getRegistration()}"></td>
+                                        </p>
+                                    </h5>
+                                    <div class="card-body">
+                                        <td th:text="'Od: ' + ${trip.getStartingDate().toLocaleString().split(',')[0]}"></td>
+                                        <br/>
+                                        <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
+                                        <p class="card-text">
+                                        <td th:text="${trip.getEmployee().getName()}"></td>
+                                        <td th:text="${trip.getEmployee().getSecondName()}"></td>
+                                        <br/>
+                                        <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
+                                        <td th:text="${trip.getAdditionalMessage()}"></td>
+                                        <td th:text="'Utworzono: ' + ${trip.getCreatedTime()}"></td>
+                                        <br/>
+                                        <td th:text="'Zmodyfikowano: ' + ${trip.getLastModifiedTime()}"></td>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group rounded-0">
+                                    <label for="tripMessageInputE">Opis:</label>
+                                    <input type="text" class="form-control rounded-0" name="additionalMessage"
+                                           id="tripMessageInputE" th:value="${trip.getAdditionalMessage()}">
+                                    <small id="tripMessageHelpE" class="form-text text-muted">Miejsce, czas,
+                                        inne...</small>
+                                </div>
+                                <input type="hidden" name="id" th:value="${trip.getId()}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij bez zmian
+                                </button>
+                                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="'tripCancel'+${trip.getId()}" data-backdrop="static" tabindex="-1"
+                 role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered bg-danger" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="CarDeleteModalTitle">Anulowanie rezerwacji</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="@{/trips/cancel}" th:object="${tripDto}" method="post">
+                            <div class="modal-body">
+                                <p>
+                                    Zaraz anulujesz rezerwację. Nie musisz nic przepisywać. Tej operacji nie można
+                                    wycofać.
+                                </p>
+                                <div class="shadow card text-white bg-info text-center rounded-0 h-100">
+                                    <h5 class="card-header">
+                                        <p class="card-text">
+                                        <td th:text="${trip.getId()}+'. '"></td>
+                                        <td th:text="${trip.getCar().getName()}"></td>
+                                        <br>
+                                        <td th:text="${trip.getCar().getRegistration()}"></td>
+                                        </p>
+                                    </h5>
+                                    <div class="card-body">
+                                        <td th:text="'Od: ' + ${trip.getStartingDate().toLocaleString().split(',')[0]}"></td>
+                                        <br/>
+                                        <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
+                                        <p class="card-text">
+                                        <td th:text="${trip.getEmployee().getName()}"></td>
+                                        <td th:text="${trip.getEmployee().getSecondName()}"></td>
+                                        <br/>
+                                        <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
+                                        <td th:text="${trip.getAdditionalMessage()}"></td>
+                                        <td th:text="'Utworzono: ' + ${trip.getCreatedTime()}"></td>
+                                        <br/>
+                                        <td th:text="'Zmodyfikowano: ' + ${trip.getLastModifiedTime()}"></td>
+                                        </p>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="id" th:value="${trip.getId()}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij bez
+                                    anulowania
+                                </button>
+                                <button type="submit" class="btn btn-small btn-danger">Anuluj rezerwację</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </tr>
@@ -143,6 +267,8 @@
             </div>
         </div>
     </div>
+
+</div>
 
 </div>
 

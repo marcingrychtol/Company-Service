@@ -7,6 +7,7 @@ import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,6 +28,9 @@ public class Car {
     private LocalDate inspectionExpiration;
     @Nullable
     private Long mileage;
+
+    @OneToMany(mappedBy = "car")
+    private List<Trip> trips;
 
     public Car(String name, String registration) {
         this.name = name;

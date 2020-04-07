@@ -8,6 +8,7 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
+import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
@@ -44,18 +45,46 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto addOne(EmployeeDto employeeDto) {
+    public void addOne(EmployeeDto employeeDto) {
         employeeRepository.save(employeeMapper.mapToEntity(employeeDto));
-        return employeeDto;
     }
 
     @Override
-    public void cancelById(Long id) {
-        employeeRepository.deleteById(id);
+    public void cancelByDto(EmployeeDto employeeDto) {
+        employeeRepository.deleteById(employeeDto.getId());
     }
 
     @Override
-    public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException {
+    public void update(EmployeeDto employeeDto) throws EntityConflictException, WrongInputDataException {
+        if (
+                employeeDto.getEmail().length() < 5
+                        || employeeDto.getName().length() < 5
+                        || employeeDto.getSecondName().length() < 5
+                        || employeeDto.getPhoneNumber().length() < 5
+        ) {
+            throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
+        }
+
+        Optional<Employee> empConflictTest = employeeRepository.findByEmailEquals(employeeDto.getEmail());
+        if (empConflictTest.isPresent() && !empConflictTest.get().getId().equals(employeeDto.getId())) {
+            throw new EntityConflictException(
+                    "Pracownik o emailu "
+                            + employeeDto.getEmail()
+                            + " już istnieje! Jest to "
+                            + empConflictTest.get().getName()
+                            + " "
+                            + empConflictTest.get().getSecondName()
+            );
+        }
+
+
+        Optional<Employee> empOptional = employeeRepository.findById(employeeDto.getId());
+        if (empOptional.isPresent()) {
+            empOptional.get().setName(employeeDto.getName());
+            empOptional.get().setSecondName(employeeDto.getSecondName());
+            empOptional.get().setEmail(employeeDto.getEmail());
+            employeeRepository.save(empOptional.get());
+        }
 
     }
 
