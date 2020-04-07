@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
+import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
@@ -73,6 +75,38 @@ public class CarServiceImpl implements CarService {
     @Override
     public void cancelById(Long id) {
         carRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException {
+
+        if (
+                carDto.getRegistration() == null
+                        || carDto.getRegistration().length() < 5
+                        || carDto.getName() == null
+                        || carDto.getName().length() <5
+        ) {
+            throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
+        }
+
+        Optional<Car> carConflictTest = carRepository.findByRegistrationEquals(carDto.getRegistration());
+        if (carConflictTest.isPresent() && !carConflictTest.get().getId().equals(carDto.getId())){
+            throw new EntityConflictException(
+                    "Pojazd o rejestracji "
+                            + carDto.getRegistration()
+                            + " już istnieje! Jest to "
+                            + carConflictTest.get().getName()
+            );
+        }
+
+
+        Optional<Car> carOptional = carRepository.findById(carDto.getId());
+        if (carOptional.isPresent()){
+            carOptional.get().setName(carDto.getName());
+            carOptional.get().setRegistration(carDto.getRegistration());
+            carRepository.save(carOptional.get());
+        }
+
     }
 
     @Override

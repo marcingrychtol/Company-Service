@@ -17,7 +17,7 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-    private CarCategory carCategory;
+    private CarCategory carCategory = CarCategory.COMPANY;
     private String name;
     private String registration;
     @Enumerated(EnumType.STRING)

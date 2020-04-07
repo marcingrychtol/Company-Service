@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
+import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
+import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
+import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
@@ -49,6 +52,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void cancelById(Long id) {
         employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException {
+
     }
 
 }

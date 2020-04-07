@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
 
@@ -16,7 +17,7 @@ import pl.mdj.rejestrbiurowy.service.CarService;
 public class CarControllerMVC {
 
     private static final String REDIR_MAIN_CAR = "redirect:/cars";
-    private static final String REDIR_EDIT_CAR = "redirect:/cars/edit";
+    private static final String REDIR_MANAGER_CARS = "redirect:/cars/manager";
     Logger LOG = LoggerFactory.getLogger(CarControllerMVC.class);
     private CarService carService;
 
@@ -34,29 +35,44 @@ public class CarControllerMVC {
         return ("main/cars");
     }
 
-    @GetMapping(path = "/edit")
-    public String getAdd(Model model){
+    @GetMapping(path = "/manager")
+    public String postEdit(@ModelAttribute CarDto carDto, Model model){
 
         model.addAttribute("name", "Rezerwator");
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
-        return ("edit/cars-edit");
+        return ("manager/manager-cars");
+    }
+
+    @PostMapping("/edit")
+    public String getAdd(@ModelAttribute CarDto carDto, Model model){
+
+        try {
+            carService.update(carDto);
+        } catch (EntityConflictException | WrongInputDataException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        model.addAttribute("name", "Rezerwator");
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("newCar", new CarDto());
+        return ("manager/manager-cars");
     }
 
     @PostMapping("/add")
-    public String addCar(@ModelAttribute CarDto car){
+    public String addCar(@ModelAttribute CarDto car, Model model){
         try {
             carService.addOne(car);
         } catch (EntityNotCompleteException | EntityConflictException e) {
             e.printStackTrace();
         }
-        return REDIR_EDIT_CAR;
+        return REDIR_MANAGER_CARS;
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete")
     public String deleteCar(@PathVariable String id){
         carService.cancelById(Long.parseLong(id));
-        return REDIR_EDIT_CAR;
+        return REDIR_MANAGER_CARS;
     }
 
 

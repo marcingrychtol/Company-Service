@@ -1,0 +1,26 @@
+<td th:unless="${errorMessage} == null">
+    <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+        <p  th:text="${errorMessage}"></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</td>
+
+<td th:unless="${successMessage} == null">
+    <div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
+        <p th:text="${successMessage}"></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</td>
+
+<td th:unless="${infoMessage} == null">
+    <div class="alert alert-info alert-dismissible fade show rounded-0" role="alert">
+        <p th:text="${infoMessage}"></p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</td>

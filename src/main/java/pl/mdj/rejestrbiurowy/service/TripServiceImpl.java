@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
+import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
@@ -81,6 +83,11 @@ public class TripServiceImpl implements TripService {
             trip.setCancelledTime(LocalDateTime.now());
             tripRepository.save(trip);
         });
+    }
+
+    @Override
+    public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException {
+
     }
 
     public List<TripDto> findAllByEmployee_Id(Long id){
