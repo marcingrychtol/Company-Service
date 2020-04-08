@@ -4,7 +4,6 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
@@ -20,8 +19,6 @@ import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.CarMapper;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
-import javax.validation.ConstraintViolationException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,11 +28,6 @@ import java.util.stream.Collectors;
 @Transactional
 @NoArgsConstructor
 public class CarServiceImpl implements CarService {
-
-    /*
-     * Car
-     * CarCategory
-     */
 
     private Logger LOG = LoggerFactory.getLogger(CarServiceImpl.class);
 
@@ -70,8 +62,10 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void addOne(CarDto carDto) {
-        carRepository.save(carMapper.mapToEntity(carDto));  // TODO: check duplicates
+    public void addOne(CarDto carDto) throws EntityConflictException, WrongInputDataException {
+        checkInputLengthData(carDto);
+        checkDuplicates(carDto);
+        carRepository.save(carMapper.mapToEntity(carDto));
     }
 
     @Override
@@ -80,31 +74,14 @@ public class CarServiceImpl implements CarService {
         if (carOptional.isPresent() && !carOptional.get().getRegistration().equals(carDto.getRegistration())) {
             throw new WrongInputDataException("Niepoprawne dane, nie można usunąć pojazdu!");
         }
-            carRepository.deleteById(carDto.getId());
+        carRepository.deleteById(carDto.getId());
     }
 
     @Override
     public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException {
 
-        if (
-                carDto.getRegistration() == null
-                        || carDto.getRegistration().length() < 5
-                        || carDto.getName() == null
-                        || carDto.getName().length() < 5
-        ) {
-            throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
-        }
-
-        Optional<Car> carConflictTest = carRepository.findByRegistrationEquals(carDto.getRegistration());
-        if (carConflictTest.isPresent() && !carConflictTest.get().getId().equals(carDto.getId())) {
-            throw new EntityConflictException(
-                    "Pojazd o rejestracji "
-                            + carDto.getRegistration()
-                            + " już istnieje! Jest to "
-                            + carConflictTest.get().getName()
-            );
-        }
-
+        checkInputLengthData(carDto);
+        checkDuplicates(carDto);
 
         Optional<Car> carOptional = carRepository.findById(carDto.getId());
         if (carOptional.isPresent()) {
@@ -137,6 +114,28 @@ public class CarServiceImpl implements CarService {
                         .collect(Collectors.toList())
         ).orElseGet(ArrayList::new);
 
+    }
+
+    private void checkInputLengthData(CarDto carDto) throws WrongInputDataException {
+        if (
+                        carDto.getRegistration().length() < 5
+                        || carDto.getName().length() < 5
+        ) {
+            throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
+        }
+    }
+
+    private void checkDuplicates(CarDto carDto) throws EntityConflictException {
+
+        Optional<Car> carConflictTest = carRepository.findByRegistrationEquals(carDto.getRegistration());
+        if (carConflictTest.isPresent() && !carConflictTest.get().getId().equals(carDto.getId())) {
+            throw new EntityConflictException(
+                    "Pojazd o rejestracji "
+                            + carDto.getRegistration()
+                            + " już istnieje! Jest to "
+                            + carConflictTest.get().getName()
+            );
+        }
     }
 
 }
