@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 public class DayDto {
     private DateDto id;
-    private List<CarDto> availableCars = new ArrayList<>();
+    private List<CarDto> availableCars = new ArrayList<>(); // filled by DayMapper
     private List<CarDto> notAvailableCars = new ArrayList<>();
 }

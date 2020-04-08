@@ -78,7 +78,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException {
+    public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException, CannotFindEntityException {
 
         checkInputLengthData(carDto);
         checkDuplicates(carDto);
@@ -88,6 +88,10 @@ public class CarServiceImpl implements CarService {
             carOptional.get().setName(carDto.getName());
             carOptional.get().setRegistration(carDto.getRegistration());
             carRepository.save(carOptional.get());
+        } else {
+            throw new CannotFindEntityException(
+                    "Nie można wprowadzić danych, pojazd nie istnieje lub jest nieaktywny. " +
+                            "Prawdopodobnie ktoś zmienił dane w międzyczasie");
         }
 
     }
@@ -109,6 +113,7 @@ public class CarServiceImpl implements CarService {
 
         return day.map(
                 d -> d.getTrips().stream()
+                        .filter(trip -> !trip.getCancelled())
                         .map(Trip::getCar)
                         .map(car -> carMapper.mapToDto(car))
                         .collect(Collectors.toList())

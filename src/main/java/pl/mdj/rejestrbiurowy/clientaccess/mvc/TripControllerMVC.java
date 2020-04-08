@@ -52,7 +52,7 @@ public class TripControllerMVC {
         model.addAttribute("filterTrip", new TripDto());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("trips", tripService.getAll());
+        model.addAttribute("trips", tripService.getAllActive());
         return "main/trips";
     }
 
@@ -121,11 +121,13 @@ public class TripControllerMVC {
             model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
         } catch (WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
+        } catch (CannotFindEntityException e) {
+            model.addAttribute("infomessage", e.getMessage());
         }
 
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
-        model.addAttribute("trips", tripService.getAll());
+        model.addAttribute("trips", tripService.getAllActive());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
         return "main/trips";
@@ -139,6 +141,8 @@ public class TripControllerMVC {
             model.addAttribute("successMessage", "Poprawnie zmieniono rezerwację!");
         } catch (WrongInputDataException | EntityConflictException e) {
             model.addAttribute("errorMessage", e.getMessage());
+        } catch (CannotFindEntityException e) {
+            model.addAttribute("infomessage", e.getMessage());
         }
 
         model.addAttribute("tripDto", new TripDto());
@@ -158,7 +162,7 @@ public class TripControllerMVC {
         try {
             tripService.addOne(tripDto);
             model.addAttribute("successMessage","Rezerwacja dodana poprawnie!");
-        } catch (EntityNotCompleteException | EntityConflictException e) {
+        } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             LOG.info(e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
         }

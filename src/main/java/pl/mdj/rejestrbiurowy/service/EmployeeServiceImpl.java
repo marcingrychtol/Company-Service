@@ -35,9 +35,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto findById(Long id) throws CannotFindEntityException{
+    public EmployeeDto findById(Long id) throws CannotFindEntityException {
         Optional<Employee> optional = employeeRepository.findById(id);
-        if (optional.isPresent()){
+        if (optional.isPresent()) {
             return employeeMapper.mapToDto(optional.get());
         } else {
             throw new CannotFindEntityException("Cannot find employee of id: " + id);
@@ -45,26 +45,57 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void addOne(EmployeeDto employeeDto) {
+    public void addOne(EmployeeDto employeeDto) throws WrongInputDataException, EntityConflictException {
+        checkInputLengthData(employeeDto); // throws WIDE
+        checkDuplicates(employeeDto); // throws ECE
         employeeRepository.save(employeeMapper.mapToEntity(employeeDto));
     }
 
     @Override
-    public void cancelByDto(EmployeeDto employeeDto) {
+    public void cancelByDto(EmployeeDto employeeDto) throws WrongInputDataException, CannotFindEntityException{
+        Optional<Employee> empOptional = employeeRepository.findById(employeeDto.getId());
+        if (!empOptional.isPresent()){
+            throw new CannotFindEntityException("Pracownik nie istnieje, wystąpił błąd! (jednoczesna edycja z innego stanowiska)");
+        }
+        if (!empOptional.get().getEmail().equals(employeeDto.getEmail())) {
+            throw new WrongInputDataException("Niepoprawne dane, nie można usunąć pojazdu!");
+        }
         employeeRepository.deleteById(employeeDto.getId());
     }
 
     @Override
-    public void update(EmployeeDto employeeDto) throws EntityConflictException, WrongInputDataException {
+    public void update(EmployeeDto employeeDto) throws EntityConflictException, WrongInputDataException, CannotFindEntityException {
+
+        checkInputLengthData(employeeDto);
+        checkDuplicates(employeeDto);
+
+        Optional<Employee> empOptional = employeeRepository.findById(employeeDto.getId());
+        if (empOptional.isPresent()) {
+            empOptional.get().setName(employeeDto.getName());
+            empOptional.get().setSecondName(employeeDto.getSecondName());
+            empOptional.get().setEmail(employeeDto.getEmail());
+            employeeRepository.save(empOptional.get());
+        } else {
+            throw new CannotFindEntityException(
+                    "Nie można wprowadzić danych, pracownik nie istnieje lub jest nieaktywny. " +
+                            "Prawdopodobnie ktoś zmienił dane w międzyczasie");
+        }
+
+    }
+
+
+    private void checkInputLengthData(EmployeeDto employeeDto) throws WrongInputDataException {
         if (
                 employeeDto.getEmail().length() < 5
-                        || employeeDto.getName().length() < 5
+                        || employeeDto.getName().length() < 3
                         || employeeDto.getSecondName().length() < 5
                         || employeeDto.getPhoneNumber().length() < 5
         ) {
             throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
         }
+    }
 
+    private void checkDuplicates(EmployeeDto employeeDto) throws EntityConflictException {
         Optional<Employee> empConflictTest = employeeRepository.findByEmailEquals(employeeDto.getEmail());
         if (empConflictTest.isPresent() && !empConflictTest.get().getId().equals(employeeDto.getId())) {
             throw new EntityConflictException(
@@ -76,16 +107,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                             + empConflictTest.get().getSecondName()
             );
         }
-
-
-        Optional<Employee> empOptional = employeeRepository.findById(employeeDto.getId());
-        if (empOptional.isPresent()) {
-            empOptional.get().setName(employeeDto.getName());
-            empOptional.get().setSecondName(employeeDto.getSecondName());
-            empOptional.get().setEmail(employeeDto.getEmail());
-            employeeRepository.save(empOptional.get());
-        }
-
     }
 
 }

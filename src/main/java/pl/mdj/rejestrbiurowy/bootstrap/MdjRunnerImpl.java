@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.*;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
@@ -41,17 +42,15 @@ public class MdjRunnerImpl implements MdjRunner {
     private EmployeeService employeeService;
     private EmployeeMapper employeeMapper;
     private TripService tripService;
-    private TripMapper tripMapper;
     private DateMapper dateMapper;
 
     @Autowired
-    public MdjRunnerImpl(CarService carService, CarMapper carMapper, EmployeeService employeeService, EmployeeMapper employeeMapper, TripService tripService, TripMapper tripMapper, DateMapper dateMapper) {
+    public MdjRunnerImpl(CarService carService, CarMapper carMapper, EmployeeService employeeService, EmployeeMapper employeeMapper, TripService tripService, DateMapper dateMapper) {
         this.carService = carService;
         this.carMapper = carMapper;
         this.employeeService = employeeService;
         this.employeeMapper = employeeMapper;
         this.tripService = tripService;
-        this.tripMapper = tripMapper;
         this.dateMapper = dateMapper;
     }
 
@@ -96,7 +95,7 @@ public class MdjRunnerImpl implements MdjRunner {
             for (Car car : Arrays.asList(car1, car2, car3, car4, car6)) {
                 try {
                     carService.addOne(carMapper.mapToDto(car));
-                } catch (EntityNotCompleteException | EntityConflictException e) {
+                } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
                     LOG.error(e.getMessage());
                 }
             }
@@ -141,7 +140,7 @@ public class MdjRunnerImpl implements MdjRunner {
                     .forEach(e -> {
                         try {
                             employeeService.addOne(employeeMapper.mapToDto(e));
-                        } catch (EntityNotCompleteException | EntityConflictException ex) {
+                        } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException ex) {
                             LOG.error(ex.getMessage());
                         }
                     });
@@ -181,7 +180,7 @@ public class MdjRunnerImpl implements MdjRunner {
                     tripService.addOne(trip);
 
                 }
-            } catch (EntityNotCompleteException | EntityConflictException e) {
+            } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
                 LOG.error(e.getMessage());
             }
         } // TRIPS

@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
@@ -49,7 +50,7 @@ public class CarControllerMVC {
         try {
             carService.update(carDto);
             model.addAttribute("successMessage", "Dane zmodyfikowane poprawnie!");
-        } catch (EntityConflictException | WrongInputDataException e) {
+        } catch (EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
@@ -63,7 +64,7 @@ public class CarControllerMVC {
         try {
             carService.addOne(car);
             model.addAttribute("successMessage", "Pojazd dodano poprawnie!");
-        } catch (EntityNotCompleteException | EntityConflictException e) {
+        } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
@@ -76,10 +77,10 @@ public class CarControllerMVC {
         try {
             carService.cancelByDto(carDto);
             model.addAttribute("successMessage", "Pojazd usunięto!");
-        } catch (WrongInputDataException e) {
+        } catch (WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (DataIntegrityViolationException e){
-            model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji");
+            model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji"); // TODO implement
         }
 
         model.addAttribute("cars", carService.getAll());

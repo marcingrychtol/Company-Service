@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
@@ -40,7 +41,7 @@ public class EmployeeControllerMVC {
         try {
             employeeService.addOne(employee);
             model.addAttribute("successMessage", "Poprawnie dodano pracownika!");
-        } catch (EntityNotCompleteException | EntityConflictException e) {
+        } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
         }
@@ -54,11 +55,12 @@ public class EmployeeControllerMVC {
         try {
             employeeService.cancelByDto(employeeDto);
             model.addAttribute("successMessage", "Poprawnie usunięto pracownika!");
-        } catch (WrongInputDataException e) {
+        } catch (WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (DataIntegrityViolationException e){
-            model.addAttribute("infoMessage", "Nie można usunąć pracownika, ustawiono jako nieaktywny!");
+            model.addAttribute("infoMessage", "Nie można usunąć pracownika, ustawiono jako nieaktywny!"); // TODO implement
         }
+
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
@@ -69,7 +71,7 @@ public class EmployeeControllerMVC {
         try {
             employeeService.update(employeeDto);
             model.addAttribute("successMessage", "Poprawnie zmieniono dane pracownika!");
-        } catch (WrongInputDataException | EntityConflictException e) {
+        } catch (WrongInputDataException | EntityConflictException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
