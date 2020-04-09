@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path ="/calendar")
@@ -61,7 +60,7 @@ public class CalendarControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("cars", carService.getAvailableCars(requestedDate));
+        model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
         return "main/browser";
     }

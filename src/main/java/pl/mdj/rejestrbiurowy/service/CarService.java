@@ -7,6 +7,6 @@ import java.util.List;
 
 
 public interface CarService extends BasicService<CarDto, Long> {
-    List<CarDto> getAvailableCars(LocalDate date);
-    List<CarDto> getNotAvailableCars(LocalDate date);
+    List<CarDto> getAvailableCarsByDay(LocalDate date);
+    List<CarDto> getNotAvailableCarsByDay(LocalDate date);
 }

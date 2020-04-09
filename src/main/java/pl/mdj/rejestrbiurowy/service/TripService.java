@@ -10,8 +10,6 @@ public interface TripService extends BasicService<TripDto, Long> {
     List<TripDto> findAllByEmployee_Id(Long id);
     List<TripDto> findAllByCar_Id(Long id);
     List<TripDto> findAllByDate(LocalDate date);
-
-    List<TripDto> getAllActive();
 }
 
 

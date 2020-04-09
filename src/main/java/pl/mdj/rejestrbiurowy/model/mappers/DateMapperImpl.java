@@ -83,10 +83,13 @@ public class DateMapperImpl implements DateMapper {
 
     @Override
     public String localDateTimeToString(LocalDateTime dateTime) {
-        return String.format("%s/%s/%d",
+        return String.format("%s/%s/%d %s:%s %ss",
                 valueWithZero(dateTime.getDayOfMonth()),
                 valueWithZero(dateTime.getMonthValue()),
-                dateTime.getYear());
+                dateTime.getYear(),
+                valueWithZero(dateTime.getHour()),
+                valueWithZero(dateTime.getMinute()),
+                valueWithZero(dateTime.getSecond()));
     }
 
     @Override

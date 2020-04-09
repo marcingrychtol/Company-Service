@@ -23,6 +23,7 @@ public class Car {
     private String registration;
     @Enumerated(EnumType.STRING)
     private CarFuel fuel;
+    private Boolean cancelled = false;
 
     private LocalDate insuranceExpiration;
     private LocalDate inspectionExpiration;

@@ -1,6 +1,7 @@
 package pl.mdj.rejestrbiurowy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
@@ -15,6 +16,7 @@ import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,6 +37,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<EmployeeDto> getAllActive() {
+        return getAll().stream()
+                .filter(emp -> !emp.getCancelled())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public EmployeeDto findById(Long id) throws CannotFindEntityException {
         Optional<Employee> optional = employeeRepository.findById(id);
         if (optional.isPresent()) {
@@ -52,7 +61,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void cancelByDto(EmployeeDto employeeDto) throws WrongInputDataException, CannotFindEntityException{
+    public void cancelByDto(EmployeeDto employeeDto){
+        Employee employee = employeeRepository.getOne(employeeDto.getId());
+        employee.setCancelled(true);
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public void deleteByDto(EmployeeDto employeeDto) throws WrongInputDataException, CannotFindEntityException, DataIntegrityViolationException {
         Optional<Employee> empOptional = employeeRepository.findById(employeeDto.getId());
         if (!empOptional.isPresent()){
             throw new CannotFindEntityException("Pracownik nie istnieje, wystąpił błąd! (jednoczesna edycja z innego stanowiska)");

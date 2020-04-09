@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
@@ -48,7 +49,13 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDto> getAll() {
-        return carMapper.mapToDto(carRepository.findAll());
+        return carMapper.mapToDto(carRepository.findAll());    }
+
+    @Override
+    public List<CarDto> getAllActive() {
+        return getAll().stream()
+                .filter(car -> !car.getCancelled())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -68,20 +75,49 @@ public class CarServiceImpl implements CarService {
         carRepository.save(carMapper.mapToEntity(carDto));
     }
 
+    /** Should be called only after deleteByDto is called.
+     * No confirmation data is checked.
+     * Existence of entity is not being checked - uses lazy loading getOne().
+     * @param carDto
+     */
     @Override
-    public void cancelByDto(CarDto carDto) throws WrongInputDataException {
+    public void cancelByDto(CarDto carDto) {
+        Car car = carRepository.getOne(carDto.getId());
+        car.setCancelled(true);
+        carRepository.save(car);
+    }
+
+    /** Checking confirmation data.
+     * Checking entity existence - uses lazy loading findById().
+     * @param carDto
+     * @throws WrongInputDataException
+     * @throws CannotFindEntityException
+     * @throws DataIntegrityViolationException
+     */
+    @Override
+    public void deleteByDto(CarDto carDto) throws WrongInputDataException, CannotFindEntityException, DataIntegrityViolationException {
         Optional<Car> carOptional = carRepository.findById(carDto.getId());
-        if (carOptional.isPresent() && !carOptional.get().getRegistration().equals(carDto.getRegistration())) {
+        if (!carOptional.isPresent()) {
+            throw new CannotFindEntityException("Wystąpił błąd, nie ma takeigo pojazdu");
+        }
+        if (!carOptional.get().getRegistration().equals(carDto.getRegistration())) {
             throw new WrongInputDataException("Niepoprawne dane, nie można usunąć pojazdu!");
         }
         carRepository.deleteById(carDto.getId());
     }
 
+    /**
+     *
+     * @param carDto
+     * @throws EntityConflictException
+     * @throws WrongInputDataException
+     * @throws CannotFindEntityException
+     */
     @Override
     public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException, CannotFindEntityException {
 
-        checkInputLengthData(carDto);
-        checkDuplicates(carDto);
+        checkInputLengthData(carDto); // WrongInputDataException
+        checkDuplicates(carDto); // EntityConflictException
 
         Optional<Car> carOptional = carRepository.findById(carDto.getId());
         if (carOptional.isPresent()) {
@@ -97,24 +133,26 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDto> getAvailableCars(LocalDate date) {
+    public List<CarDto> getAvailableCarsByDay(LocalDate date) {
 
-        List<CarDto> notAvailableCars = getNotAvailableCars(date);
+        List<CarDto> notAvailableCars = getNotAvailableCarsByDay(date);
 
         return carRepository.findAll().stream()
                 .map(c -> carMapper.mapToDto(c))
-                .filter(c -> !notAvailableCars.contains(c))
+                .filter(car -> !notAvailableCars.contains(car))
+                .filter(car -> !car.getCancelled())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CarDto> getNotAvailableCars(LocalDate date) {
+    public List<CarDto> getNotAvailableCarsByDay(LocalDate date) {
         Optional<Day> day = dayRepository.findById(date);
 
         return day.map(
                 d -> d.getTrips().stream()
                         .filter(trip -> !trip.getCancelled())
                         .map(Trip::getCar)
+                        .filter(car -> !car.getCancelled())
                         .map(car -> carMapper.mapToDto(car))
                         .collect(Collectors.toList())
         ).orElseGet(ArrayList::new);
@@ -123,7 +161,7 @@ public class CarServiceImpl implements CarService {
 
     private void checkInputLengthData(CarDto carDto) throws WrongInputDataException {
         if (
-                        carDto.getRegistration().length() < 5
+                carDto.getRegistration().length() < 5
                         || carDto.getName().length() < 5
         ) {
             throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
@@ -131,7 +169,6 @@ public class CarServiceImpl implements CarService {
     }
 
     private void checkDuplicates(CarDto carDto) throws EntityConflictException {
-
         Optional<Car> carConflictTest = carRepository.findByRegistrationEquals(carDto.getRegistration());
         if (carConflictTest.isPresent() && !carConflictTest.get().getId().equals(carDto.getId())) {
             throw new EntityConflictException(

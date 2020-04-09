@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
-import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.repository.DayRepository;
 import pl.mdj.rejestrbiurowy.service.CarService;
-import pl.mdj.rejestrbiurowy.service.DayService;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +35,8 @@ public class DayMapper implements BasicMapper<Day, DayDto> {
 //                .map(Trip::getCar)
 //                .map(car -> carMapper.mapToDto(car))
 //                .collect(Collectors.toList()));
-        dto.setAvailableCars(carService.getAvailableCars(entity.getId()));
-        dto.setNotAvailableCars(carService.getNotAvailableCars(entity.getId()));
+        dto.setAvailableCars(carService.getAvailableCarsByDay(entity.getId()));
+        dto.setNotAvailableCars(carService.getNotAvailableCarsByDay(entity.getId()));
         return dto;
     }
 

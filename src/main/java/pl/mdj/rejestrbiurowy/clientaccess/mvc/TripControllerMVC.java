@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -50,8 +51,8 @@ public class TripControllerMVC {
     public String getAllTrips(Model model){
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("employees", employeeService.getAllActive());
         model.addAttribute("trips", tripService.getAllActive());
         return "main/trips";
     }
@@ -104,33 +105,35 @@ public class TripControllerMVC {
     @GetMapping("/manager")
     public String manageTrips(Model model){
 
-
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
         model.addAttribute("trips", tripService.getAll());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
-        return "main/trips";
+        return "manager/manager-trips";
     }
 
     @PostMapping("/cancel")
     public String cancelTrip(@ModelAttribute TripDto tripDto, Model model){
 
         try {
-            tripService.cancelByDto(tripDto);
-            model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
+            tripService.deleteByDto(tripDto);
+            model.addAttribute("successMessage", "Poprawnie usunięto rezerwację!");
         } catch (WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (CannotFindEntityException e) {
             model.addAttribute("infomessage", e.getMessage());
+        } catch (DataIntegrityViolationException e){
+            tripService.cancelByDto(tripDto);
+            model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
         }
 
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
-        model.addAttribute("trips", tripService.getAllActive());
+        model.addAttribute("trips", tripService.getAll());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
-        return "main/trips";
+        return "manager/manager-trips";
     }
 
     @PostMapping("/edit")
@@ -150,7 +153,7 @@ public class TripControllerMVC {
         model.addAttribute("trips", tripService.getAll());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
-        return "main/trips";
+        return "manager/manager-trips";
     }
 
     @PostMapping("/add")
@@ -171,7 +174,7 @@ public class TripControllerMVC {
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
-        model.addAttribute("cars", carService.getAvailableCars(requestedDate));
+        model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
         return "main/browser";
@@ -192,8 +195,8 @@ public class TripControllerMVC {
     }
 
     private void addTripsMainSiteAttributesToModel(Model model){
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("employees", employeeService.getAllActive());
         model.addAttribute("tripDto", new TripDto());
     }
 

@@ -149,5 +149,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-devtools:2.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.2.4.RELEASE" level="project" />
+    <orderEntry type="library" name="gijgo" level="application" />
   </component>
 </module>

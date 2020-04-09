@@ -31,7 +31,7 @@ public class CarControllerMVC {
     @GetMapping("")
     public String getAll(Model model){
 
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
         return ("main/cars");
     }
@@ -39,7 +39,7 @@ public class CarControllerMVC {
     @GetMapping(path = "/manager")
     public String postEdit(Model model){
 
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
     }
@@ -54,7 +54,7 @@ public class CarControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
     }
@@ -68,22 +68,23 @@ public class CarControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");    }
 
     @PostMapping("/delete")
     public String deleteCar(@ModelAttribute CarDto carDto, Model model){
         try {
-            carService.cancelByDto(carDto);
+            carService.deleteByDto(carDto);
             model.addAttribute("successMessage", "Pojazd usunięto!");
         } catch (WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (DataIntegrityViolationException e){
-            model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji"); // TODO implement
+            carService.cancelByDto(carDto);
+            model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji");
         }
 
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
     }

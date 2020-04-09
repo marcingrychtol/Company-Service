@@ -26,6 +26,8 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
         Optional.ofNullable(entity.getId()).ifPresent(dto::setId);
         Optional.ofNullable(entity.getName()).ifPresent(dto::setName);
         Optional.ofNullable(entity.getRegistration()).ifPresent(dto::setRegistration);
+        dto.setCancelled(entity.getCancelled());
+
         return dto;
     }
 
@@ -42,6 +44,8 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
         Optional.ofNullable(dto.getId()).ifPresent(entity::setId);
         Optional.ofNullable(dto.getName()).ifPresent(entity::setName);
         Optional.ofNullable(dto.getRegistration()).ifPresent(entity::setRegistration);
+        entity.setCancelled(dto.getCancelled());
+
         return entity;
     }
 

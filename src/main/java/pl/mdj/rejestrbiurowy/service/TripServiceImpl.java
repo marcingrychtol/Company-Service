@@ -1,9 +1,9 @@
 package pl.mdj.rejestrbiurowy.service;
 
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
@@ -54,6 +54,14 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    public List<TripDto> getAllActive() {
+        List<TripDto> activeTrips = getAll();
+        return activeTrips.stream()
+                .filter(trip -> !trip.getCancelled())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public TripDto findById(Long id) throws CannotFindEntityException {
         Optional<Trip> optional = tripRepository.findById(id);
         if (optional.isPresent()) {
@@ -76,8 +84,27 @@ public class TripServiceImpl implements TripService {
 
     }
 
+    /**
+     * Should be used only after deleteByDto(), no checking performed
+     * @param tripDto
+     */
     @Override
-    public void cancelByDto(TripDto tripDto) throws CannotFindEntityException, WrongInputDataException {
+    public void cancelByDto(TripDto tripDto){
+        Trip trip = tripRepository.getOne(tripDto.getId());
+        trip.setCancelled(true);
+        trip.setCancelledTime(LocalDateTime.now());
+        tripRepository.save(trip);
+    }
+
+    /**
+     *
+     * @param tripDto
+     * @throws CannotFindEntityException
+     * @throws WrongInputDataException
+     * @throws DataIntegrityViolationException
+     */
+    @Override
+    public void deleteByDto(TripDto tripDto) throws CannotFindEntityException, WrongInputDataException, DataIntegrityViolationException {
         Optional<Trip> tripOptional = tripRepository.findById(tripDto.getId());
         if (!tripOptional.isPresent()) {
             throw new CannotFindEntityException("Rezerwacja nie istnieje, wystąpił błąd! (jednoczesna edycja z innego stanowiska)");
@@ -86,9 +113,7 @@ public class TripServiceImpl implements TripService {
         if (!requestedEmployee.getPhoneNumber().equals(tripDto.getEmployee().getPhoneNumber())) {
             throw new WrongInputDataException("Niepoprawne dane, nie można anulować rezerwacji!");
         }
-        tripOptional.get().setCancelled(true);
-        tripOptional.get().setCancelledTime(LocalDateTime.now());
-        tripRepository.save(tripOptional.get());
+        throw new DataIntegrityViolationException("Usuwanie rezerwacji nie jest możliwe w tej wersji systemu!");
     }
 
     @Override
@@ -118,14 +143,6 @@ public class TripServiceImpl implements TripService {
             return new ArrayList<>();
         }
         return tripMapper.mapToDto(day.getTrips());
-    }
-
-    @Override
-    public List<TripDto> getAllActive() {
-        List<TripDto> activeTrips = getAll();
-        return activeTrips.stream()
-                .filter(trip -> !trip.getCancelled())
-                .collect(Collectors.toList());
     }
 
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {

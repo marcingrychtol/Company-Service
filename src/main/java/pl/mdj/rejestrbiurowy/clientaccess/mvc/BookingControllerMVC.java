@@ -54,8 +54,8 @@ public class BookingControllerMVC implements BasicController {
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("requestedTrip", requestedTrip);
         model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAllActive());
+        model.addAttribute("cars", carService.getAllActive());
         return "main/booking";
     }
 
@@ -74,8 +74,8 @@ public class BookingControllerMVC implements BasicController {
         model.addAttribute("requestedDate", dateMapper.getDateDto(dateMapper.toLocalDate(tripDto.getStartingDate())));
         model.addAttribute("requestedTrip", tripDto);
         model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAllActive());
+        model.addAttribute("cars", carService.getAllActive());
         return "main/booking";
     }
 

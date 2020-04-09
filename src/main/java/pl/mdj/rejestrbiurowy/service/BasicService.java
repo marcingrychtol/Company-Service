@@ -16,8 +16,10 @@ import java.util.List;
  */
 public interface BasicService<D, I> {
     List<D> getAll();
+    List<D> getAllActive();
     D findById(I id) throws CannotFindEntityException;
     void addOne(D d) throws EntityNotCompleteException, EntityConflictException, WrongInputDataException, CannotFindEntityException;
-    void cancelByDto(D d) throws WrongInputDataException, CannotFindEntityException;
+    void cancelByDto(D d);
+    void deleteByDto(D d) throws WrongInputDataException, CannotFindEntityException;
     void update(D carDto) throws EntityConflictException, WrongInputDataException, CannotFindEntityException;
 }

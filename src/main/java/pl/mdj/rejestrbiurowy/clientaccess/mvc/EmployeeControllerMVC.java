@@ -25,13 +25,13 @@ public class EmployeeControllerMVC {
 
     @GetMapping("")
     public String getEmployees(Model model){
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("employees", employeeService.getAllActive());
         return "main/employees";
     }
 
     @GetMapping("/manager")
     public String editEmployees(Model model){
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("employees", employeeService.getAllActive());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }
@@ -45,7 +45,7 @@ public class EmployeeControllerMVC {
             e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
         }
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("employees", employeeService.getAllActive());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }
@@ -53,15 +53,16 @@ public class EmployeeControllerMVC {
     @PostMapping("/delete")
     public String deleteEmployee(@ModelAttribute EmployeeDto employeeDto, Model model){
         try {
-            employeeService.cancelByDto(employeeDto);
+            employeeService.deleteByDto(employeeDto);
             model.addAttribute("successMessage", "Poprawnie usunięto pracownika!");
         } catch (WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (DataIntegrityViolationException e){
-            model.addAttribute("infoMessage", "Nie można usunąć pracownika, ustawiono jako nieaktywny!"); // TODO implement
+            employeeService.cancelByDto(employeeDto);
+            model.addAttribute("infoMessage", "Nie można usunąć pracownika, ustawiono jako nieaktywny!");
         }
 
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("employees", employeeService.getAllActive());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }
@@ -75,7 +76,7 @@ public class EmployeeControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("employees", employeeService.getAllActive());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }

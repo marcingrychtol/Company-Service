@@ -14,6 +14,7 @@ public class Employee {
     private String secondName;
     private String phoneNumber;
     private String email;
+    private Boolean cancelled = false;
 //    private BigDecimal salary;
 
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

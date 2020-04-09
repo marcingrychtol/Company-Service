@@ -29,6 +29,7 @@ public class EmployeeMapper implements BasicMapper<Employee, EmployeeDto> {
         Optional.ofNullable(entity.getSecondName()).ifPresent(dto::setSecondName);
         Optional.ofNullable(entity.getEmail()).ifPresent(dto::setEmail);
         Optional.ofNullable(entity.getPhoneNumber()).ifPresent(dto::setPhoneNumber);
+        dto.setCancelled(entity.getCancelled());
 
         return dto;
     }
@@ -49,6 +50,7 @@ public class EmployeeMapper implements BasicMapper<Employee, EmployeeDto> {
         Optional.ofNullable(dto.getName()).ifPresent(entity::setName);
         Optional.ofNullable(dto.getSecondName()).ifPresent(entity::setSecondName);
         Optional.ofNullable(dto.getPhoneNumber()).ifPresent(entity::setPhoneNumber);
+        entity.setCancelled(dto.getCancelled());
 
         return entity;
     }
