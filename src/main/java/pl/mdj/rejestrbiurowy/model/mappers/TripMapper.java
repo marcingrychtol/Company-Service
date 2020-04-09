@@ -72,6 +72,8 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                         .setCancelledTime(dateMapper
                                 .localDateTimeToString(created)));
 
+        dto.setCancelled(entity.getCancelled());
+
         return dto;
     }
 
@@ -114,6 +116,8 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                 .ifPresent(date -> entity.setEndingDate(dateMapper.toLocalDate(date)));
         Optional.ofNullable(dto.getAdditionalMessage())
                 .ifPresent(entity::setAdditionalMessage);
+
+        entity.setCancelled(dto.getCancelled());
 
         // creation an modification times and etc. are not transfered
         // cancellation info is not transfered this way

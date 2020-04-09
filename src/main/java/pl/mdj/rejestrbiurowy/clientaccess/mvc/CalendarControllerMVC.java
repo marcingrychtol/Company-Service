@@ -68,6 +68,7 @@ public class CalendarControllerMVC {
     @GetMapping("")
     public String getCalendar(Model model) {
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(72));
+        model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         return "main/calendar";

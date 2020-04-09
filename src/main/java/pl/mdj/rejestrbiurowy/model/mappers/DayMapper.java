@@ -35,8 +35,8 @@ public class DayMapper implements BasicMapper<Day, DayDto> {
 //                .map(Trip::getCar)
 //                .map(car -> carMapper.mapToDto(car))
 //                .collect(Collectors.toList()));
-        dto.setAvailableCars(carService.getAvailableCarsByDay(entity.getId()));
-        dto.setNotAvailableCars(carService.getNotAvailableCarsByDay(entity.getId()));
+        carService.getAvailableCarsByDay(entity.getId())
+            .forEach(carDto -> dto.getAvailableCars().add(carDto.getId()));
         return dto;
     }
 

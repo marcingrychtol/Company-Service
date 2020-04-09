@@ -21,29 +21,17 @@
                     <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
                         <div class="card-header">
                             <input type="hidden" name="localDate" th:value="${day.id.localDate}">
-                            <button type="submit" id="dayButton" th:text="${day.getId().getDayOfWeekPL()} + ' ' + ${day.getId().getLocalDate().toString()}" class="btn btn-sm text-white stretched-link rounded-0"></button>
+                            <button type="submit" id="dayButton"
+                                    th:text="${day.getId().getDayOfWeekPL()} + ' ' + ${day.getId().getLocalDate().toString()}"
+                                    class="btn btn-sm text-white stretched-link rounded-0"></button>
                         </div>
                         <div class="card-body">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <table>
-                                        <tr th:each="carN :${day.getNotAvailableCars()}">
-                                        <div class="col-12 rounded-0 p-0">
-                                            <div class="shadow card text-white bg-danger rounded-0 h-100">
-                                                <p th:text="${carN.getName()}"></p>
-                                            </div>
-                                        </div>
-                                        </tr>
-                                        <tr th:each="carA :${day.getAvailableCars()}">
-                                            <div class="col-12 rounded-0 p-0">
-                                                <div class="shadow card text-white bg-info rounded-0 h-100">
-                                                    <p th:text="${carA.getName()}"></p>
-                                                </div>
-                                            </div>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
+                            <table class="shadow table table-sm table-dark table-borderless">
+                                <tr th:each="car :${cars}"
+                                    th:class="${day.availableCars.contains(car.getId())} ? 'bg-info' :'bg-danger'">
+                                    <td th:text="${car.getName()}"></td>
+                                </tr>
+                            </table>
                         </div>
                     </form>
                 </div>

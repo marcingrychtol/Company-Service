@@ -22,9 +22,9 @@ public class TripDto {
     private Integer durationDays;
 
     private String createdTime;
-    private String lastModifiedTime;
+    private String lastModifiedTime;  // TODO: not working
     private String cancelledTime;
-    private Boolean cancelled;
+    private Boolean cancelled = false;
 
     private String additionalMessage;
 

@@ -120,6 +120,7 @@ public class TripServiceImpl implements TripService {
     public void update(TripDto tripDto) {
         tripRepository.findById(tripDto.getId()).ifPresent(trip -> {
             trip.setAdditionalMessage(tripDto.getAdditionalMessage());
+            trip.setLastModifiedTime(LocalDateTime.now());
             tripRepository.save(trip);
         });
     }

@@ -152,6 +152,7 @@ public class MdjRunnerImpl implements MdjRunner {
             TripDto trip2 = new TripDto();
             TripDto trip3 = new TripDto();
             TripDto trip4 = new TripDto();
+            TripDto trip5 = new TripDto();
 
             try {
                 trip1.setCarId((long) 2);
@@ -174,8 +175,14 @@ public class MdjRunnerImpl implements MdjRunner {
                 trip3.setStartingDate(dateMapper.toDate(LocalDate.now().plusDays(5)));
                 trip3.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(9)));
 
+                trip5.setCarId((long) 4);
+                trip5.setEmployeeId((long) 4);
+                trip5.setStartingDate(dateMapper.toDate(LocalDate.now().plusDays(10)));
+                trip5.setEndingDate(dateMapper.toDate(LocalDate.now().plusDays(12)));
+                trip5.setCancelled(true);
+
                 for (TripDto trip :
-                        Arrays.asList(trip1, trip2, trip3, trip4)) {
+                        Arrays.asList(trip1, trip2, trip3, trip4, trip5)) {
 
                     tripService.addOne(trip);
 
