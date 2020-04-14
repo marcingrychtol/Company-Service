@@ -49,12 +49,14 @@ public class TripControllerMVC {
 
     @GetMapping("")
     public String getAllTrips(Model model){
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
-        model.addAttribute("cars", carService.getAllActive());
-        model.addAttribute("employees", employeeService.getAllActive());
-        model.addAttribute("trips", tripService.getAllActive());
-        return "main/trips";
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("trips", tripService.getAll());
+        return "manager/manager-trips";
     }
 
     @GetMapping("/employee/{id}")
@@ -66,11 +68,13 @@ public class TripControllerMVC {
         } catch (CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
 
         addTripsMainSiteAttributesToModel(model);
-        return "main/trips";
+        return "manager/manager-trips";
     }
 
     @GetMapping("/car/{id}")
@@ -83,12 +87,13 @@ public class TripControllerMVC {
             LOG.info(e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
         }
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByCar_Id(id));
 
         addTripsMainSiteAttributesToModel(model);
-        return "main/trips";
+        return "manager/manager-trips";
     }
 
     @GetMapping("/filter")
@@ -96,20 +101,10 @@ public class TripControllerMVC {
 
         Optional<Date> optionalDate = Optional.ofNullable(tripDto.getStartingDate());
         LocalDate date = dateMapper.toLocalDate(optionalDate.orElse(new Date()));
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByDate(date));
-        return "main/trips";
-    }
-
-    @GetMapping("/manager")
-    public String manageTrips(Model model){
-
-        model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("filterTrip", new TripDto());
-        model.addAttribute("trips", tripService.getAll());
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
         return "manager/manager-trips";
     }
 
@@ -127,6 +122,7 @@ public class TripControllerMVC {
             tripService.cancelByDto(tripDto);
             model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
         }
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
@@ -147,6 +143,7 @@ public class TripControllerMVC {
         } catch (CannotFindEntityException e) {
             model.addAttribute("infomessage", e.getMessage());
         }
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());

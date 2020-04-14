@@ -67,6 +67,8 @@ public class CalendarControllerMVC {
 
     @GetMapping("")
     public String getCalendar(Model model) {
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(72));
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("tripDto", new TripDto());

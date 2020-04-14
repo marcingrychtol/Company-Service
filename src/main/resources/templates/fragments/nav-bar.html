@@ -1,46 +1,35 @@
 <nav class="shadow-sm navbar navbar-expand-lg navbar-dark bg-info" xmlns:th="http://www.thymeleaf.org">
-    <div class="container">
-        <a class="navbar-brand" th:href="@{/}">ŁOBSZTALATOR</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" th:href="@{/}">MDJ Rezerwator</a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/}">Rezerwacja <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class=" nav-link " th:href="@{/calendar}">Kalyndorz </a>
-                </li>
-                <li class="nav-item active">
-                    <a class=" nav-link " th:href="@{/calendar/browser}">Dziyń </a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/trips}">Rajzy </a>
-                </li>
-                <li class="nav-item active">
-                    <a class=" nav-link " th:href="@{/cars}">Auta </a>
-                </li>
-                <li class="nav-item active">
-                    <a class=" nav-link " th:href="@{/employees}">Hajery </a>
-                </li>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
 
-                <li class="nav-item dropdown rounded-0">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Łonacz
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" th:href="@{/cars/manager}">Auto </a>
-                        <a class="dropdown-item" th:href="@{/employees/manager}">Hajer </a>
-                        <!--                        <div class="dropdown-divider"></div>-->
-                        <a class="dropdown-item" th:href="@{/trips/manager}">Rajza </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
+            <li class=" nav-item active">
+                <a class=" nav-link " th:href="@{/calendar}">| Kalendarz |</a>
+            </li>
+            <li class=" nav-item active">
+                <a class="nav-link" th:href="@{/trips}">| Zarezerwowane |</a>
+            </li>
+            <li class=" nav-item active">
+                <a class=" nav-link " th:href="@{/cars}">| Pojazdy |</a>
+            </li>
+            <li class=" nav-item active">
+                <a class=" nav-link " th:href="@{/employees}">| Pracownicy |</a>
+            </li>
+            <li class=" nav-item active">
+                <a class="nav-link" th:href="@{/}">| Zaawansowana rezerwacja |</a>
+            </li>
+
+        </ul>
+        <span class="navbar-text text-white" th:text="${today.getDayOfWeekPL()} + ' '
+              + ${today.getDayValueWithZero()} + ' '
+              + ${today.getMonthPL()} + ' '
+              + ${today.getYear()}">
+            Navbar text with an inline element
+        </span>
     </div>
 </nav>

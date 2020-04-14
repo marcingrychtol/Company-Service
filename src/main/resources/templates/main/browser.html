@@ -17,19 +17,21 @@
     <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
-                <div class="shadow card bg-danger text-white rounded-0">
+                <div class="shadow card bg-danger text-white rounded-0 mb-1">
                     <div class="card-header" th:text=
-                            "'Dziosio momy: '
+                            "'Dziś jest: '
                             + ${today.getDayOfWeekPL()}
                             + ' '
                             + ${today.getLocalDate().toString()}"></div>
+                </div>
+                <div class="shadow card bg-danger text-white rounded-0">
                     <div class="card-header" th:text=
-                            "'Przeglondosz: '
+                            "'Przeglądasz: '
                             + ${requestedDate.getDayOfWeekPL()}
                             + ' '
                             + ${requestedDate.getLocalDate().toString()}"></div>
                     <div class="card-body">
-                        <label for="startDate">Zmiyń se dziyń: </label>
+                        <label for="startDate">Zmień: </label>
                         <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                     </div>
                 </div>
@@ -42,7 +44,7 @@
 
     <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-2 rounded-0"
          role="alert">
-        <h5 class="display-4">Dostympne auta:</h5>
+        <h5 class="alert-heading">Dostępne pojazdy:</h5>
     </div>
 
     <div class="row px-2">
@@ -72,7 +74,7 @@
 
     <div class="alert alert-dark text-white bg-secondary border-secondary alert-dismissible fade show mt-3 rounded-0"
          role="alert">
-        <h5 class="display-4">Dzisio jadom:</h5>
+        <h5 class="alert-heading">Zarezerwowane pojazdy:</h5>
     </div>
 
     <div class="row px-2">
@@ -81,8 +83,6 @@
                 <div class="shadow card text-white bg-danger text-center rounded-0 h-100">
                     <h5 class="card-header">
                         <p class="card-text">
-                        <td th:text="${trip.getId()}"></td>
-                        <br>
                         <td th:text="${trip.getCar().getName()}"></td>
                         <br>
                         <td th:text="${trip.getCar().getRegistration()}"></td>

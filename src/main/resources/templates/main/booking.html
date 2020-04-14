@@ -13,7 +13,7 @@
 
 <div class="container-fluid">
     <div class="alert alert-dark text-white bg-secondary border-secondary mt-2 rounded-0" role="alert">
-        <h1 class="display-4">Łobsztaluj se auto!</h1>
+        <h1 class="display-4">Zarezerwuj pojazd!</h1>
     </div>
 
     <div th:replace="fragments/message"></div>
@@ -26,12 +26,12 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                     <div class="shadow card bg-danger text-white rounded-0 h-100">
-                        <div class="card-header">Dziyń</div>
+                        <div class="card-header">Termin</div>
                         <div class="card-body">
-                            <label for="startDate">Kiedy wezna: </label>
+                            <label for="startDate">Początek: </label>
                             <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
-                            <label for="endDate">Kiedy łoddom: </label>
-                            <input class="bg-light rounded-0" placeholder="tego niy musisz" id="endDate"
+                            <label for="endDate">Koniec: </label>
+                            <input class="bg-light rounded-0" placeholder="nie trzeba ustawiać" id="endDate"
                                    th:field="*{endingDate}"/>
                             <small id="endDateHelp" class="form-text text-light"></small>
                         </div>
@@ -83,13 +83,12 @@
                             <textarea class="form-control bg-light rounded-0" rows="2"
                                       placeholder="Np. godziny wyjazdu, cel, klient..."
                                       th:field="*{additionalMessage}"></textarea>
-                            <!--                            <small id="messageHelp" class="form-text text-light">pole opcjonalne</small>-->
+                                                        <small id="messageHelp" class="form-text text-light">- niewymagane</small>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="shadow btn btn-info btn-block btn-lg mt-3 rounded-0">Ciś
-                    knefel, a łobsztaluj!
+                <button type="submit" class="shadow btn btn-info btn-block btn-lg mt-3 rounded-0">Zarezerwuj!
                 </button>
 
             </div>

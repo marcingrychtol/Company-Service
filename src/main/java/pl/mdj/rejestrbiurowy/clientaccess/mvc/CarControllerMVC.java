@@ -12,7 +12,10 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
+import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import pl.mdj.rejestrbiurowy.service.CarService;
+
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping(path = "cars")
@@ -22,14 +25,17 @@ public class CarControllerMVC {
     private static final String REDIR_MANAGER_CARS = "redirect:/cars/manager";
     Logger LOG = LoggerFactory.getLogger(CarControllerMVC.class);
     private CarService carService;
+    private DateMapper dateMapper;
 
     @Autowired
-    public CarControllerMVC(CarService carService) {
+    public CarControllerMVC(CarService carService, DateMapper dateMapper) {
         this.carService = carService;
+        this.dateMapper = dateMapper;
     }
 
     @GetMapping("")
     public String getAll(Model model){
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
@@ -38,6 +44,7 @@ public class CarControllerMVC {
 
     @GetMapping(path = "/manager")
     public String postEdit(Model model){
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
@@ -54,6 +61,8 @@ public class CarControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
@@ -67,6 +76,7 @@ public class CarControllerMVC {
         } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
@@ -83,6 +93,8 @@ public class CarControllerMVC {
             carService.cancelByDto(carDto);
             model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji");
         }
+
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
