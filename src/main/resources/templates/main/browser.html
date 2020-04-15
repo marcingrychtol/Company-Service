@@ -17,13 +17,6 @@
     <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
-                <div class="shadow card bg-danger text-white rounded-0 mb-1">
-                    <div class="card-header" th:text=
-                            "'Dziś jest: '
-                            + ${today.getDayOfWeekPL()}
-                            + ' '
-                            + ${today.getLocalDate().toString()}"></div>
-                </div>
                 <div class="shadow card bg-danger text-white rounded-0">
                     <div class="card-header" th:text=
                             "'Przeglądasz: '
@@ -101,15 +94,10 @@
                         <td th:text="${trip.getEmployee().getPhoneNumber()}"></td>
                         </p>
                     </div>
-                    <div class="card-body">
-                        <p class="card-text mt-1">
-                        <td th:text="${trip.getAdditionalMessage()}"></td>
-                        </p>
-                    </div>
+                    <form th:action="@{/trips}">
                     <button type="submit" class="btn btn-danger stretched-link rounded-0" value="add new employee">
-                        Edytuj
-<!--                        TODO: move to trips.html-->
-                    </button>
+                        Szczegóły
+                    </button></form>
                 </div>
             </div>
         </tr>

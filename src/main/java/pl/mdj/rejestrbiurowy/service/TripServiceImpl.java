@@ -50,7 +50,7 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<TripDto> getAll() {
-        return tripMapper.mapToDto(tripRepository.findByOrderByStartingDateAsc());
+        return tripMapper.mapToDto(tripRepository.findByOrderByStartingDateDesc());
     }
 
     @Override

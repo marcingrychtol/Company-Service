@@ -26,6 +26,9 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
         Optional.ofNullable(entity.getId()).ifPresent(dto::setId);
         Optional.ofNullable(entity.getName()).ifPresent(dto::setName);
         Optional.ofNullable(entity.getRegistration()).ifPresent(dto::setRegistration);
+        Optional.ofNullable(entity.getInspectionExpiration()).ifPresent(dto::setInspectionExpiration);
+        Optional.ofNullable(entity.getInsuranceExpiration()).ifPresent(dto::setInsuranceExpiration);
+        Optional.ofNullable(entity.getMileage().intValue()).ifPresent(dto::setMileage);
         dto.setCancelled(entity.getCancelled());
 
         return dto;
@@ -44,7 +47,10 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
         Optional.ofNullable(dto.getId()).ifPresent(entity::setId);
         Optional.ofNullable(dto.getName()).ifPresent(entity::setName);
         Optional.ofNullable(dto.getRegistration()).ifPresent(entity::setRegistration);
-        entity.setCancelled(dto.getCancelled());
+        Optional.ofNullable(dto.getInspectionExpiration()).ifPresent(entity::setInspectionExpiration);
+        Optional.ofNullable(dto.getInsuranceExpiration()).ifPresent(entity::setInsuranceExpiration);
+        Optional.of(dto.getMileage()).ifPresent(mileage -> entity.setMileage(Long.valueOf(mileage)));
+        entity.setCancelled(dto.isCancelled());
 
         return entity;
     }

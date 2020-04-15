@@ -38,9 +38,9 @@ public class EmployeeControllerMVC {
 
     @GetMapping("/manager")
     public String editEmployees(Model model){
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
-        model.addAttribute("employees", employeeService.getAllActive());
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }
@@ -56,7 +56,7 @@ public class EmployeeControllerMVC {
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
-        model.addAttribute("employees", employeeService.getAllActive());
+        model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }
@@ -74,7 +74,7 @@ public class EmployeeControllerMVC {
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
-        model.addAttribute("employees", employeeService.getAllActive());
+        model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }
@@ -89,7 +89,7 @@ public class EmployeeControllerMVC {
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
-        model.addAttribute("employees", employeeService.getAllActive());
+        model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }

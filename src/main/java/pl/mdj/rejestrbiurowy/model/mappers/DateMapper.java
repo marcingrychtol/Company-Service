@@ -10,7 +10,9 @@ public interface DateMapper {
     Date toDate(LocalDate localDate);
     LocalDate toLocalDate(Date date);
     String dayOfWeekPL(LocalDate localDate);
+    String dayOfWeekPLShort(LocalDate localDate);
     String dayOfWeekPL(Date date);
+    String dayOfWeekPLShort(Date date);
     String monthPL(LocalDate localDate);
     String monthPL(Date date);
     String valueWithZero(int i);

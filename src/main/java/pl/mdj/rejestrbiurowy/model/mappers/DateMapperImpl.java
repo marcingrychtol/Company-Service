@@ -37,8 +37,27 @@ public class DateMapperImpl implements DateMapper {
     }
 
     @Override
+    public String dayOfWeekPLShort(LocalDate localDate) {
+        switch (localDate.getDayOfWeek()){
+            case MONDAY: return "Pon";
+            case TUESDAY: return "Wto";
+            case WEDNESDAY: return "Śro";
+            case THURSDAY: return "Czw";
+            case FRIDAY: return "Pią";
+            case SATURDAY: return "Sob";
+            case SUNDAY: return "Nie";
+            default: return null;
+        }
+    }
+
+    @Override
     public String dayOfWeekPL(Date date) {
         return dayOfWeekPL(toLocalDate(date));
+    }
+
+    @Override
+    public String dayOfWeekPLShort(Date date) {
+        return dayOfWeekPLShort(toLocalDate(date));
     }
 
     @Override
@@ -98,6 +117,7 @@ public class DateMapperImpl implements DateMapper {
         dateDto.setLocalDate(localDate);
         dateDto.setDate(toDate(localDate));
         dateDto.setDayOfWeekPL(dayOfWeekPL(localDate));
+        dateDto.setDayOfWeekPLShort(dayOfWeekPLShort(localDate));
         dateDto.setDayValueWithZero(valueWithZero(localDate.getDayOfMonth()));
         dateDto.setDayValueWithZeroJS(valueWithZeroForJS(localDate.getDayOfMonth()));
         dateDto.setMonthPL(monthPL(localDate));

@@ -35,8 +35,8 @@ public class CarControllerMVC {
 
     @GetMapping("")
     public String getAll(Model model){
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
         return ("main/cars");
@@ -45,8 +45,7 @@ public class CarControllerMVC {
     @GetMapping(path = "/manager")
     public String postEdit(Model model){
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
     }
@@ -62,8 +61,7 @@ public class CarControllerMVC {
         }
 
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
     }
@@ -76,9 +74,9 @@ public class CarControllerMVC {
         } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");    }
 
@@ -95,8 +93,7 @@ public class CarControllerMVC {
         }
 
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
     }

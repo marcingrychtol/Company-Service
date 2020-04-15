@@ -12,8 +12,9 @@
 <div th:replace="fragments/nav-bar"></div>
 
 <div class="container-fluid">
+
     <div class="alert alert-dark text-white bg-secondary border-secondary mt-2 rounded-0" role="alert">
-        <h1 class="display-4">Zarezerwuj pojazd!</h1>
+        <h4>Zarezerwuj pojazd!</h4>
     </div>
 
     <div th:replace="fragments/message"></div>
@@ -88,7 +89,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="shadow btn btn-info btn-block btn-lg mt-3 rounded-0">Zarezerwuj!
+                <button type="submit" class="shadow btn btn-info btn-block btn-lg mt-3 rounded-0">Rezerwuj
                 </button>
 
             </div>
@@ -102,8 +103,9 @@
 <script th:inline="javascript">
     var today = new Date(
         [(${requestedDate.getYear()})],
-        [(${requestedDate.getMonthValueWithZeroJS()})],
+        [(${requestedDate.localDate.getMonthValue()})]-1,
         [(${requestedDate.getDayValueWithZeroJS()})]);
+
 
     $('#startDate').datepicker({
         showOnFocus: true,

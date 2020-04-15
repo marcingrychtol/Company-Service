@@ -54,7 +54,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<CarDto> getAllActive() {
         return getAll().stream()
-                .filter(car -> !car.getCancelled())
+                .filter(car -> !car.isCancelled())
                 .collect(Collectors.toList());
     }
 
@@ -140,7 +140,7 @@ public class CarServiceImpl implements CarService {
         return carRepository.findAll().stream()
                 .map(c -> carMapper.mapToDto(c))
                 .filter(car -> !notAvailableCars.contains(car))
-                .filter(car -> !car.getCancelled())
+                .filter(car -> !car.isCancelled())
                 .collect(Collectors.toList());
     }
 

@@ -7,6 +7,7 @@
 
 </head>
 <body class="bg-dark">
+
 <div th:replace="fragments/nav-bar"></div>
 
 <!-- filters below -->
@@ -96,35 +97,33 @@
                 <th scope="col">Do</th>
                 <th scope="col">Pojazd</th>
                 <th scope="col">Osoba</th>
-                <th scope="col">Utworzono</th>
-                <th scope="col">Edycja</th>
-                <th scope="col">Anulowanie</th>
+                <th scope="col">Telefon</th>
+                <th scope="col">Funkcje</th>
             </tr>
             </thead>
             <tbody>
 
-                <tr th:each="trip: ${trips}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
-                    <th scope="row" th:text="${trip.getId()}"></th>
-                    <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
-                    <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
-                    <td th:text="${trip.car.name}+' - '+${trip.car.registration}"></td>
-                    <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
-                    <td th:text="${trip.createdTime}"></td>
-                    <td>
-                        <button type="button" class="btn btn-outline-light bg-info text-white rounded-0"
-                                data-toggle="modal"
-                                th:attr="data-target='#tripEdit'+${trip.getId()}">
-                            Szczegóły
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger text-white rounded-0"
-                                data-toggle="modal"
-                                th:attr="data-target='#tripCancel'+${trip.getId()}">
-                            Anuluj
-                        </button>
-                    </td>
-                </tr>
+            <tr th:each="trip: ${trips}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
+                <th scope="row" th:text="${trip.getId()}"></th>
+                <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
+                <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
+                <td th:text="${trip.car.name}+' - '+${trip.car.registration}"></td>
+                <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
+                <td th:text="${trip.employee.phoneNumber}"></td>
+                <td>
+                    <button type="button" class="shadow btn btn-info rounded-0"
+                            data-toggle="modal"
+                            th:attr="data-target='#tripEdit'+${trip.getId()}">
+                        Szczegóły
+                    </button>
+                    <button type="button" class="shadow btn btn-danger rounded-0"
+                            data-toggle="modal"
+                            th:attr="data-target='#tripCancel'+${trip.getId()}">
+                        Anuluj
+                    </button>
+                </td>
+
+            </tr>
 
             </tbody>
         </table>
@@ -240,16 +239,16 @@
                                 </div>
                                 <div class="form-group rounded-0">
                                     <label class="text-centered" for="carDeleteInput1">Tutaj wpisz nr telefonu:</label>
-                                    <input type="text" class="form-control rounded-0" th:field="*{employee.phoneNumber}"
+                                    <input type="text" class="shadow form-control rounded-0" th:field="*{employee.phoneNumber}"
                                            id="carDeleteInput1">
                                 </div>
                                 <input type="hidden" name="id" th:value="${trip.getId()}">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij bez
-                                    anulowania
+                                <button type="button" class="shadow btn btn-secondary" data-dismiss="modal">Zamknij bez
+                                    zmian
                                 </button>
-                                <button type="submit" class="btn btn-small btn-outline-light bg-danger text-white">
+                                <button type="submit" class="shadow btn btn-danger">
                                     Anuluj rezerwację
                                 </button>
                             </div>

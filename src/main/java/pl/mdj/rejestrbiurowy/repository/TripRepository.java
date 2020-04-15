@@ -10,6 +10,7 @@ import java.util.List;
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
     List<Trip> findByOrderByStartingDateAsc();
+    List<Trip> findByOrderByStartingDateDesc();
     List<Trip> findAll(Sort sort);
 
     List<Trip> findAllByEmployee_IdOrderByStartingDateAsc(Long id);

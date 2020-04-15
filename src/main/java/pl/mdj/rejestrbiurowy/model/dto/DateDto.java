@@ -19,6 +19,7 @@ public class DateDto {
     private String monthValueWithZero;
     private String monthValueWithZeroJS;
     private String dayOfWeekPL;
+    private String dayOfWeekPLShort;
     private String dayValueWithZeroJS;
     private String dayValueWithZero;
     private String year;

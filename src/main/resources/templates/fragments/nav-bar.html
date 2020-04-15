@@ -1,4 +1,4 @@
-<nav class="shadow-sm navbar navbar-expand-lg navbar-dark bg-info" xmlns:th="http://www.thymeleaf.org">
+<nav class="shadow-sm navbar sticky-top navbar-expand-lg navbar-dark bg-info" xmlns:th="http://www.thymeleaf.org">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,21 +8,34 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
-            <li class=" nav-item active">
-                <a class=" nav-link " th:href="@{/calendar}">| Kalendarz |</a>
+            <li class="border-left nav-item active">
+                <a class=" nav-link " th:href="@{/calendar/0}">Kalendarz</a>
             </li>
-            <li class=" nav-item active">
-                <a class="nav-link" th:href="@{/trips}">| Zarezerwowane |</a>
+            <li class="border-left nav-item">
+            <a class="nav-link" th:href="@{/}">Szybka rezerwacja</a>
+        </li>
+            <li class="border-left nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReservations" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Rezerwacje
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownReservations">
+                    <a class="dropdown-item" th:href="@{/trips}">Wszystkie</a>
+                    <a class="dropdown-item" th:href="@{/cars}">Według pojazdu</a>
+                    <a class="dropdown-item" th:href="@{/employees}">Według pracownika</a>
+                </div>
             </li>
-            <li class=" nav-item active">
-                <a class=" nav-link " th:href="@{/cars}">| Pojazdy |</a>
+            <li class="border-left nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownManagement" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Zarządzanie danymi
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownManagement">
+                    <a class="dropdown-item" th:href="@{/cars/manager}">Pojazdy</a>
+                    <a class="dropdown-item" th:href="@{/employees/manager}">Pracownicy</a>
+                </div>
             </li>
-            <li class=" nav-item active">
-                <a class=" nav-link " th:href="@{/employees}">| Pracownicy |</a>
-            </li>
-            <li class=" nav-item active">
-                <a class="nav-link" th:href="@{/}">| Zaawansowana rezerwacja |</a>
-            </li>
+
 
         </ul>
         <span class="navbar-text text-white" th:text="${today.getDayOfWeekPL()} + ' '
