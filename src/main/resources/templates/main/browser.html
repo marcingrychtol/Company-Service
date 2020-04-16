@@ -29,9 +29,9 @@
                         <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
                     </form>
                 </div>
-                <form th:action="@{/calendar/find}" th:object="${newDate}">
-                    <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()()}"/>
-                    <button type="submit" class="btn btn-block btn-secondary rounded-0">Pokaż ten dzień w kalendarzu</button>
+                <form th:action="@{/calendar/find}" th:object="${dateDto}">
+                    <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()}"/>
+                    <button type="submit" class="btn btn-block btn-secondary rounded-0">Pokaż tę kartę w kalendarzu</button>
                 </form>
             </div>
         </div>
@@ -44,9 +44,9 @@
         <h5 class="alert-heading">Dostępne pojazdy:</h5>
     </div>
 
-    <div class="row px-2">
+    <div class="row mx-2">
         <tr th:each="car: ${cars}">
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 m-1">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-2">
                 <div class="shadow card text-white bg-info text-center rounded-0">
                     <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
                         <h5 class="card-header">
@@ -74,9 +74,9 @@
         <h5 class="alert-heading">Zarezerwowane pojazdy:</h5>
     </div>
 
-    <div class="row px-2">
+    <div class="row mx-2">
         <tr th:each="trip: ${trips}">
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 m-1">
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-2">
                 <div class="shadow card text-white bg-danger text-center rounded-0 h-100">
                     <h5 class="card-header">
                         <p class="card-text">

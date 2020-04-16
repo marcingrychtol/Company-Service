@@ -20,10 +20,13 @@ import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Date;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Controller
 @RequestMapping(path ="/calendar")
@@ -85,9 +88,15 @@ public class CalendarControllerMVC {
     @GetMapping("/find")
     public String getCalendarByDay(Model model, @ModelAttribute DateDto tripDto) {
 
-        int diff = Period.between(LocalDate.now(), tripDto.getLocalDate()).getDays();
-        int scope = 28;
-        int page = scope/diff;
+        LocalDate now = LocalDate.now();
+        long diff = DAYS.between(now, tripDto.getLocalDate());
+        long scope = 28;
+        long page;
+        if (diff == 0){
+            page = 0;
+        } else {
+        page = diff/scope;
+        }
 
         model.addAttribute("page", page);
         model.addAttribute("scope", scope);
@@ -113,7 +122,7 @@ public class CalendarControllerMVC {
     }
 
 
-    private List<DayDto> getDataForIndexCalendarView(int page, int daysByPage){
+    private List<DayDto> getDataForIndexCalendarView(long page, long daysByPage){
         LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY).plusDays(page*daysByPage);
         LocalDate end = start.plusDays(daysByPage-1);
         return dayService.getDaysDtoBetween(start, end);
