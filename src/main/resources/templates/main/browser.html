@@ -14,24 +14,28 @@
 
 
 <div class="container-fluid pt-2">
-    <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
-        <div class="row justify-content-md-center">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
-                <div class="shadow card bg-danger text-white rounded-0">
-                    <div class="card-header" th:text=
-                            "'Przeglądasz: '
+
+    <div class="row justify-content-md-center">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-4 p-4">
+            <div class="shadow card bg-danger text-white rounded-0">
+                <div class="card-header" th:text=
+                        "'Przeglądasz: '
                             + ${requestedDate.getDayOfWeekPL()}
                             + ' '
                             + ${requestedDate.getLocalDate().toString()}"></div>
-                    <div class="card-body">
+                <div class="card-body">
+                    <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
                         <label for="startDate">Zmień: </label>
                         <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
-                    </div>
+                    </form>
                 </div>
+                <form th:action="@{/calendar/find}" th:object="${newDate}">
+                    <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()()}"/>
+                    <button type="submit" class="btn btn-block btn-secondary rounded-0">Pokaż ten dzień w kalendarzu</button>
+                </form>
             </div>
         </div>
-    </form>
-
+    </div>
 
     <div th:replace="fragments/message"></div>
 
@@ -95,9 +99,10 @@
                         </p>
                     </div>
                     <form th:action="@{/trips}">
-                    <button type="submit" class="btn btn-danger stretched-link rounded-0" value="add new employee">
-                        Szczegóły
-                    </button></form>
+                        <button type="submit" class="btn btn-danger stretched-link rounded-0" value="add new employee">
+                            Szczegóły
+                        </button>
+                    </form>
                 </div>
             </div>
         </tr>

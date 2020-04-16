@@ -155,8 +155,10 @@ public class TripServiceImpl implements TripService {
 
         for (LocalDate date : datesToCheck) {
             try {
-                existingTrips = dayService.findById(date).getTrips();
-            } catch (CannotFindEntityException e) {
+                existingTrips = dayService.findById(date).getTrips().stream()
+                        .filter(t -> !t.getCancelled())
+                        .collect(Collectors.toList());
+            } catch (CannotFindEntityException ignored) {
             }
 
             for (Trip existingTrip :

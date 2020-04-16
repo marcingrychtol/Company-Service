@@ -156,7 +156,6 @@ public class TripControllerMVC {
     @PostMapping("/add")
     public String addTrip(@ModelAttribute TripDto tripDto, Model model){
 
-        LOG.info(tripDto.getStartingDate().toString());
         LocalDate requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
 
         try {

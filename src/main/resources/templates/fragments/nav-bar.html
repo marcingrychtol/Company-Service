@@ -9,15 +9,21 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="border-left nav-item active">
-                <a class=" nav-link " th:href="@{/calendar/0}">Kalendarz</a>
+                <a class=" nav-link " th:href="@{/calendar/28/0}">Miesiąc</a>
+            </li>
+            <li class="border-left nav-item active">
+                <a class=" nav-link " th:href="@{/calendar/7/0}">Tydzień</a>
+            </li>
+            <li class="border-left nav-item active">
+                <a class=" nav-link " th:href="@{/calendar/browser}">Dzień</a>
             </li>
             <li class="border-left nav-item">
-            <a class="nav-link" th:href="@{/fast}">Szybka rezerwacja</a>
+            <a class="nav-link" th:href="@{/fast}">Rezerwacja</a>
         </li>
             <li class="border-left nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReservations" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Rezerwacje
+                    Przeglądaj rezerwacje
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownReservations">
                     <a class="dropdown-item" th:href="@{/trips}">Wszystkie</a>

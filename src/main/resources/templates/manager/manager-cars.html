@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <div class="row p-2">
+    <div class="row p-2 m-2">
 
         <table class="table table-hover table-dark">
             <caption>Lista pracowników</caption>
@@ -137,7 +137,7 @@
                     <div class="modal-content rounded-0">
                         <div class="modal-header">
                             <h5 class="modal-title" id="CarDeleteModalTitle"
-                                th:text="${dto.getId()}+'. '+${dto.getBrand()} + ' ' + ${car.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>
+                                th:text="${dto.getId()}+'. '+${dto.getBrand()} + ' ' + ${dto.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

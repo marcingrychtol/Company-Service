@@ -13,6 +13,16 @@
 <div th:replace="fragments/nav-bar"></div>
 <div th:replace="fragments/message"></div>
 
+<div class="text-center pt-3 text-white">
+    <h4 class="display-4" th:text="
+    ${calendarPreview.get(0).getId().getDayValueWithZero()}
+    + ' '
+    + ${calendarPreview.get(0).getId().getMonthPL()}
+    + ' - '
+    + ${calendarPreview.get(calendarPreview.size()-1).getId().getDayValueWithZero()}
+    + ' '
+    + ${calendarPreview.get(calendarPreview.size()-1).getId().getMonthPL()}"></h4>
+</div>
 
 <div th:replace="fragments/calendar-page-switch"></div>
 
@@ -33,12 +43,12 @@
                             <button type="submit" id="dayButton"
                                     th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
-                                    ? ${day.getId().getDayOfWeekPL()}
+                                    ? ${day.getId().getDayOfWeekPLShort()} + ' ' + ${day.getId().getDayValueWithZero()}
                                     : ${day.getId().getDayOfWeekPLShort()} + ' ' + ${day.getId().getLocalDate().toString()}"
                                     class="btn btn-sm text-white stretched-link rounded-0"></button>
                         </div>
                         <div class="card-body">
-                            <table class="shadow table table-sm table-dark table-borderless">
+                            <table class="shadow table table-sm table-dark">
                                 <tr th:each="car :${cars}"
                                     th:class="${day.availableCars.contains(car.getId())} ? 'bg-info' :'bg-danger'">
                                     <td th:text="
@@ -55,8 +65,6 @@
         </tr>
     </div>
 </div>
-<div th:replace="fragments/calendar-page-switch"></div>
-
 
 <div th:replace="fragments/bootstrap-scripts"></div>
 </body>

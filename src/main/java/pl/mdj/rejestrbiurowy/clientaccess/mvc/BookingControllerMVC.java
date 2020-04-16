@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
+import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.clientaccess.mvc.interfaces.BasicController;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
@@ -46,7 +47,7 @@ public class BookingControllerMVC implements BasicController {
 
     @GetMapping("/")
     public String getHome(Model model){
-        return "redirect:/calendar/0";
+        return "redirect:/calendar/28/0";
     }
 
     @GetMapping("/fast")
@@ -83,6 +84,7 @@ public class BookingControllerMVC implements BasicController {
         model.addAttribute("requestedDate", dateMapper.getDateDto(dateMapper.toLocalDate(tripDto.getStartingDate())));
         model.addAttribute("requestedTrip", tripDto);
         model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("newDate", new DateDto());
         model.addAttribute("employees", employeeService.getAllActive());
         model.addAttribute("cars", carService.getAllActive());
         return "main/booking";

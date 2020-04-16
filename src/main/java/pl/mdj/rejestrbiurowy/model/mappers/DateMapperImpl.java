@@ -68,10 +68,10 @@ public class DateMapperImpl implements DateMapper {
             case MARCH: return "Marca";
             case APRIL: return "Kwietnia";
             case MAY: return "Maja";
-            case JUNE: return "Czerwieca";
+            case JUNE: return "Czerwca";
             case JULY: return "Lipca";
-            case AUGUST: return "Sierpienia";
-            case SEPTEMBER: return "Wrzesienia";
+            case AUGUST: return "Sierpnia";
+            case SEPTEMBER: return "Wrzesnia";
             case OCTOBER: return "Października";
             case NOVEMBER: return "Listopada";
             case DECEMBER: return "Grudnia";

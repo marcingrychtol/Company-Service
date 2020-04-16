@@ -21,6 +21,7 @@ import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Date;
 import java.util.List;
 
@@ -61,23 +62,42 @@ public class CalendarControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("dateDto", new DateDto());
         model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
         return "main/browser";
     }
 
-    @GetMapping("{page}")
-    public String getCalendar(Model model, @PathVariable int page) {
+    @GetMapping("/{scope}/{page}")
+    public String getMonth(Model model, @PathVariable String page, @PathVariable String scope) {
+
 
         model.addAttribute("page", page);
+        model.addAttribute("scope", scope);
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, 21));
+        model.addAttribute("calendarPreview", getDataForIndexCalendarView(Integer.parseInt(page), Integer.parseInt(scope)));
+        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("tripDto", new TripDto());
+        return "main/calendar";
+    }
+
+
+    @GetMapping("/find")
+    public String getCalendarByDay(Model model, @ModelAttribute DateDto tripDto) {
+
+        int diff = Period.between(LocalDate.now(), tripDto.getLocalDate()).getDays();
+        int scope = 28;
+        int page = scope/diff;
+
+        model.addAttribute("page", page);
+        model.addAttribute("scope", scope);
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, scope));
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         return "main/calendar";
     }
-
 
     @InitBinder
     public void customizeDateBinder( WebDataBinder binder )
