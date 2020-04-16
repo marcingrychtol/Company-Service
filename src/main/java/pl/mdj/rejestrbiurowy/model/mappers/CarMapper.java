@@ -24,7 +24,8 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
     public CarDto mapToDto(Car entity) {
         CarDto dto = new CarDto();
         Optional.ofNullable(entity.getId()).ifPresent(dto::setId);
-        Optional.ofNullable(entity.getName()).ifPresent(dto::setName);
+        Optional.ofNullable(entity.getBrand()).ifPresent(dto::setBrand);
+        Optional.ofNullable(entity.getModel()).ifPresent(dto::setModel);
         Optional.ofNullable(entity.getRegistration()).ifPresent(dto::setRegistration);
         Optional.ofNullable(entity.getInspectionExpiration()).ifPresent(dto::setInspectionExpiration);
         Optional.ofNullable(entity.getInsuranceExpiration()).ifPresent(dto::setInsuranceExpiration);
@@ -45,7 +46,8 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
     public Car mapToEntity(CarDto dto) {
         Car entity = new Car();
         Optional.ofNullable(dto.getId()).ifPresent(entity::setId);
-        Optional.ofNullable(dto.getName()).ifPresent(entity::setName);
+        Optional.ofNullable(dto.getBrand()).ifPresent(entity::setBrand);
+        Optional.ofNullable(dto.getModel()).ifPresent(entity::setModel);
         Optional.ofNullable(dto.getRegistration()).ifPresent(entity::setRegistration);
         Optional.ofNullable(dto.getInspectionExpiration()).ifPresent(entity::setInspectionExpiration);
         Optional.ofNullable(dto.getInsuranceExpiration()).ifPresent(entity::setInsuranceExpiration);

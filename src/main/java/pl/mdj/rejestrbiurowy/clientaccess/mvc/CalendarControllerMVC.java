@@ -19,6 +19,7 @@ import pl.mdj.rejestrbiurowy.service.TripService;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +71,7 @@ public class CalendarControllerMVC {
 
         model.addAttribute("page", page);
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, 24));
+        model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, 21));
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
@@ -93,7 +94,7 @@ public class CalendarControllerMVC {
 
 
     private List<DayDto> getDataForIndexCalendarView(int page, int daysByPage){
-        LocalDate start = LocalDate.now().plusDays(page*daysByPage);
+        LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY).plusDays(page*daysByPage);
         LocalDate end = start.plusDays(daysByPage-1);
         return dayService.getDaysDtoBetween(start, end);
     }

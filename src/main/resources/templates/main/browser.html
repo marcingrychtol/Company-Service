@@ -47,7 +47,7 @@
                     <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
                         <h5 class="card-header">
                             <!--                        <td th:text="${car.getId()}"></td>-->
-                            <td th:text="${car.getName()}"></td>
+                            <td th:text="${car.getBrand()} + ' ' + ${car.getModel()}"></td>
                         </h5>
                         <div class="card-body">
                             <p class="card-text">
@@ -76,7 +76,7 @@
                 <div class="shadow card text-white bg-danger text-center rounded-0 h-100">
                     <h5 class="card-header">
                         <p class="card-text">
-                        <td th:text="${trip.getCar().getName()}"></td>
+                        <td th:text="${trip.getCar().getBrand()} + ' ' + ${trip.getCar().getModel()}"></td>
                         <br>
                         <td th:text="${trip.getCar().getRegistration()}"></td>
                         </p>

@@ -9,9 +9,7 @@
 <body class="bg-dark">
 
 <div th:replace="fragments/nav-bar"></div>
-
-<!-- filters below -->
-<div class="container">
+<div class="container-fluid p-3">
     <div class="row p-1 mt-2">
         <p>
             <a class="shadow btn btn-secondary btn-block  rounded-0" data-toggle="collapse" href="#collapseExample"
@@ -36,33 +34,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                            <div class="shadow card border-white rounded-0 h-100">
-                                <div class="card-header">Auto</div>
-                                <div class="card-body">
-                                    <select class="custom-select bg-light rounded-0" size="6" th:field="*{carId}">
-                                        <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                                th:text="${car.getId()} + '. ' + ${car.getName()} + ' - ' + ${car.getRegistration()}">
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                            <div class="shadow card border-white rounded-0 h-100">
-                                <div class="card-header">Hajer</div>
-                                <div class="card-body">
-                                    <select class="custom-select bg-light  rounded-0" size="6" th:field="*{employeeId}">
-                                        <option th:each="emp : ${employees}" th:value="${emp.getId()}"
-                                                th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="col-12 col-md-6 col-lg-12 col-xl-3 p-1">
                             <div class="shadow card border-white rounded-0 h-100">
                                 <div class="card-header">Opis</div>
@@ -73,19 +44,15 @@
                                 </div>
                             </div>
                         </div>
-
                         <button type="submit" class="shadow btn btn-warning btn-block mt-3 rounded-0">Filtruj!
                         </button>
-
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 <div th:replace="fragments/message"></div>
-
 <div class="container-fluid pt-2">
     <div class="row">
         <table class="table table-hover table-dark">
@@ -102,12 +69,11 @@
             </tr>
             </thead>
             <tbody>
-
             <tr th:each="trip: ${trips}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
                 <th scope="row" th:text="${trip.getId()}"></th>
                 <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
                 <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
-                <td th:text="${trip.car.name}+' - '+${trip.car.registration}"></td>
+                <td th:text="${trip.car.brand} + ' ' + ${trip.car.model} +' - '+${trip.car.registration}"></td>
                 <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
                 <td th:text="${trip.employee.phoneNumber}"></td>
                 <td>
@@ -122,14 +88,10 @@
                         Anuluj
                     </button>
                 </td>
-
             </tr>
-
             </tbody>
         </table>
-
         <tr th:each="trip: ${trips}">
-
             <div class="modal fade" th:id="'tripEdit'+${trip.getId()}" data-backdrop="static" tabindex="-1"
                  role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -152,7 +114,7 @@
                                     <h5 class="card-header">
                                         <p class="card-text">
                                         <td th:text="${trip.getId()}+'. '"></td>
-                                        <td th:text="${trip.getCar().getName()}"></td>
+                                        <td th:text="${trip.getCar().getBrand()}"></td>
                                         <br>
                                         <td th:text="${trip.getCar().getRegistration()}"></td>
                                         </p>
@@ -191,7 +153,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="modal fade" th:id="'tripCancel'+${trip.getId()}" data-backdrop="static" tabindex="-1"
                  role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -215,7 +176,7 @@
                                     <h5 class="card-header">
                                         <p class="card-text">
                                         <td th:text="${trip.getId()}+'. '"></td>
-                                        <td th:text="${trip.getCar().getName()}"></td>
+                                        <td th:text="${trip.getCar().getBrand()} + ' ' + ${trip.getCar().getModel()}"></td>
                                         <br>
                                         <td th:text="${trip.getCar().getRegistration()}"></td>
                                         </p>
@@ -256,11 +217,8 @@
                     </div>
                 </div>
             </div>
-
         </tr>
-
     </div>
-
 </div>
 
 <div th:replace="fragments/bootstrap-scripts"></div>

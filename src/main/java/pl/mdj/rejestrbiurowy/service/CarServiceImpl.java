@@ -121,7 +121,8 @@ public class CarServiceImpl implements CarService {
 
         Optional<Car> carOptional = carRepository.findById(carDto.getId());
         if (carOptional.isPresent()) {
-            carOptional.get().setName(carDto.getName());
+            carOptional.get().setBrand(carDto.getBrand());
+            carOptional.get().setModel(carDto.getModel());
             carOptional.get().setRegistration(carDto.getRegistration());
             carRepository.save(carOptional.get());
         } else {
@@ -162,9 +163,10 @@ public class CarServiceImpl implements CarService {
     private void checkInputLengthData(CarDto carDto) throws WrongInputDataException {
         if (
                 carDto.getRegistration().length() < 5
-                        || carDto.getName().length() < 5
+                        || carDto.getBrand().length() < 2
+                        || carDto.getModel().length() < 2
         ) {
-            throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
+            throw new WrongInputDataException("Za krótkie dane, 5 znaków dla rejestracji, 2 znaki dla marki i modelu...");
         }
     }
 
@@ -175,7 +177,9 @@ public class CarServiceImpl implements CarService {
                     "Pojazd o rejestracji "
                             + carDto.getRegistration()
                             + " już istnieje! Jest to "
-                            + carConflictTest.get().getName()
+                            + carConflictTest.get().getBrand()
+                            + " "
+                            + carConflictTest.get().getModel()
             );
         }
     }

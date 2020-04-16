@@ -46,6 +46,12 @@ public class BookingControllerMVC implements BasicController {
 
     @GetMapping("/")
     public String getHome(Model model){
+        return "redirect:/calendar/0";
+    }
+
+    @GetMapping("/fast")
+    public String getFast(Model model){
+
         LocalDate requestedDate = LocalDate.now();
 
         CarDto carDto = new CarDto();

@@ -7,7 +7,8 @@ import java.time.LocalDate;
 @Data
 public class CarDto {
     private Long id;
-    private String name;
+    private String brand;
+    private String model;
     private String registration;
     private boolean cancelled;
     private boolean available;

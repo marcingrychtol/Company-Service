@@ -19,7 +19,8 @@ public class Car {
     private Long id;
     @Enumerated(EnumType.STRING)
     private CarCategory carCategory = CarCategory.COMPANY;
-    private String name;
+    private String brand;
+    private String model;
     private String registration;
     @Enumerated(EnumType.STRING)
     private CarFuel fuel;
@@ -33,8 +34,8 @@ public class Car {
     @OneToMany(mappedBy = "car")
     private List<Trip> trips;
 
-    public Car(String name, String registration) {
-        this.name = name;
+    public Car(String brand, String registration) {
+        this.brand = brand;
         this.registration = registration;
     }
 }
