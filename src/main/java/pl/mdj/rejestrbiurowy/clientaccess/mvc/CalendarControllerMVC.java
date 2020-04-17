@@ -90,7 +90,7 @@ public class CalendarControllerMVC {
 
         LocalDate now = LocalDate.now();
         long diff = DAYS.between(now, tripDto.getLocalDate());
-        long scope = 28;
+        long scope = 7;
         long page;
         if (diff == 0){
             page = 0;
