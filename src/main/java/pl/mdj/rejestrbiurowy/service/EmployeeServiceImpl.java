@@ -14,6 +14,7 @@ import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,9 +39,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getAllActive() {
-        return getAll().stream()
-                .filter(emp -> !emp.getCancelled())
-                .collect(Collectors.toList());
+        List<EmployeeDto> dtoList = getAll();
+        List<EmployeeDto> dtoListActive = new ArrayList<>();
+        for (EmployeeDto emp :
+                dtoList) {
+            if (!emp.isCancelled()) {
+                dtoListActive.add(emp);
+            }
+        }
+        return dtoListActive;
+//        return getAll().stream()
+//                .filter(emp -> !emp.getCancelled())
+//                .collect(Collectors.toList());
     }
 
     @Override

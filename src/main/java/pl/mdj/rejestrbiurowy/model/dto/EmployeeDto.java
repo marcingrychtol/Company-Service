@@ -9,5 +9,5 @@ public class EmployeeDto {
     private String secondName;
     private String phoneNumber;
     private String email;
-    private Boolean cancelled;
+    private boolean cancelled;
 }

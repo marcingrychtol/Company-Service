@@ -9,7 +9,6 @@ import pl.mdj.rejestrbiurowy.bootstrap.MdjRunner;
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
-@NoArgsConstructor
 public class MDJServiceApplication {
 
 //    private MdjRunner mdjRunner;
@@ -18,7 +17,7 @@ public class MDJServiceApplication {
 //    public MDJServiceApplication(MdjRunner mdjRunner) {
 //        this.mdjRunner = mdjRunner;
 //    }
-
+//
 //    @PostConstruct
 //    private void postConstruct(){
 //        mdjRunner.run();

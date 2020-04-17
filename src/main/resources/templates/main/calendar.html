@@ -14,14 +14,14 @@
 <div th:replace="fragments/message"></div>
 
 <div class="text-center pt-3 text-white">
-    <h4 class="display-4" th:text="
+    <p th:text="
     ${calendarPreview.get(0).getId().getDayValueWithZero()}
     + ' '
     + ${calendarPreview.get(0).getId().getMonthPL()}
     + ' - '
     + ${calendarPreview.get(calendarPreview.size()-1).getId().getDayValueWithZero()}
     + ' '
-    + ${calendarPreview.get(calendarPreview.size()-1).getId().getMonthPL()}"></h4>
+    + ${calendarPreview.get(calendarPreview.size()-1).getId().getMonthPL()}"></p>
 </div>
 
 <div th:replace="fragments/calendar-page-switch"></div>

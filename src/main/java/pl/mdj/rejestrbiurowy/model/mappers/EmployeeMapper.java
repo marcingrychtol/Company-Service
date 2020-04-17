@@ -50,7 +50,7 @@ public class EmployeeMapper implements BasicMapper<Employee, EmployeeDto> {
         Optional.ofNullable(dto.getName()).ifPresent(entity::setName);
         Optional.ofNullable(dto.getSecondName()).ifPresent(entity::setSecondName);
         Optional.ofNullable(dto.getPhoneNumber()).ifPresent(entity::setPhoneNumber);
-        entity.setCancelled(dto.getCancelled());
+        entity.setCancelled(dto.isCancelled());
 
         return entity;
     }
