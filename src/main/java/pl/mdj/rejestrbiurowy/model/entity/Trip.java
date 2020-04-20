@@ -2,6 +2,8 @@ package pl.mdj.rejestrbiurowy.model.entity;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,12 +1,19 @@
-
-
-<div class="container pt-4">
+<div class="container pt-1">
     <div class="row justify-content-center">
         <nav aria-label="Page navigation example">
             <ul class="pagination rounded-0">
-                <li class="page-item"><a class="page-link" th:href="@{/calendar/{s}/{p}(p=${page}-1, s=${scope})}">&laquo; -1</a></li>
-                <li class="page-item"><a class="page-link" th:href="@{/calendar/{s}/0(s=${scope})}" >Zeruj</a></li>
-                <li class="page-item"><a class="page-link" th:href="@{/calendar/{s}/{p}(p=${page}+1, s=${scope})}"> +1 &raquo;</a></li>
+                <li class="page-item rounded-0"><a class="page-link rounded-0 bg-secondary outline-secondary text-white" th:href="@{/calendar/{s}/{p}(p=${page}-1, s=${scope})}">&laquo;
+                    -1</a></li>
+                <li class="page-item"><a class="page-link rounded-0 bg-secondary outline-secondary text-white" th:href="@{/calendar/{s}/0(s=${scope})}" th:text="
+                    ${calendarPreview.get(0).getId().getDayValueWithZero()}
+                    + ' '
+                    + ${calendarPreview.get(0).getId().getMonthPL()}
+                    + ' - '
+                    + ${calendarPreview.get(calendarPreview.size()-1).getId().getDayValueWithZero()}
+                    + ' '
+                    + ${calendarPreview.get(calendarPreview.size()-1).getId().getMonthPL()}">Zeruj</a></li>
+                <li class="page-item rounded-0"><a class="page-link rounded-0 bg-secondary outline-secondary text-white" th:href="@{/calendar/{s}/{p}(p=${page}+1, s=${scope})}"> +1
+                    &raquo;</a></li>
             </ul>
         </nav>
     </div>

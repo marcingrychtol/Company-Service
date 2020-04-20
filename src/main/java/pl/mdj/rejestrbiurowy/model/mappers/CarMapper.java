@@ -53,8 +53,19 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
         Optional.ofNullable(dto.getInsuranceExpiration()).ifPresent(entity::setInsuranceExpiration);
         Optional.of(dto.getMileage()).ifPresent(mileage -> entity.setMileage(Long.valueOf(mileage)));
         entity.setCancelled(dto.isCancelled());
-
         return entity;
+    }
+
+    public Car mapToEntityJoin(CarDto dto, Car entity) {
+        Car newEntity = new Car();
+        Optional.ofNullable(dto.getBrand()).ifPresentOrElse(newEntity::setBrand,()-> newEntity.setBrand(entity.getBrand()));
+        Optional.ofNullable(dto.getModel()).ifPresentOrElse(newEntity::setModel,()-> newEntity.setModel(entity.getModel()));
+        Optional.ofNullable(dto.getRegistration()).ifPresentOrElse(newEntity::setRegistration,()-> newEntity.setRegistration(entity.getRegistration()));
+        newEntity.setMileage(0L);
+//        Optional.ofNullable(dto.getInspectionExpiration()).ifPresent(newEntity::setInspectionExpiration);
+//        Optional.ofNullable(dto.getInsuranceExpiration()).ifPresent(newEntity::setInsuranceExpiration);
+
+        return newEntity;
     }
 
     @Override

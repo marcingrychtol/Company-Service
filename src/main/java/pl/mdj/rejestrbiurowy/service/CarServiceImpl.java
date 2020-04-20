@@ -69,10 +69,19 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void addOne(CarDto carDto) throws EntityConflictException, WrongInputDataException {
-        checkInputLengthData(carDto);
-        checkDuplicates(carDto);
-        carRepository.save(carMapper.mapToEntity(carDto));
+    public void addOne(CarDto inputDto) throws EntityConflictException, WrongInputDataException {
+        Car entity = new Car();
+        if (inputDto.getId() != null){
+            Optional<Car> optionalCar = carRepository.findById(inputDto.getId());
+            if (optionalCar.isPresent()){
+                entity = carMapper.mapToEntityJoin(inputDto, optionalCar.get());
+            }
+        } else {
+            entity = carMapper.mapToEntity(inputDto);
+        }
+        checkInputLengthData(entity); // Throws WIDE
+        checkDuplicates(entity); // Throws ECE
+        carRepository.save(entity);
     }
 
     /** Should be called only after deleteByDto is called.
@@ -116,14 +125,16 @@ public class CarServiceImpl implements CarService {
     @Override
     public void update(CarDto carDto) throws EntityConflictException, WrongInputDataException, CannotFindEntityException {
 
-        checkInputLengthData(carDto); // WrongInputDataException
-        checkDuplicates(carDto); // EntityConflictException
+        Car car = carMapper.mapToEntity(carDto);
+
+        checkInputLengthData(car); // WrongInputDataException
+        checkDuplicates(car); // EntityConflictException
 
         Optional<Car> carOptional = carRepository.findById(carDto.getId());
         if (carOptional.isPresent()) {
-            carOptional.get().setBrand(carDto.getBrand());
-            carOptional.get().setModel(carDto.getModel());
-            carOptional.get().setRegistration(carDto.getRegistration());
+            carOptional.get().setBrand(car.getBrand());
+            carOptional.get().setModel(car.getModel());
+            carOptional.get().setRegistration(car.getRegistration());
             carRepository.save(carOptional.get());
         } else {
             throw new CannotFindEntityException(
@@ -160,22 +171,25 @@ public class CarServiceImpl implements CarService {
 
     }
 
-    private void checkInputLengthData(CarDto carDto) throws WrongInputDataException {
+    private void checkInputLengthData(Car car) throws WrongInputDataException {
         if (
-                carDto.getRegistration().length() < 5
-                        || carDto.getBrand().length() < 2
-                        || carDto.getModel().length() < 2
+                car.getRegistration() == null
+                        || car.getRegistration().length() < 5
+                        || car.getBrand() == null
+                        || car.getBrand().length() < 2
+                        || car.getModel() == null
+                        || car.getModel().length() < 2
         ) {
             throw new WrongInputDataException("Za krótkie dane, 5 znaków dla rejestracji, 2 znaki dla marki i modelu...");
         }
     }
 
-    private void checkDuplicates(CarDto carDto) throws EntityConflictException {
-        Optional<Car> carConflictTest = carRepository.findByRegistrationEquals(carDto.getRegistration());
-        if (carConflictTest.isPresent() && !carConflictTest.get().getId().equals(carDto.getId())) {
+    private void checkDuplicates(Car car) throws EntityConflictException {
+        Optional<Car> carConflictTest = carRepository.findByRegistrationEquals(car.getRegistration());
+        if (carConflictTest.isPresent() && !carConflictTest.get().getId().equals(car.getId())) {
             throw new EntityConflictException(
                     "Pojazd o rejestracji "
-                            + carDto.getRegistration()
+                            + car.getRegistration()
                             + " już istnieje! Jest to "
                             + carConflictTest.get().getBrand()
                             + " "
