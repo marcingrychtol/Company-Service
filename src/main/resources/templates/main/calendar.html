@@ -21,12 +21,12 @@
         <tr th:each="day :${calendarPreview}">
             <div th:class="
             ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
-            ? 'col-3 col-md-2 col-xl-1 p-0 pb-2'
-            : 'col-6 col-md-4 col-xl-2 p-0 pb-2'">
+            ? 'col-3 col-sm-2 col-lg-1 p-0 pb-2'
+            : 'col-6 col-sm-4 col-lg-2 p-0 pb-2'">
                 <div th:class="
                 ${day.getId().equals(today)}
                 ? 'shadow alert text-white bg-warning rounded-0 h-100 p-0 m-0'
-                : 'shadow alert text-white bg-secondary rounded-0 h-100 p-0 m-0'">
+                : 'shadow alert text-white bg-dark rounded-0 h-100 p-0 m-0'">
                     <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
 <!--                        <div class="card-body">-->
                             <input type="hidden" name="localDate" th:value="${day.id.localDate}">
@@ -38,7 +38,7 @@
                                     class="btn btn-sm text-white stretched-link rounded-0"></button>
                             <table class="shadow table table-sm table-dark p-0">
                                 <tr th:each="car :${cars}"
-                                    th:class="${day.availableCars.contains(car.getId())} ? '':'bg-danger'">
+                                    th:class="${day.availableCars.contains(car.getId())} ? 'bg-secondary':'bg-danger text-dark'">
                                     <td th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
                                     ? ${car.getModel()}

@@ -70,15 +70,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void addOne(CarDto inputDto) throws EntityConflictException, WrongInputDataException {
-        Car entity = new Car();
-        if (inputDto.getId() != null){
-            Optional<Car> optionalCar = carRepository.findById(inputDto.getId());
-            if (optionalCar.isPresent()){
-                entity = carMapper.mapToEntityJoin(inputDto, optionalCar.get());
-            }
-        } else {
-            entity = carMapper.mapToEntity(inputDto);
-        }
+        Car entity = carMapper.mapToEntity(inputDto);
+
         checkInputLengthData(entity); // Throws WIDE
         checkDuplicates(entity); // Throws ECE
         carRepository.save(entity);

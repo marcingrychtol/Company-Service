@@ -88,14 +88,16 @@ public class CalendarControllerMVC {
     @GetMapping("/find")
     public String getCalendarByDay(Model model, @ModelAttribute DateDto tripDto) {
 
-        LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now().with(DayOfWeek.MONDAY);
         long diff = DAYS.between(now, tripDto.getLocalDate());
-        long scope = 7;
+        long scope = 14;
         long page;
         if (diff == 0){
             page = 0;
+        } else if (diff<0) {
+            page = (diff+1)/scope-1;
         } else {
-        page = diff/scope;
+            page = diff/scope;
         }
 
         model.addAttribute("page", page);
@@ -105,7 +107,7 @@ public class CalendarControllerMVC {
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
-        return "main/calendar";
+        return "redirect:/calendar/"+scope+"/"+page;
     }
 
     @InitBinder

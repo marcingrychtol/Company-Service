@@ -32,16 +32,20 @@
                             <label for="carBrandInputN">Marka:</label>
                             <input type="text" class="shadow form-control rounded-0" name="brand"
                                    id="carBrandInputN">
+                            <small class="form-text text-muted">min. 5 znaków</small>
                         </div>
                         <div class="form-group rounded-0">
                             <label for="carModelInputN">Model:</label>
                             <input type="text" class="shadow form-control rounded-0" name="model"
                                    id="carModelInputN">
+                            <small class="form-text text-muted">min. 2 znaki</small>
                         </div>
                         <div class="form-group rounded-0">
                             <label for="carRegistrationInputN">Rejestracja:</label>
                             <input type="text" class="shadow form-control rounded-0" name="registration"
                                    id="carRegistrationInputN">
+                            <small class="form-text text-muted">min. 5 znaków</small>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -77,11 +81,6 @@
                             th:attr="data-target='#dtoEdit'+${dto.getId()}">
                         Szczegóły
                     </button>
-                    <button type="button" class="shadow btn btn-secondary rounded-0"
-                            data-toggle="modal"
-                            th:attr="data-target='#dtoCopy'+${dto.getId()}">
-                        Kopiuj
-                    </button>
                     <button type="button" class="shadow btn btn-danger rounded-0"
                             data-toggle="modal"
                             th:attr="data-target='#dtoCancel'+${dto.getId()}">
@@ -110,19 +109,21 @@
                             <div class="modal-body">
                                 <div class="form-group rounded-0">
                                     <label for="carBrandInputE">Marka:</label>
-                                    <input type="text" class="form-control rounded-0" name="name"
+                                    <input type="text" class="form-control rounded-0" name="brand"
                                            id="carBrandInputE" th:value="${dto.getBrand()}">
+                                    <small id="carBrandHelpN" class="form-text text-muted">min. 5 znaków</small>
                                 </div>
                                 <div class="form-group rounded-0">
                                     <label for="carModelInputE">Model:</label>
-                                    <input type="text" class="form-control rounded-0" name="name"
+                                    <input type="text" class="form-control rounded-0" name="model"
                                            id="carModelInputE" th:value="${dto.getModel()}">
-                                    <small id="carNameHelpE" class="form-text text-muted">Marka, model, generacja</small>
+                                    <small id="carModelHelpE" class="form-text text-muted">min. 2 znaki</small>
                                 </div>
                                 <div class="form-group rounded-0">
                                     <label for="carRegistrationInputE">Rejestracja:</label>
                                     <input type="text" class="form-control rounded-0" name="registration"
                                            id="carRegistrationInputE" th:value="${dto.getRegistration()}">
+                                    <small id="carRegistrationHelpE" class="form-text text-muted">min. 5 znaków</small>
                                 </div>
                                 <input type="hidden" name="id" th:value="${dto.getId()}">
                             </div>
@@ -135,54 +136,11 @@
                 </div>
             </div>
 
-            <div class="modal fade" th:id="'dtoCopy'+${dto.getId()}" data-backdrop="static" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content rounded-0">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="carCopyModalTitle"
-                                th:text="'Kopiowanie: '+${dto.getBrand()} + ' ' + ${dto.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form th:action="@{/cars/add}" th:object="${newCar}" method="post">
-                            <div class="modal-body">
-                                <div class="form-group rounded-0">
-                                    <label for="carBrandInputE">Marka:</label>
-                                    <input type="text" class="form-control rounded-0" name="name"
-                                           id="carBrandInputC" th:value="${dto.getBrand()}">
-                                    <small id="carBrandHelpC" class="form-text text-muted">min. 5 znaków</small>
-
-                                </div>
-                                <div class="form-group rounded-0">
-                                    <label for="carModelInputE">Model:</label>
-                                    <input type="text" class="form-control rounded-0" name="name"
-                                           id="carModelInputC" th:value="${dto.getModel()}">
-                                    <small id="carNameHelpC" class="form-text text-muted">min. 5 znaków</small>
-                                </div>
-                                <div class="form-group rounded-0">
-                                    <label for="carRegistrationInputE">Rejestracja:</label>
-                                    <input type="text" class="form-control rounded-0" name="registration"
-                                           id="carRegistrationInputC" th:value="${dto.getRegistration()}">
-                                    <small id="carRegistrationHelpC" class="form-text text-muted">min. 5 znaków</small>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="shadow btn btn-secondary rounded-0" data-dismiss="modal">Anuluj</button>
-                                <button type="submit" class="shadow btn btn-primary rounded-0">Zapisz</button>
-                            </div>
-                            <input type="hidden" name="id" th:value="${dto.getId()}">
-                        </form>
-                    </div>
-                </div>
-            </div>
-
             <div class="modal fade" th:id="'dtoCancel'+${dto.getId()}" data-backdrop="static" tabindex="-1"
                  role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered bg-danger" role="document">
-                    <div class="modal-content rounded-0">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content bg-danger rounded-0">
                         <div class="modal-header">
                             <h5 class="modal-title" id="CarDeleteModalTitle"
                                 th:text="${dto.getId()}+'. '+${dto.getBrand()} + ' ' + ${dto.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>

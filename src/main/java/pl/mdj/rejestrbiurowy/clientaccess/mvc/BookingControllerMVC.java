@@ -47,7 +47,7 @@ public class BookingControllerMVC implements BasicController {
 
     @GetMapping("/")
     public String getHome(Model model){
-        return "redirect:/calendar/28/0";
+        return "redirect:/calendar/14/0";
     }
 
     @GetMapping("/fast")
