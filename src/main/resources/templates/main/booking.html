@@ -13,20 +13,16 @@
 
 <div class="container-fluid">
 
-    <div class="alert alert-dark text-white bg-secondary border-secondary mt-2" role="alert">
-        <h4>Zarezerwuj pojazd!</h4>
-    </div>
-
     <div th:replace="fragments/message"></div>
-
-
     <div class="container-fluid">
 
         <form th:action="@{/trips/add}" th:object="${newTrip}" method="post">
 
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-danger text-white h-100">
+                    <div th:class="${requestedTrip.getCarId() == null}
+                                    ? 'shadow card bg-warning text-white h-100'
+                                    : 'shadow card bg-secondary text-white h-100'">
                         <div class="card-header">Termin</div>
                         <div class="card-body">
                             <label for="startDate">Początek: </label>
@@ -40,7 +36,9 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-warning text-white h-100">
+                    <div th:class="${requestedTrip.getCarId() == null}
+                                    ? 'shadow card bg-warning text-white h-100'
+                                    : 'shadow card bg-secondary text-white h-100'">
                         <div class="card-header">Pojazd</div>
                         <div class="card-body">
                             <td th:unless="${requestedTrip.getCarId() != null}">
@@ -64,7 +62,7 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-success text-white h-100">
+                    <div class="shadow card bg-warning text-white h-100">
                         <div class="card-header">Osoba</div>
                         <div class="card-body">
                             <select class="custom-select bg-light" size="6" th:field="*{employeeId}">

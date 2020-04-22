@@ -42,7 +42,7 @@
                                     ></button>
                             <table class="shadow table table-sm table-dark p-0">
                                 <tr th:each="car :${cars}"
-                                    th:class="${day.availableCars.contains(car.getId())} ? 'bg-info':'bg-dark text-secondary'">
+                                    th:class="${day.availableCars.contains(car.getId())} ? 'bg-info':'bg-secondary text-dark'">
                                     <td th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
                                     ? ${car.getModel()}
