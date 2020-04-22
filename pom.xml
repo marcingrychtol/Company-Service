@@ -10,7 +10,7 @@
     </parent>
     <groupId>pl.mdj</groupId>
     <artifactId>rcp</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>MDJ-Service</name>
     <description>Welcome to MDJ-Service</description>
 

@@ -8,19 +8,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
-            <li class="border-left nav-item active">
+            <li th:class="${active == 'calendar'} ? 'nav-item active' : 'nav-item'">
                 <a class=" nav-link " th:href="@{/calendar/14/0}">Kalendarz</a>
             </li>
-<!--            <li class="border-left nav-item active">-->
-<!--                <a class=" nav-link " th:href="@{/calendar/7/0}">Tydzień</a>-->
-<!--            </li>-->
-            <li class="border-left nav-item active">
+            <!--            <li class="border-left nav-item active">-->
+            <!--                <a class=" nav-link " th:href="@{/calendar/7/0}">Tydzień</a>-->
+            <!--            </li>-->
+            <li th:class="${active == 'day'} ? 'nav-item active' : 'nav-item'">
                 <a class=" nav-link " th:href="@{/calendar/browser}">Dzień</a>
             </li>
-            <li class="border-left nav-item">
-            <a class="nav-link" th:href="@{/fast}">Rezerwacja</a>
-        </li>
-            <li class="border-left nav-item dropdown active">
+            <li th:class="${active == 'booking'} ? 'nav-item active' : 'nav-item'">
+                <a class="nav-link" th:href="@{/fast}">Rezerwacja</a>
+            </li>
+            <li th:class="${active == 'trips'} ? 'nav-item dropdown active' : 'nav-item dropdown'">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReservations" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Przeglądaj
@@ -31,7 +31,7 @@
                     <a class="dropdown-item" th:href="@{/employees}">Według pracownika</a>
                 </div>
             </li>
-            <li class="border-left nav-item dropdown active">
+            <li th:class="${active == 'data'} ? 'nav-item dropdown active' : 'nav-item dropdown'">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownManagement" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Dane
@@ -41,9 +41,8 @@
                     <a class="dropdown-item" th:href="@{/employees/manager}">Pracownicy</a>
                 </div>
             </li>
-
-
         </ul>
+
         <span class="navbar-text text-white" th:text="${today.getDayOfWeekPL()} + ' '
               + ${today.getDayValueWithZero()} + ' '
               + ${today.getMonthPL()} + ' '
