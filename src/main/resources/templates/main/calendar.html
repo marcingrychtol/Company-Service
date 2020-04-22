@@ -25,17 +25,21 @@
             : 'col-6 col-sm-4 col-lg-2 p-0 pb-2'">
                 <div th:class="
                 ${day.getId().equals(today)}
-                ? 'shadow alert text-white bg-warning  h-100 p-0 m-0'
-                : 'shadow alert text-white bg-dark  h-100 p-0 m-0'">
+                ? 'shadow alert bg-warning h-100 p-0 m-0'
+                : 'shadow alert text-white bg-dark h-100 p-0 m-0'">
                     <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
 <!--                        <div class="card-body">-->
                             <input type="hidden" name="localDate" th:value="${day.id.localDate}">
                             <button type="submit" id="dayButton"
                                     th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
-                                    ? ${day.getId().getDayOfWeekPLShort()}
-                                    : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPLShort()} "
-                                    class="btn btn-sm text-white stretched-link "></button>
+                                    ? ${day.getId().getDayOfWeekPL()}
+                                    : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPL()} "
+                                    th:class="
+                                    ${day.getId().equals(today)}
+                                    ? 'btn btn-sm text-dark stretched-link '
+                                    : 'btn btn-sm text-white stretched-link '"
+                                    ></button>
                             <table class="shadow table table-sm table-dark p-0">
                                 <tr th:each="car :${cars}"
                                     th:class="${day.availableCars.contains(car.getId())} ? 'bg-info':'bg-dark text-secondary'">

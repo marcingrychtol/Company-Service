@@ -43,11 +43,11 @@
             </li>
         </ul>
 
-        <span class="navbar-text text-white" th:text="${today.getDayOfWeekPL()} + ' '
+        <button type="button" class="shadow btn btn-warning" th:text="${today.getDayOfWeekPL()} + ' '
               + ${today.getDayValueWithZero()} + ' '
               + ${today.getMonthPL()} + ' '
               + ${today.getYear()}">
             Navbar text with an inline element
-        </span>
+        </button>
     </div>
 </nav>
