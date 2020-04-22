@@ -21,8 +21,8 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                     <div th:class="${requestedTrip.getCarId() == null}
-                                    ? 'shadow card bg-warning text-white h-100'
-                                    : 'shadow card bg-secondary text-white h-100'">
+                                    ? 'shadow card bg-danger text-white h-100'
+                                    : 'shadow card bg-secondary border-danger text-white h-100'">
                         <div class="card-header">Termin</div>
                         <div class="card-body">
                             <label for="startDate">Początek: </label>
@@ -37,7 +37,7 @@
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
                     <div th:class="${requestedTrip.getCarId() == null}
-                                    ? 'shadow card bg-warning text-white h-100'
+                                    ? 'shadow card bg-danger text-white h-100'
                                     : 'shadow card bg-secondary text-white h-100'">
                         <div class="card-header">Pojazd</div>
                         <div class="card-body">
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-warning text-white h-100">
+                    <div class="shadow card bg-danger text-white h-100">
                         <div class="card-header">Osoba</div>
                         <div class="card-body">
                             <select class="custom-select bg-light" size="6" th:field="*{employeeId}">
