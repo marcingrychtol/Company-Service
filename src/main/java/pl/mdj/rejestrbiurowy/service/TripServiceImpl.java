@@ -86,10 +86,11 @@ public class TripServiceImpl implements TripService {
 
     /**
      * Should be used only after deleteByDto(), no checking performed
+     *
      * @param tripDto
      */
     @Override
-    public void cancelByDto(TripDto tripDto){
+    public void cancelByDto(TripDto tripDto) {
         Trip trip = tripRepository.getOne(tripDto.getId());
         trip.setCancelled(true);
         trip.setCancelledTime(LocalDateTime.now());
@@ -97,7 +98,6 @@ public class TripServiceImpl implements TripService {
     }
 
     /**
-     *
      * @param tripDto
      * @throws CannotFindEntityException
      * @throws WrongInputDataException
@@ -134,6 +134,19 @@ public class TripServiceImpl implements TripService {
         List<Trip> tripList = tripRepository.findAllByCar_IdOrderByStartingDateAsc(id);
         return tripMapper.mapToDto(tripList);
     }
+
+    @Override
+    public List<TripDto> findAllActiveByDate(LocalDate date) {
+        Day day;
+        try {
+            day = dayService.findById(date);
+        } catch (CannotFindEntityException e) {
+            LOG.info(e.getMessage());
+            return new ArrayList<>();
+        }
+        return tripMapper.mapToDto(day.getTrips().stream()
+                .filter(trip -> !trip.getCancelled())
+                .collect(Collectors.toList()));    }
 
     public List<TripDto> findAllByDate(LocalDate date) {
         Day day;

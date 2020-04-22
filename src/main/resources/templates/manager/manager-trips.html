@@ -27,9 +27,9 @@
                                 <div class="card-header">Dni</div>
                                 <div class="card-body">
                                     <label for="startDate">Łod (abo yno): </label>
-                                    <input class="bg-light " id="startDate" th:field="*{startingDate}"/>
+                                    <input type="text" readonly="true" class="bg-light " id="startDate" th:field="*{startingDate}"/>
                                     <label for="endDate">Do: </label>
-                                    <input class="bg-light " placeholder="tego niy trza" id="endDate"
+                                    <input type="text" readonly="true" class="bg-light " placeholder="tego niy trza" id="endDate"
                                            th:field="*{endingDate}"/>
                                 </div>
                             </div>
@@ -236,11 +236,13 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
+        footer:true,
         format: 'dd/mm/yyyy',
         value: today.getDate().toString() + '/' + (today.getMonth() + 1).toString() + '/' + today.getFullYear().toString(),
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         minDate: today,
+        ignoreReadonly: true,
 
         maxDate: function () {
             return $('#endDate').val();
@@ -250,9 +252,12 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
+        footer:true,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
+        ignoreReadonly: true,
+
         minDate: function () {
             return $('#startDate').val();
         }

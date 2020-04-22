@@ -20,38 +20,37 @@
     <div class="container-fluid bg-warning pt-2 px-2 mb-2 rounded">
 
         <div class="row">
-            <div class="col-12 col-md-3 mb-2">
+            <div class="col-12 col-md-4 mb-2">
                 <button type="button" class="btn btn-block btn-warning" th:text="
-                    ${requestedDate.getDayOfWeekPL()}
+                    'Wyświetlasz: ' + ${requestedDate.getDayOfWeekPL()}
                     + ' '
                     + ${requestedDate.getLocalDate().getDayOfMonth()}
                     + ' '
                     + ${requestedDate.getMonthPL()}">
-                    Dostępne w dniu:
                 </button>
             </div>
-            <div class="col-3 col-md-2 mb-2">
+            <div class="col-3 col-md-1 mb-2">
                 <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().minusDays(1)}"/>
                     <button type="submit" class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
-                        &laquo; -1
+                        &laquo;
                     </button>
                 </form>
             </div>
             <div class="col-6 col-md-2 mb-2">
                 <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
-                    <input class="bg-light" id="requestedDatepicker" th:field="*{startingDate}"/>
+                    <input type="text" readonly="true" class="bg-light" id="requestedDatepicker" th:field="*{startingDate}"/>
                 </form>
             </div>
-            <div class="col-3 col-md-2 mb-2">
+            <div class="col-3 col-md-1 mb-2">
                 <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().plusDays(1)}"/>
                     <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
-                        +1 &raquo;
+                        &raquo;
                     </button>
                 </form>
             </div>
-            <div class="col-12 col-md-3 mb-2">
+            <div class="col-12 col-md-4 mb-2">
                 <form th:action="@{/calendar/find}" th:object="${dateDto}">
                     <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()}"/>
                     <button type="submit" class="btn btn-block btn-outline-dark text-dark bg-warning">
@@ -276,6 +275,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
+        footer:true,
         format: 'dd/mm/yyyy',
         value: [(${requestedDate.getDayValueWithZeroJS()})]
             + "/"
@@ -283,6 +283,7 @@
             + "/" + [(${requestedDate.getYear()})],
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
+        ignoreReadonly: true,
 
         maxDate: function () {
             return $('#endDate').val();
@@ -292,9 +293,12 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
+        footer:true,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
+        ignoreReadonly: true,
+
         minDate: function () {
             return $('#requestedDatepicker').val();
         }

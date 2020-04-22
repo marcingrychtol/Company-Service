@@ -9,6 +9,7 @@ import java.util.List;
 public interface TripService extends BasicService<TripDto, Long> {
     List<TripDto> findAllByEmployee_Id(Long id);
     List<TripDto> findAllByCar_Id(Long id);
+    List<TripDto> findAllActiveByDate(LocalDate date);
     List<TripDto> findAllByDate(LocalDate date);
 }
 

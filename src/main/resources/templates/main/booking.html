@@ -30,9 +30,9 @@
                         <div class="card-header">Termin</div>
                         <div class="card-body">
                             <label for="startDate">Początek: </label>
-                            <input class="bg-light" id="startDate" th:field="*{startingDate}"/>
+                            <input type="text" readonly="true" class="bg-light" id="startDate" th:field="*{startingDate}"/>
                             <label for="endDate">Koniec: </label>
-                            <input class="bg-light" placeholder="nie trzeba ustawiać" id="endDate"
+                            <input type="text" readonly="true" class="bg-light" placeholder="nie trzeba ustawiać" id="endDate"
                                    th:field="*{endingDate}"/>
                             <small id="endDateHelp" class="form-text text-light"></small>
                         </div>
@@ -111,6 +111,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
+        footer: true,
         format: 'dd/mm/yyyy',
         value: [(${requestedDate.getDayValueWithZeroJS()})]
             + "/"
@@ -119,6 +120,7 @@
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         minDate: today,
+        ignoreReadonly: true,
 
         maxDate: function () {
             return $('#endDate').val();
@@ -128,9 +130,12 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
+        footer:true,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
+        ignoreReadonly: true,
+
         minDate: function () {
             return $('#startDate').val();
         }
@@ -138,5 +143,6 @@
 
 
 </script>
+
 </body>
 </html>

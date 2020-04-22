@@ -1,4 +1,4 @@
-<nav class="shadow-sm navbar sticky-top navbar-expand-lg navbar-dark bg-info" xmlns:th="http://www.thymeleaf.org">
+<nav class="shadow-sm navbar sticky-top navbar-expand-lg navbar-dark bg-info mb-2" xmlns:th="http://www.thymeleaf.org">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -43,11 +43,15 @@
             </li>
         </ul>
 
-        <button type="button" class="shadow btn btn-warning" th:text="${today.getDayOfWeekPL()} + ' '
+
+    </div>
+    <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+        <button type="submit" class="shadow btn btn-warning" th:text="'Dziś: ' + ${today.getDayOfWeekPL()} + ' '
               + ${today.getDayValueWithZero()} + ' '
               + ${today.getMonthPL()} + ' '
               + ${today.getYear()}">
             Navbar text with an inline element
         </button>
-    </div>
+        <input type="hidden" name="localDate" th:value="${today.getLocalDate()}">
+    </form>
 </nav>

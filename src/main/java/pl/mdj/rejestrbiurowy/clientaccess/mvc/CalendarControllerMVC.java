@@ -68,7 +68,7 @@ public class CalendarControllerMVC {
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
-        model.addAttribute("trips", tripService.findAllByDate(requestedDate));
+        model.addAttribute("trips", tripService.findAllActiveByDate(requestedDate));
         return "main/browser";
     }
 
@@ -83,6 +83,7 @@ public class CalendarControllerMVC {
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(Integer.parseInt(page), Integer.parseInt(scope)));
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("dateDto", new DateDto());
         return "main/calendar";
     }
 

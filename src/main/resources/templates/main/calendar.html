@@ -21,12 +21,12 @@
         <tr th:each="day :${calendarPreview}">
             <div th:class="
             ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
-            ? 'col-3 col-sm-2 col-lg-1 p-0 pb-2'
-            : 'col-6 col-sm-4 col-lg-2 p-0 pb-2'">
+            ? 'col-3 col-sm-2 col-lg-1 p-0 pb-1'
+            : 'col-6 col-sm-4 col-lg-2 p-0 pb-1'">
                 <div th:class="
                 ${day.getId().equals(today)}
                 ? 'shadow alert bg-warning h-100 p-0 m-0'
-                : 'shadow alert text-white bg-dark h-100 p-0 m-0'">
+                : 'alert text-white bg-dark h-100 p-0 m-0'">
                     <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
 <!--                        <div class="card-body">-->
                             <input type="hidden" name="localDate" th:value="${day.id.localDate}">
