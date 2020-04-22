@@ -12,14 +12,14 @@
 
 <div class="container-fluid p-2">
     <!-- Button trigger modal -->
-    <button type="button" class="shadow btn btn-info rounded-0" data-toggle="modal" data-target="#newCarModal">
+    <button type="button" class="shadow btn btn-info " data-toggle="modal" data-target="#newCarModal">
         Dodaj nowy pojazd
     </button>
 
     <div class="modal fade" id="newCarModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content rounded-0">
+            <div class="modal-content ">
                 <div class="modal-header">
                     <h5 class="modal-title" id="neCarModalTitle">Dodawanie nowego pojazdu</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -28,29 +28,29 @@
                 </div>
                 <form th:action="@{/cars/add}" th:object="${newCar}" method="post">
                     <div class="modal-body">
-                        <div class="form-group rounded-0">
+                        <div class="form-group ">
                             <label for="carBrandInputN">Marka:</label>
-                            <input type="text" class="shadow form-control rounded-0" name="brand"
+                            <input type="text" class="shadow form-control " name="brand"
                                    id="carBrandInputN">
                             <small class="form-text text-muted">min. 5 znaków</small>
                         </div>
-                        <div class="form-group rounded-0">
+                        <div class="form-group ">
                             <label for="carModelInputN">Model:</label>
-                            <input type="text" class="shadow form-control rounded-0" name="model"
+                            <input type="text" class="shadow form-control " name="model"
                                    id="carModelInputN">
                             <small class="form-text text-muted">min. 2 znaki</small>
                         </div>
-                        <div class="form-group rounded-0">
+                        <div class="form-group ">
                             <label for="carRegistrationInputN">Rejestracja:</label>
-                            <input type="text" class="shadow form-control rounded-0" name="registration"
+                            <input type="text" class="shadow form-control " name="registration"
                                    id="carRegistrationInputN">
                             <small class="form-text text-muted">min. 5 znaków</small>
 
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="shadow btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
-                        <button type="submit" class="shadow btn btn-primary rounded-0">Dodaj pojazd</button>
+                        <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Close</button>
+                        <button type="submit" class="shadow btn btn-primary ">Dodaj pojazd</button>
                     </div>
                 </form>
             </div>
@@ -76,12 +76,12 @@
                 <td th:text="${dto.getBrand()} + ' ' + ${dto.getModel()}"></td>
                 <td th:text="${dto.getRegistration()}"></td>
                 <td>
-                    <button type="button" class="shadow btn bg-secondary rounded-0"
+                    <button type="button" class="shadow btn bg-secondary "
                             data-toggle="modal"
                             th:attr="data-target='#dtoEdit'+${dto.getId()}">
                         Szczegóły
                     </button>
-                    <button type="button" class="shadow btn btn-danger rounded-0"
+                    <button type="button" class="shadow btn btn-danger "
                             data-toggle="modal"
                             th:attr="data-target='#dtoCancel'+${dto.getId()}">
                         Wyłącz
@@ -97,7 +97,7 @@
             <div class="modal fade" th:id="'dtoEdit'+${dto.getId()}" data-backdrop="static" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content rounded-0">
+                    <div class="modal-content ">
                         <div class="modal-header">
                             <h5 class="modal-title" id="carEditModalTitle"
                                 th:text="${dto.getId()}+'. '+${dto.getBrand()} + ' ' + ${dto.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>
@@ -107,29 +107,29 @@
                         </div>
                         <form th:action="@{/cars/edit}" th:object="${newCar}" method="post">
                             <div class="modal-body">
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="carBrandInputE">Marka:</label>
-                                    <input type="text" class="form-control rounded-0" name="brand"
+                                    <input type="text" class="form-control " name="brand"
                                            id="carBrandInputE" th:value="${dto.getBrand()}">
                                     <small id="carBrandHelpN" class="form-text text-muted">min. 5 znaków</small>
                                 </div>
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="carModelInputE">Model:</label>
-                                    <input type="text" class="form-control rounded-0" name="model"
+                                    <input type="text" class="form-control " name="model"
                                            id="carModelInputE" th:value="${dto.getModel()}">
                                     <small id="carModelHelpE" class="form-text text-muted">min. 2 znaki</small>
                                 </div>
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="carRegistrationInputE">Rejestracja:</label>
-                                    <input type="text" class="form-control rounded-0" name="registration"
+                                    <input type="text" class="form-control " name="registration"
                                            id="carRegistrationInputE" th:value="${dto.getRegistration()}">
                                     <small id="carRegistrationHelpE" class="form-text text-muted">min. 5 znaków</small>
                                 </div>
                                 <input type="hidden" name="id" th:value="${dto.getId()}">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="shadow btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
-                                <button type="submit" class="shadow btn btn-primary rounded-0">Save changes</button>
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Close</button>
+                                <button type="submit" class="shadow btn btn-primary ">Save changes</button>
                             </div>
                         </form>
                     </div>
@@ -140,7 +140,7 @@
                  role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content bg-danger rounded-0">
+                    <div class="modal-content bg-danger ">
                         <div class="modal-header">
                             <h5 class="modal-title" id="CarDeleteModalTitle"
                                 th:text="${dto.getId()}+'. '+${dto.getBrand()} + ' ' + ${dto.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>
@@ -157,17 +157,17 @@
                                     Jeśli pojazd jest przypisany do jakiejkolwiek rezerwacji, jego usunięcie nie będzie możliwe.
                                     W tym przypadku zostanie on ustawiony jako niedostepny do dalszych rezerwacji.
                                 </p>
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="carDeleteInput1">Nr rejestracyjny: </label>
-                                    <input type="text" class="shadow form-control rounded-0" th:field="*{registration}"
+                                    <input type="text" class="shadow form-control " th:field="*{registration}"
                                            id="carDeleteInput1">
                                     <small id="carDeleteHelp12" class="form-text text-muted">Marka, model</small>
                                 </div>
                                 <input type="hidden" name="id" th:value="${dto.getId()}">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="shadow btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
-                                <button type="submit" class="shadow btn btn-small btn-danger rounded-0">Delete Car</button>
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Close</button>
+                                <button type="submit" class="shadow btn btn-small btn-danger ">Delete Car</button>
                             </div>
                         </form>
                     </div>

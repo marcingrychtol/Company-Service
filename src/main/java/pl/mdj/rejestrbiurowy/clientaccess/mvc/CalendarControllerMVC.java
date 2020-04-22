@@ -62,6 +62,7 @@ public class CalendarControllerMVC {
             requestedDate = LocalDate.now();
         }
 
+        model.addAttribute("active", "day");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
@@ -77,6 +78,7 @@ public class CalendarControllerMVC {
 
         model.addAttribute("page", page);
         model.addAttribute("scope", scope);
+        model.addAttribute("active", "calendar");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(Integer.parseInt(page), Integer.parseInt(scope)));
         model.addAttribute("cars", carService.getAllActive());
@@ -100,8 +102,10 @@ public class CalendarControllerMVC {
             page = diff/scope;
         }
 
+
         model.addAttribute("page", page);
         model.addAttribute("scope", scope);
+        model.addAttribute("active", "calendar");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, scope));
         model.addAttribute("cars", carService.getAllActive());

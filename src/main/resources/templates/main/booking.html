@@ -13,7 +13,7 @@
 
 <div class="container-fluid">
 
-    <div class="alert alert-dark text-white bg-secondary border-secondary mt-2 rounded-0" role="alert">
+    <div class="alert alert-dark text-white bg-secondary border-secondary mt-2" role="alert">
         <h4>Zarezerwuj pojazd!</h4>
     </div>
 
@@ -26,13 +26,13 @@
 
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-danger text-white rounded-0 h-100">
+                    <div class="shadow card bg-danger text-white h-100">
                         <div class="card-header">Termin</div>
                         <div class="card-body">
                             <label for="startDate">Początek: </label>
-                            <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
+                            <input class="bg-light" id="startDate" th:field="*{startingDate}"/>
                             <label for="endDate">Koniec: </label>
-                            <input class="bg-light rounded-0" placeholder="nie trzeba ustawiać" id="endDate"
+                            <input class="bg-light" placeholder="nie trzeba ustawiać" id="endDate"
                                    th:field="*{endingDate}"/>
                             <small id="endDateHelp" class="form-text text-light"></small>
                         </div>
@@ -40,11 +40,11 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-warning text-white rounded-0 h-100">
+                    <div class="shadow card bg-warning text-white h-100">
                         <div class="card-header">Pojazd</div>
                         <div class="card-body">
                             <td th:unless="${requestedTrip.getCarId() != null}">
-                                <select class="custom-select bg-light rounded-0" size="6" th:field="*{carId}">
+                                <select class="custom-select bg-light" size="6" th:field="*{carId}">
                                     <option th:each="car : ${cars}" th:value="${car.getId()}"
                                             th:text="${car.getId()} + '. ' + ${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
                                     </option>
@@ -64,10 +64,10 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                    <div class="shadow card bg-success text-white rounded-0 h-100">
+                    <div class="shadow card bg-success text-white h-100">
                         <div class="card-header">Osoba</div>
                         <div class="card-body">
-                            <select class="custom-select bg-light  rounded-0" size="6" th:field="*{employeeId}">
+                            <select class="custom-select bg-light" size="6" th:field="*{employeeId}">
                                 <option th:each="emp : ${employees}" th:value="${emp.getId()}"
                                         th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
                                 </option>
@@ -78,10 +78,10 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-12 col-xl-3 p-1">
-                    <div class="shadow card bg-secondary text-white rounded-0 h-100">
+                    <div class="shadow card bg-secondary text-white h-100">
                         <div class="card-header">Opis</div>
                         <div class="card-body">
-                            <textarea class="form-control bg-light rounded-0" rows="2"
+                            <textarea class="form-control bg-light" rows="2"
                                       placeholder="Np. godziny wyjazdu, cel, klient..."
                                       th:field="*{additionalMessage}"></textarea>
                                                         <small id="messageHelp" class="form-text text-light">- niewymagane</small>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="shadow btn btn-info btn-block btn-lg mt-3 rounded-0">Rezerwuj
+                <button type="submit" class="shadow btn btn-info btn-block btn-lg mt-3">Rezerwuj
                 </button>
 
             </div>

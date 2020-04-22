@@ -12,39 +12,39 @@
 <div class="container-fluid p-3">
     <div class="row p-1 mt-2">
         <p>
-            <a class="shadow btn btn-secondary btn-block  rounded-0" data-toggle="collapse" href="#collapseExample"
+            <a class="shadow btn btn-secondary btn-block  " data-toggle="collapse" href="#collapseExample"
                role="button"
                aria-expanded="false" aria-controls="collapseExample">
                 Filtrowanie
             </a>
         </p>
         <div class="collapse" id="collapseExample">
-            <div class="shadow card card-body bg-secondary rounded-0">
+            <div class="shadow card card-body bg-secondary ">
                 <form th:action="@{/trips/filter}" th:object="${tripDto}" method="post">
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-1">
-                            <div class="shadow card border-white rounded-0 h-100">
+                            <div class="shadow card border-white  h-100">
                                 <div class="card-header">Dni</div>
                                 <div class="card-body">
                                     <label for="startDate">Łod (abo yno): </label>
-                                    <input class="bg-light rounded-0" id="startDate" th:field="*{startingDate}"/>
+                                    <input class="bg-light " id="startDate" th:field="*{startingDate}"/>
                                     <label for="endDate">Do: </label>
-                                    <input class="bg-light rounded-0" placeholder="tego niy trza" id="endDate"
+                                    <input class="bg-light " placeholder="tego niy trza" id="endDate"
                                            th:field="*{endingDate}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6 col-lg-12 col-xl-3 p-1">
-                            <div class="shadow card border-white rounded-0 h-100">
+                            <div class="shadow card border-white  h-100">
                                 <div class="card-header">Opis</div>
                                 <div class="card-body">
-                            <textarea class="form-control bg-light rounded-0" rows="2"
+                            <textarea class="form-control bg-light " rows="2"
                                       placeholder="Np. godziny wyjazdu, cel, klient..."
                                       th:field="*{additionalMessage}"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="shadow btn btn-sm btn-warning btn-block mt-3 rounded-0">Filtruj!
+                        <button type="submit" class="shadow btn btn-sm btn-warning btn-block mt-3 ">Filtruj!
                         </button>
                     </div>
                 </form>
@@ -78,12 +78,12 @@
                     <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
                     <td th:text="${trip.employee.phoneNumber}"></td>
                     <td>
-                        <button type="button" class="shadow btn btn-info rounded-0"
+                        <button type="button" class="shadow btn btn-info "
                                 data-toggle="modal"
                                 th:attr="data-target='#tripEdit'+${trip.getId()}">
                             Szczegóły
                         </button>
-                        <button type="button" class="shadow btn btn-danger rounded-0"
+                        <button type="button" class="shadow btn btn-danger "
                                 data-toggle="modal"
                                 th:attr="data-target='#tripCancel'+${trip.getId()}">
                             Anuluj
@@ -111,7 +111,7 @@
                                         Nie możesz zmienić innych jej parametrów.
                                         Możesz ją anulować i utworzyć nową.
                                     </p>
-                                    <div class="shadow card text-white bg-info text-center rounded-0 h-100">
+                                    <div class="shadow card text-white bg-info text-center  h-100">
                                         <h5 class="card-header">
                                             <p class="card-text">
                                             <td th:text="${trip.getId()}+'. '"></td>
@@ -136,9 +136,9 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="form-group rounded-0">
+                                    <div class="form-group ">
                                         <label for="tripMessageInputE">Opis:</label>
-                                        <input type="text" class="form-control rounded-0" name="additionalMessage"
+                                        <input type="text" class="form-control " name="additionalMessage"
                                                id="tripMessageInputE" th:value="${trip.getAdditionalMessage()}">
                                         <small id="tripMessageHelpE" class="form-text text-muted">Miejsce, czas,
                                             inne...</small>
@@ -175,7 +175,7 @@
                                         Tej operacji nie można
                                         wycofać.
                                     </p>
-                                    <div class="shadow card text-white bg-info text-center rounded-0 h-100">
+                                    <div class="shadow card text-white bg-info text-center  h-100">
                                         <h5 class="card-header">
                                             <p class="card-text">
                                             <td th:text="${trip.getId()}+'. '"></td>
@@ -201,10 +201,10 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="form-group rounded-0">
+                                    <div class="form-group ">
                                         <label class="text-centered" for="carDeleteInput1">Tutaj wpisz nr
                                             telefonu:</label>
-                                        <input type="text" class="shadow form-control rounded-0"
+                                        <input type="text" class="shadow form-control "
                                                th:field="*{employee.phoneNumber}"
                                                id="carDeleteInput1">
                                     </div>

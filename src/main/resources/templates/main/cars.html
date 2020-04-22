@@ -16,7 +16,7 @@
 
         <tr th:each="car: ${cars}">
             <div class="col-6 col-md-4 col-lg-3 col-xl-2 p-1 mt-2">
-                <div class="shadow card text-white bg-warning text-center rounded-0 h-100">
+                <div class="shadow card text-white bg-warning text-center  h-100">
                     <h5 class="card-header">
                         <td th:text="${car.getBrand()} + ' ' + ${car.getModel()}"></td>
                     </h5>
@@ -28,7 +28,7 @@
 
                     </div>
                     <a th:href="@{/trips/car/{id}(id=${car.getId()})}"
-                       class="btn btn-warning stretched-link btn-block text-white rounded-0">Pokaż rezerwacje</a>
+                       class="btn btn-warning stretched-link btn-block text-white ">Pokaż rezerwacje</a>
                 </div>
             </div>
         </tr>

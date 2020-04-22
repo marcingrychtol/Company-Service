@@ -49,8 +49,8 @@ public class TripControllerMVC {
 
     @GetMapping("")
     public String getAllTrips(Model model){
+        model.addAttribute("active", "trips");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
         model.addAttribute("cars", carService.getAll());
@@ -69,7 +69,7 @@ public class TripControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
+        model.addAttribute("active", "trips");
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
 
@@ -88,7 +88,7 @@ public class TripControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
+        model.addAttribute("active", "trips");
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByCar_Id(id));
 
@@ -102,7 +102,7 @@ public class TripControllerMVC {
         Optional<Date> optionalDate = Optional.ofNullable(tripDto.getStartingDate());
         LocalDate date = dateMapper.toLocalDate(optionalDate.orElse(new Date()));
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
+        model.addAttribute("active", "trips");
         model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
         model.addAttribute("trips", tripService.findAllByDate(date));
         return "manager/manager-trips";
@@ -123,7 +123,7 @@ public class TripControllerMVC {
             model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
+        model.addAttribute("active", "trips");
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
         model.addAttribute("trips", tripService.getAll());
@@ -144,7 +144,7 @@ public class TripControllerMVC {
             model.addAttribute("infomessage", e.getMessage());
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
+        model.addAttribute("active", "trips");
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("filterTrip", new TripDto());
         model.addAttribute("trips", tripService.getAll());

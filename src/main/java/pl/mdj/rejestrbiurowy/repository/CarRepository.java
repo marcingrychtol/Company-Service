@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface CarRepository extends JpaRepository<Car,Long> {
     void deleteById(Long id) throws DataIntegrityViolationException;
     Optional<Car> findByRegistrationEquals(String registration);
+    List<Car> findAllByOrderByBrand();
 }

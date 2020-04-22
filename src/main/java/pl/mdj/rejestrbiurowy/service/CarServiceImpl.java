@@ -49,7 +49,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDto> getAll() {
-        return carMapper.mapToDto(carRepository.findAll());    }
+        return carMapper.mapToDto(carRepository.findAllByOrderByBrand());    }
 
     @Override
     public List<CarDto> getAllActive() {
@@ -142,7 +142,7 @@ public class CarServiceImpl implements CarService {
 
         List<CarDto> notAvailableCars = getNotAvailableCarsByDay(date);
 
-        return carRepository.findAll().stream()
+        return carRepository.findAllByOrderByBrand().stream()
                 .map(c -> carMapper.mapToDto(c))
                 .filter(car -> !notAvailableCars.contains(car))
                 .filter(car -> !car.isCancelled())

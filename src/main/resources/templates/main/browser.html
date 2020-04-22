@@ -17,39 +17,44 @@
 
     <div th:replace="fragments/message"></div>
 
-    <div class="container-fluid bg-secondary p-2 mb-2">
+    <div class="container-fluid bg-warning p-2 mb-2">
 
         <div class="row">
             <div class="col-12 col-md-3 mb-2">
-                <button type="button" class="btn btn-block btn-dark rounded-0">
+                <button type="button" class="btn btn-block btn-warning" th:text="
+                    ${requestedDate.getDayOfWeekPL()}
+                    + ' '
+                    + ${requestedDate.getLocalDate().getDayOfMonth()}
+                    + ' '
+                    + ${requestedDate.getMonthPL()}">
                     Dostępne w dniu:
                 </button>
             </div>
             <div class="col-3 col-md-2 mb-2">
                 <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().minusDays(1)}"/>
-                    <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark rounded-0">
-                        &laquo;-1
+                    <button type="submit" class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
+                        &laquo; -1
                     </button>
                 </form>
             </div>
             <div class="col-6 col-md-2 mb-2">
                 <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
-                    <input class="bg-light rounded-0" id="requestedDatepicker" th:field="*{startingDate}"/>
+                    <input class="bg-light" id="requestedDatepicker" th:field="*{startingDate}"/>
                 </form>
             </div>
             <div class="col-3 col-md-2 mb-2">
                 <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().plusDays(1)}"/>
-                    <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark rounded-0">
-                        &raquo;+1
+                    <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
+                        +1 &raquo;
                     </button>
                 </form>
             </div>
             <div class="col-12 col-md-3 mb-2">
                 <form th:action="@{/calendar/find}" th:object="${dateDto}">
                     <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()}"/>
-                    <button type="submit" class="btn btn-block btn-dark rounded-0">
+                    <button type="submit" class="btn btn-block btn-outline-dark text-dark bg-warning">
                         Pokaż w kalendarzu
                     </button>
                 </form>
@@ -61,7 +66,7 @@
         <div class="row">
             <tr th:each="car: ${cars}">
                 <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-1">
-                    <div class="shadow card text-white bg-info text-center h-100 rounded-0">
+                    <div class="shadow card text-white bg-info text-center h-100">
                         <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
                             <h5 class="card-header">
                                 <!--                        <td th:text="${car.getId()}"></td>-->
@@ -76,22 +81,19 @@
                             <input type="hidden" name="startingDate"
                                    th:value="${requestedDate.getLocalDateFormatted()}">
                             <button type="submit"
-                                    class="btn btn-info stretched-link btn-block text-white rounded-0">Rezerwuj
+                                    class="btn btn-info stretched-link btn-block text-white">Rezerwuj
                             </button>
                         </form>
                     </div>
                 </div>
             </tr>
         </div>
-
     </div>
-
-    <h5 class="text-white">Rezerwacje w tym dniu:</h5>
 
     <div class="row m-2">
         <div class="table-responsive">
             <table class="table table-hover table-dark">
-                <caption th:text="'Lista rezerwacji w dniu '+${tripDto.startingDate}">Lista rezerwacji w dniu</caption>
+                <caption th:text="'Lista rezerwacji w dniu '+${requestedDate.getLocalDateFormatted()}">Lista rezerwacji w dniu</caption>
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -112,12 +114,12 @@
                     <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
                     <td th:text="${trip.employee.phoneNumber}"></td>
                     <td>
-                        <button type="button" class="shadow btn btn-info rounded-0"
+                        <button type="button" class="shadow btn btn-info"
                                 data-toggle="modal"
                                 th:attr="data-target='#tripEdit'+${trip.getId()}">
                             Szczegóły
                         </button>
-                        <button type="button" class="shadow btn btn-danger rounded-0"
+                        <button type="button" class="shadow btn btn-danger"
                                 data-toggle="modal"
                                 th:attr="data-target='#tripCancel'+${trip.getId()}">
                             Anuluj
@@ -145,7 +147,7 @@
                                         Nie możesz zmienić innych jej parametrów.
                                         Możesz ją anulować i utworzyć nową.
                                     </p>
-                                    <div class="shadow card text-white bg-info text-center rounded-0 h-100">
+                                    <div class="shadow card text-white bg-info text-center h-100">
                                         <h5 class="card-header">
                                             <p class="card-text">
                                             <td th:text="${trip.getId()}+'. '"></td>
@@ -172,7 +174,7 @@
                                     </div>
                                     <div class="form-group rounded-0">
                                         <label for="tripMessageInputE">Opis:</label>
-                                        <input type="text" class="form-control rounded-0" name="additionalMessage"
+                                        <input type="text" class="form-control" name="additionalMessage"
                                                id="tripMessageInputE" th:value="${trip.getAdditionalMessage()}">
                                         <small id="tripMessageHelpE" class="form-text text-muted">Miejsce, czas,
                                             inne...</small>
@@ -209,7 +211,7 @@
                                         Tej operacji nie można
                                         wycofać.
                                     </p>
-                                    <div class="shadow card text-white bg-info text-center rounded-0 h-100">
+                                    <div class="shadow card text-white bg-info text-center h-100">
                                         <h5 class="card-header">
                                             <p class="card-text">
                                             <td th:text="${trip.getId()}+'. '"></td>
@@ -235,7 +237,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="form-group rounded-0">
+                                    <div class="form-group ">
                                         <label class="text-centered" for="carDeleteInput1">Tutaj wpisz nr
                                             telefonu:</label>
                                         <input type="text" class="shadow form-control rounded-0"

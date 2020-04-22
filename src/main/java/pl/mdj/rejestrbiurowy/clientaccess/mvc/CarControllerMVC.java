@@ -35,7 +35,7 @@ public class CarControllerMVC {
 
     @GetMapping("")
     public String getAll(Model model){
-
+        model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAllActive());
         model.addAttribute("newCar", new CarDto());
@@ -44,6 +44,7 @@ public class CarControllerMVC {
 
     @GetMapping(path = "/manager")
     public String postEdit(Model model){
+        model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
@@ -59,7 +60,7 @@ public class CarControllerMVC {
         } catch (EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
+        model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
@@ -75,6 +76,7 @@ public class CarControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
+        model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());
@@ -92,6 +94,7 @@ public class CarControllerMVC {
             model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji");
         }
 
+        model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("newCar", new CarDto());

@@ -58,6 +58,7 @@ public class BookingControllerMVC implements BasicController {
         CarDto carDto = new CarDto();
         TripDto requestedTrip = new TripDto();
         requestedTrip.setCar(carDto);
+        model.addAttribute("active", "booking");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("requestedTrip", requestedTrip);
@@ -80,6 +81,7 @@ public class BookingControllerMVC implements BasicController {
         tripDto.setCar(carDto);
 
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("active", "booking");
 
         model.addAttribute("requestedDate", dateMapper.getDateDto(dateMapper.toLocalDate(tripDto.getStartingDate())));
         model.addAttribute("requestedTrip", tripDto);

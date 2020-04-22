@@ -31,14 +31,14 @@ public class EmployeeControllerMVC {
     @GetMapping("")
     public String getEmployees(Model model){
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
+        model.addAttribute("active", "data");
         model.addAttribute("employees", employeeService.getAllActive());
         return "main/employees";
     }
 
     @GetMapping("/manager")
     public String editEmployees(Model model){
-
+        model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
@@ -54,8 +54,9 @@ public class EmployeeControllerMVC {
             e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
         }
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("active", "data");
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
@@ -72,8 +73,9 @@ public class EmployeeControllerMVC {
             employeeService.cancelByDto(employeeDto);
             model.addAttribute("infoMessage", "Nie można usunąć pracownika, ustawiono jako nieaktywny!");
         }
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("active", "data");
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
@@ -87,8 +89,9 @@ public class EmployeeControllerMVC {
         } catch (WrongInputDataException | EntityConflictException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
 
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("active", "data");
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";

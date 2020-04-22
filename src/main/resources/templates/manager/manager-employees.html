@@ -12,13 +12,13 @@
 
 <div class="container-fluid p-2">
 
-    <button type="button" class="btn btn-info m-2 rounded-0" data-toggle="modal" data-target="#newEmployeeModal">
+    <button type="button" class="btn btn-info m-2 " data-toggle="modal" data-target="#newEmployeeModal">
         Dodaj nowego pracownika
     </button>
     <div class="modal fade" id="newEmployeeModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content rounded-0">
+            <div class="modal-content ">
                 <div class="modal-header">
                     <h5 class="modal-title" id="empAddModalTitle">Dodawanie nowego pracownika</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -27,29 +27,29 @@
                 </div>
                 <form th:action="@{/employees/add}" th:object="${newEmployee}" method="post">
                     <div class="modal-body">
-                        <div class="form-group rounded-0">
+                        <div class="form-group ">
                             <label for="empNameInputE">Imię:</label>
-                            <input type="text" class="shadow form-control rounded-0" name="name" id="empNameInputN">
+                            <input type="text" class="shadow form-control " name="name" id="empNameInputN">
                             <small id="empNameHelpN" class="form-text text-muted">Tylko pierwsze imię</small>
                         </div>
-                        <div class="form-group rounded-0">
+                        <div class="form-group ">
                             <label for="empSecondNameInputN">Nazwisko:</label>
-                            <input type="text" class="shadow form-control rounded-0" name="secondName"
+                            <input type="text" class="shadow form-control " name="secondName"
                                    id="empSecondNameInputN">
                         </div>
-                        <div class="form-group rounded-0">
+                        <div class="form-group ">
                             <label for="empEmailInputN">E-mail:</label>
-                            <input type="text" class="shadow form-control rounded-0" name="email" id="empEmailInputN">
+                            <input type="text" class="shadow form-control " name="email" id="empEmailInputN">
                         </div>
-                        <div class="form-group rounded-0">
+                        <div class="form-group ">
                             <label for="empPhoneInputE">Nr telefonu:</label>
-                            <input type="text" class="shadow form-control rounded-0" name="phoneNumber" id="empPhoneInputN">
+                            <input type="text" class="shadow form-control " name="phoneNumber" id="empPhoneInputN">
                             <small id="empPhoneHelpN" class="form-text text-muted">Format: +48 xxx xxx xxx</small>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="shadow btn btn-sm btn-secondary rounded-0" data-dismiss="modal">Close</button>
-                        <button type="submit" class="shadow btn btn-sm btn-primary rounded-0">Save changes</button>
+                        <button type="button" class="shadow btn btn-sm btn-secondary " data-dismiss="modal">Close</button>
+                        <button type="submit" class="shadow btn btn-sm btn-primary ">Save changes</button>
                     </div>
                 </form>
             </div>
@@ -76,12 +76,12 @@
                 <td th:text="${emp.getEmail()}"></td>
                 <td th:text="${emp.getPhoneNumber()}"></td>
                 <td>
-                    <button type="button" class="shadow btn bg-info rounded-0"
+                    <button type="button" class="shadow btn bg-info "
                             data-toggle="modal"
                             th:attr="data-target='#empEdit'+${emp.getId()}">
                         Szczegóły
                     </button>
-                    <button type="button" class="shadow btn btn-danger rounded-0"
+                    <button type="button" class="shadow btn btn-danger "
                             data-toggle="modal"
                             th:attr="data-target='#empCancel'+${emp.getId()}">
                         Wyłącz
@@ -97,7 +97,7 @@
             <div class="modal fade" th:id="'empEdit'+${emp.getId()}" data-backdrop="static" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content rounded-0">
+                    <div class="modal-content ">
                         <div class="modal-header">
                             <h5 class="modal-title" id="carEditModalTitle"
                                 th:text="${emp.getId()}+'. '+${emp.getName()} +' '+${emp.getSecondName()}">Modal
@@ -108,25 +108,25 @@
                         </div>
                         <form th:action="@{/employees/edit}" th:object="${newEmployee}" method="post">
                             <div class="modal-body">
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="empNameInputE">Imię:</label>
-                                    <input type="text" class="form-control rounded-0" name="name"
+                                    <input type="text" class="form-control " name="name"
                                            id="empNameInputE" th:value="${emp.getName()}">
                                     <small id="empNameHelpE" class="form-text text-muted">Tylko pierwsze imię</small>
                                 </div>
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="empSecondNameInputE">Nazwisko:</label>
-                                    <input type="text" class="form-control rounded-0" name="secondName"
+                                    <input type="text" class="form-control " name="secondName"
                                            id="empSecondNameInputE" th:value="${emp.getSecondName()}">
                                 </div>
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="empEmailInputE">E-mail:</label>
-                                    <input type="text" class="form-control rounded-0" name="email"
+                                    <input type="text" class="form-control " name="email"
                                            id="empEmailInputE" th:value="${emp.getEmail()}">
                                 </div>
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="empPhoneInputE">Nr telefonu:</label>
-                                    <input type="text" class="form-control rounded-0" name="phoneNumber"
+                                    <input type="text" class="form-control " name="phoneNumber"
                                            id="empPhoneInputE" th:value="${emp.getPhoneNumber()}">
                                     <small id="empPhoneHelpE" class="form-text text-muted">Format: +48 xxx xxx
                                         xxx</small>
@@ -134,9 +134,9 @@
                                 <input type="hidden" name="id" th:value="${emp.getId()}">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="shadow btn btn-secondary rounded-0" data-dismiss="modal">Zamknij bez zmian
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez zmian
                                 </button>
-                                <button type="submit" class="shadow btn btn-primary rounded-0">Zapisz zmiany</button>
+                                <button type="submit" class="shadow btn btn-primary ">Zapisz zmiany</button>
                             </div>
                         </form>
                     </div>
@@ -147,7 +147,7 @@
                  role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content bg-danger text-white rounded-0">
+                    <div class="modal-content bg-danger text-white ">
                         <div class="modal-header">
                             <h5 class="modal-title" id="CarDeleteModalTitle"
                                 th:text="${emp.getId()}+'. '+${emp.getName()} +' '+${emp.getSecondName()}">Modal
@@ -166,18 +166,18 @@
                                     będzie możliwe.
                                     W tym przypadku zostanie on ustawiony jako niedostepny do dalszych rezerwacji.
                                 </p>
-                                <div class="form-group rounded-0">
+                                <div class="form-group ">
                                     <label for="carDeleteInput1" th:text="${emp.getEmail()}">email</label>
-                                    <input type="text" class="form-control rounded-0" th:field="*{email}"
+                                    <input type="text" class="form-control " th:field="*{email}"
                                            id="carDeleteInput1">
                                 </div>
                                 <input type="hidden" name="id" th:value="${emp.getId()}">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="shadow btn btn-secondary rounded-0" data-dismiss="modal">Zamknij bez
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez
                                     zmian
                                 </button>
-                                <button type="submit" class="shadow btn btn-danger rounded-0">Wyłącz pracownika</button>
+                                <button type="submit" class="shadow btn btn-danger ">Wyłącz pracownika</button>
                             </div>
                         </form>
                     </div>
