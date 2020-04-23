@@ -45,9 +45,15 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
         Optional.ofNullable(entity.getId())
                 .ifPresent(dto::setId);
         Optional.ofNullable(entity.getCar())
-                .ifPresent(car -> dto.setCar(carMapper.mapToDto(car)));
+                .ifPresent(car -> {
+                    dto.setCar(carMapper.mapToDto(car));
+                    dto.setCarId(entity.getCar().getId());
+                });
         Optional.ofNullable(entity.getEmployee())
-                .ifPresent(employee -> dto.setEmployee(employeeMapper.mapToDto(employee)));
+                .ifPresent(employee -> {
+                    dto.setEmployee(employeeMapper.mapToDto(employee));
+                    dto.setEmployeeId(entity.getEmployee().getId());
+                });
         Optional.ofNullable(entity.getStartingDate())
                 .ifPresent(date -> dto.setStartingDate(dateMapper.toDate(date)));
         Optional.ofNullable(entity.getEndingDate())

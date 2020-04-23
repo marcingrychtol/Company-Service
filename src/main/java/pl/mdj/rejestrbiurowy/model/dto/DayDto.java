@@ -1,13 +1,19 @@
 package pl.mdj.rejestrbiurowy.model.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 public class DayDto {
     private DateDto id;
     private List<Long> availableCars = new ArrayList<>(); // filled by DayMapper
+    private List<TripDto> trips = new ArrayList<>(); // filled by DayMapper
 }

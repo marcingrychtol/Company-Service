@@ -9,74 +9,61 @@
 <body class="bg-dark">
 
 <div th:replace="fragments/nav-bar"></div>
-<div class="container-fluid">
+<div class="container-fluid mx-1">
     <div class="row">
         <p>
-            <a class="shadow btn btn-warning btn-block" data-toggle="collapse" href="#collapseExample"
+            <a class="shadow btn btn-secondary m-1" data-toggle="collapse" href="#collapseExample"
                role="button"
                aria-expanded="false" aria-controls="collapseExample">
                 Filtrowanie
             </a>
         </p>
         <div class="collapse" id="collapseExample">
-            <div class="alert">
-                <form th:action="@{/trips/filter}" th:object="${tripDto}" method="post">
-                    <div class="row">
+            <div class="shadow alert bg-dark border-secondary text-white m-1">
+                <form class="form-inline" th:action="@{/trips/filter}" th:object="${tripDto}" method="post">
 
-                        <div class="col-6 col-md-4 col-xl-2 py-1">
-                            <div class="shadow card border-white  h-100">
-                                <div class="card-body">Od:
-                                    <input type="text" readonly="true" class="bg-light " id="startDate" th:field="*{startingDate}"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-4 col-xl-2 py-1">
-                            <div class="shadow card border-white  h-100">
-                                <div class="card-body">Do:
-                                    <input type="text" readonly="true" class="bg-light "  id="endDate"
-                                           th:field="*{endingDate}"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-4 col-xl-2 py-1">
-                            <div class="shadow card border-white  h-100">
-                                <div class="card-body">Pojazd:
-                                        <select class="custom-select bg-light" size="1" th:field="*{carId}">
-                                            <option value=""></option>
-                                            <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                                    th:text="${car.getId()} + '. ' + ${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
-                                            </option>
-                                        </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-4 col-xl-2 py-1">
-                            <div class="shadow card border-white  h-100">
-                                <div class="card-body">Osoba:
-                                    <select class="custom-select bg-light" size="1" th:field="*{employeeId}">
-                                        <option value=""></option>
-                                        <option th:each="emp : ${employees}" th:value="${emp.getId()}"
-                                                th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-8 col-xl-4 py-1">
-                            <div class="shadow card border-white  h-100">
-                                <div class="card-body">Opis:
-                            <textarea class="form-control bg-light " rows="1"
-                                      th:field="*{additionalMessage}"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="shadow btn btn-sm btn-warning btn-block mt-1">Filtruj!
-                        </button>
+                    <div class="form-group">
+                        <label class="my-1 mx-2" for="startDate">Od:</label>
+                        <input type="text" readonly="true" class="shadow bg-secondary text-white" id="startDate"
+                               th:field="*{startingDate}"/>
                     </div>
+
+                    <div class="form-group">
+                        <label class="my-1 mx-2" for="endDate">Do:</label>
+                        <input type="text" readonly="true" class="shadow bg-secondary text-white" id="endDate"
+                               th:field="*{endingDate}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="my-1 mx-2" for="selectCar">Pojazd:</label>
+                        <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1" th:field="*{carId}">
+                            <option value=""></option>
+                            <option th:each="car : ${cars}" th:value="${car.getId()}"
+                                    th:text="${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
+                        <select id="selectEmployee" class="shadow custom-select bg-secondary text-white" size="1"
+                                th:field="*{employeeId}">
+                            <option value=""></option>
+                            <option th:each="emp : ${employees}" th:value="${emp.getId()}"
+                                    th:text="${emp.getName()} + ' ' + ${emp.getSecondName()}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="my-1 mx-2" for="selectEmployee">Opis:</label>
+                        <textarea class="shadow form-control bg-secondary text-white" rows="1"
+                                  th:field="*{additionalMessage}"></textarea>
+                    </div>
+
+                    <button type="submit" class="shadow btn btn-secondary my-1 ml-2">Filtruj!
+                    </button>
+
                 </form>
             </div>
         </div>
@@ -267,7 +254,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer:true,
+        footer: true,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
@@ -281,7 +268,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer:true,
+        footer: true,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',

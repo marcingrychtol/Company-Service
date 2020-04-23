@@ -2,13 +2,18 @@ package pl.mdj.rejestrbiurowy.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Data
-public class TripDto {
+@Getter
+@Setter
+@EqualsAndHashCode
+public class TripDto implements Comparable<TripDto>{
     private Long id; // only individual database registry id
     private Long carId;
     private CarDto car;
@@ -29,5 +34,8 @@ public class TripDto {
     private String additionalMessage;
 
 
-
+    @Override
+    public int compareTo(TripDto o) {
+        return o.getStartingDate().compareTo(this.startingDate);
+    }
 }

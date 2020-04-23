@@ -20,9 +20,7 @@ import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Date;
 import java.util.List;
 
@@ -90,7 +88,19 @@ public class CalendarControllerMVC {
 
     @GetMapping("/find")
     public String getCalendarByDay(Model model, @ModelAttribute DateDto tripDto) {
+        long page = calculatePage(tripDto);
+        model.addAttribute("page", page);
+        model.addAttribute("scope", 14);
+        model.addAttribute("active", "calendar");
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, 14));
+        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("dateDto", new DateDto());
+        return "redirect:/calendar/14/"+page;
+    }
 
+    private long calculatePage(DateDto tripDto) {
         LocalDate now = LocalDate.now().with(DayOfWeek.MONDAY);
         long diff = DAYS.between(now, tripDto.getLocalDate());
         long scope = 14;
@@ -102,17 +112,7 @@ public class CalendarControllerMVC {
         } else {
             page = diff/scope;
         }
-
-
-        model.addAttribute("page", page);
-        model.addAttribute("scope", scope);
-        model.addAttribute("active", "calendar");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, scope));
-        model.addAttribute("cars", carService.getAllActive());
-        model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("dateDto", new DateDto());
-        return "redirect:/calendar/"+scope+"/"+page;
+        return page;
     }
 
     @InitBinder

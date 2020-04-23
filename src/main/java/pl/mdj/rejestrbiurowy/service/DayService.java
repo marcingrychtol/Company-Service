@@ -14,5 +14,8 @@ public interface DayService {
     Day findById(LocalDate id) throws CannotFindEntityException;
     void addTripToDay(Trip trip) throws EntityNotCompleteException, EntityConflictException;
     List<LocalDate> getLocalDatesBetween(LocalDate start, LocalDate end);
+    List<DayDto> getAllDto();
     List<DayDto> getDaysDtoBetween(LocalDate start, LocalDate end);
+    List<DayDto> getDaysDtoAfter(LocalDate date);
+    List<DayDto> getDaysDtoBefore(LocalDate date);
 }

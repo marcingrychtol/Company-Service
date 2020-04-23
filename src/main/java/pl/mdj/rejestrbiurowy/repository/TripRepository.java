@@ -14,12 +14,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     List<Trip> findAll(Sort sort);
 
     List<Trip> findAllByEmployee_IdOrderByStartingDateAsc(Long id);
-
     List<Trip> findAllByCar_IdOrderByStartingDateAsc(Long id);
-
-    List<Trip> findAllByStartingDateEquals(LocalDate date);
-
-    List<Trip> findAllByStartingDateIsNot(LocalDate date);
-
-//    @EntityGraph(value = "Trip")
+    List<Trip> findAllByAdditionalMessageContainingIgnoreCaseOrderByStartingDateAsc(String search);
+    //    @EntityGraph(value = "Trip")
 }

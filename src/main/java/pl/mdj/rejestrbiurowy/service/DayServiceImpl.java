@@ -71,6 +71,16 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
+    public List<DayDto> getDaysDtoAfter(LocalDate date) {
+        return dayMapper.mapToDto(dayRepository.findAllByIdAfterOrderByIdAsc(date));
+    }
+
+    @Override
+    public List<DayDto> getDaysDtoBefore(LocalDate date) {
+        return dayMapper.mapToDto(dayRepository.findAllByIdBeforeOrderByIdAsc(date));
+    }
+
+    @Override
     public List<LocalDate> getLocalDatesBetween(LocalDate start, LocalDate end){
         List<LocalDate> dates = new ArrayList<>();
         int i = 0;
@@ -79,6 +89,11 @@ public class DayServiceImpl implements DayService {
             i++;
         } while (start.plusDays(i).compareTo(end)<=0);
         return dates;
+    }
+
+    @Override
+    public List<DayDto> getAllDto() {
+        return dayMapper.mapToDto(dayRepository.findAll());
     }
 
     private List<Day> getDaysBetween(LocalDate start, LocalDate end) {

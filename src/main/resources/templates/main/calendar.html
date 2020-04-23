@@ -37,12 +37,14 @@
                                     : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPL()} "
                                     th:class="
                                     ${day.getId().equals(today)}
-                                    ? 'btn btn-sm text-dark stretched-link '
-                                    : 'btn btn-sm text-white stretched-link '"
+                                    ? 'btn btn-sm text-dark stretched-link'
+                                    : 'btn btn-sm text-white stretched-link'"
                                     ></button>
                             <table class="shadow table table-sm table-dark p-0">
                                 <tr th:each="car :${cars}"
-                                    th:class="${day.availableCars.contains(car.getId())} ? 'bg-info':'bg-secondary text-dark'">
+                                    th:class="${day.availableCars.contains(car.getId())}
+                                        ? 'bg-info'
+                                        : 'bg-secondary text-dark font-weight-light'">
                                     <td th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
                                     ? ${car.getModel()}

@@ -10,11 +10,14 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
+import pl.mdj.rejestrbiurowy.model.dto.DateDto;
+import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
+import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
@@ -22,9 +25,7 @@ import pl.mdj.rejestrbiurowy.model.mappers.TripMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,14 +39,16 @@ public class TripServiceImpl implements TripService {
     CarRepository carRepository;
     TripMapper tripMapper;
     DayService dayService;
+    DateMapper dateMapper;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository, TripMapper tripMapper, DayService dayService, EmployeeRepository employeeRepository, CarRepository carRepository) {
+    public TripServiceImpl(TripRepository tripRepository, TripMapper tripMapper, DayService dayService, EmployeeRepository employeeRepository, CarRepository carRepository, DateMapper dateMapper) {
         this.tripRepository = tripRepository;
         this.tripMapper = tripMapper;
         this.dayService = dayService;
         this.employeeRepository = employeeRepository;
         this.carRepository = carRepository;
+        this.dateMapper = dateMapper;
     }
 
     @Override
@@ -157,6 +160,50 @@ public class TripServiceImpl implements TripService {
             return new ArrayList<>();
         }
         return tripMapper.mapToDto(day.getTrips());
+    }
+
+    @Override
+    public List<TripDto> findByFilter(TripDto filter) {
+
+        LocalDate start = dateMapper.toLocalDate(filter.getStartingDate());
+        LocalDate end = dateMapper.toLocalDate( filter.getEndingDate());
+
+        Set<TripDto> tripSet = new HashSet<>();
+        List<DayDto> days;
+        if (filter.getStartingDate() != null){
+            if (filter.getEndingDate() != null) {
+                days = dayService.getDaysDtoBetween(start, end);
+            } else {
+                days = dayService.getDaysDtoAfter(start);
+            }
+        } else {
+            if (filter.getEndingDate() != null) {
+                days = dayService.getDaysDtoBefore(end);
+            } else {
+                days = dayService.getAllDto();
+            }
+        }
+
+        days.stream()
+                .map(DayDto::getTrips)
+                .forEach(tripSet::addAll);
+
+        if (filter.getCarId() != null){
+            tripSet = tripSet.stream()
+                    .filter(t -> t.getCarId().equals(filter.getCarId()))
+            .collect(Collectors.toSet());
+        }
+
+        if (filter.getEmployeeId() != null){
+            tripSet = tripSet.stream()
+                    .filter(t -> t.getEmployeeId().equals(filter.getEmployeeId()))
+            .collect(Collectors.toSet());
+        }
+
+        List<TripDto> tripList = new ArrayList<>(tripSet);
+        Collections.sort(tripList);
+
+        return tripList;
     }
 
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {

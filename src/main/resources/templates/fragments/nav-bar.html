@@ -3,6 +3,7 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
     <a class="navbar-brand" th:href="@{/}">MDJ Rezerwator</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -42,11 +43,10 @@
                 </div>
             </li>
         </ul>
-
-
     </div>
+
     <form th:action="@{/calendar/browser}" th:object="${dateDto}">
-        <button type="submit" class="shadow btn btn-warning" th:text="'Dziś: ' + ${today.getDayOfWeekPL()} + ' '
+        <button type="submit" class="shadow btn btn-warning mt-1" th:text="'Dziś: ' + ${today.getDayOfWeekPL()} + ' '
               + ${today.getDayValueWithZero()} + ' '
               + ${today.getMonthPL()} + ' '
               + ${today.getYear()}">

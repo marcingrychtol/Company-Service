@@ -18,13 +18,15 @@ public class DayMapper implements BasicMapper<Day, DayDto> {
     DayRepository dayRepository;
     CarService carService;
     DateMapper dateMapper;
+    TripMapper tripMapper;
 
     @Autowired
-    public DayMapper(CarMapper carMapper, DayRepository dayRepository, DateMapper dateMapper, CarService carService) {
+    public DayMapper(CarMapper carMapper, DayRepository dayRepository, DateMapper dateMapper, CarService carService, TripMapper tripMapper) {
         this.carMapper = carMapper;
         this.dayRepository = dayRepository;
         this.dateMapper = dateMapper;
         this.carService = carService;
+        this.tripMapper = tripMapper;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class DayMapper implements BasicMapper<Day, DayDto> {
 //                .collect(Collectors.toList()));
         carService.getAvailableCarsByDay(entity.getId())
             .forEach(carDto -> dto.getAvailableCars().add(carDto.getId()));
+        Optional.ofNullable(entity.getTrips()).ifPresent(trips -> dto.setTrips(tripMapper.mapToDto(trips)));
         return dto;
     }
 
