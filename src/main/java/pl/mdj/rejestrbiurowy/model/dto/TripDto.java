@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class TripDto implements Comparable<TripDto>{
+public class TripDto{
     private Long id; // only individual database registry id
     private Long carId;
     private CarDto car;
@@ -33,9 +33,4 @@ public class TripDto implements Comparable<TripDto>{
 
     private String additionalMessage;
 
-
-    @Override
-    public int compareTo(TripDto o) {
-        return o.getStartingDate().compareTo(this.startingDate);
-    }
 }

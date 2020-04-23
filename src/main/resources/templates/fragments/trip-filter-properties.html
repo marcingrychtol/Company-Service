@@ -1,0 +1,22 @@
+<div class="container-fluid px-2">
+    <div class="alert alert-info alert-dismissible fade show " role="alert">Aktywne filtry:
+        <td th:unless="${filterDto.getStartingDate() == null}">
+            <span class="badge badge-info text-wrap" th:text="'Po: '+${filterDto.getStartingDate()}"></span>
+        </td>
+        <td th:unless="${filterDto.getEndingDate() == null}">
+            <span class="badge badge-info text-wrap" th:text="'Przed: '+${filterDto.getEndingDate()}"></span>
+        </td>
+        <td th:unless="${filterDto.getCarId() == null}">
+            <span class="badge badge-info text-wrap" th:text="'Dla auta: '+${filterDto.getCar().getModel()}"></span>
+        </td>
+        <td th:unless="${filterDto.getEmployeeId() == null}">
+            <span class="badge badge-info text-wrap" th:text="'Dla pracownika: '+${filterDto.getEmployee().getSecondName()}"></span>
+        </td>
+        <td th:unless="${filterDto.getAdditionalMessage() == '' || filterDto.getAdditionalMessage() == null }">
+            <span class="badge badge-info text-wrap" th:text="'Dla słowa: '+${filterDto.getAdditionalMessage()}"></span>
+        </td>
+        <a th:href="@{/trips}" type="button" class="close">
+           <span> &times;</span>
+        </a>
+    </div>
+</div>

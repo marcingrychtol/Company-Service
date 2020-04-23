@@ -47,62 +47,33 @@ public class TripControllerMVC {
         this.dateMapper = dateMapper;
     }
 
-    @GetMapping("")
-    public String getAllTrips(Model model){
+    @GetMapping("" +
+            "")
+    public String getAllTrips(@ModelAttribute TripDto tripDto, Model model){
+
         model.addAttribute("active", "trips");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("filterTrip", new TripDto());
+
+        model.addAttribute("filterDto", new TripDto());
+
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("trips", tripService.getAll());
         return "manager/manager-trips";
     }
 
-//    @GetMapping("/employee/{id}")
-//    public String getTripsFilteredByEmployee(@PathVariable("id") Long id, Model model){
-//        EmployeeDto employee;
-//        try {
-//            employee = employeeService.findById(id);
-//            model.addAttribute("employee", employee);
-//        } catch (CannotFindEntityException e) {
-//            model.addAttribute("errorMessage", e.getMessage());
-//        }
-//        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-//        model.addAttribute("active", "trips");
-//        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
-//        model.addAttribute("trips", tripService.findAllByEmployee_Id(id));
-//
-//        addTripsMainSiteAttributesToModel(model);
-//        return "manager/manager-trips";
-//    }
-//
-//    @GetMapping("/car/{id}")
-//    public String getTripsFilteredByCar(@PathVariable("id") Long id, Model model){
-//        CarDto carDto;
-//        try {
-//            carDto = carService.findById(id);
-//            model.addAttribute("car", carDto);
-//        } catch (CannotFindEntityException e) {
-//            LOG.info(e.getMessage());
-//            model.addAttribute("errorMessage", e.getMessage());
-//        }
-//        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-//        model.addAttribute("active", "trips");
-//        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
-//        model.addAttribute("trips", tripService.findAllByCar_Id(id));
-//
-//        addTripsMainSiteAttributesToModel(model);
-//        return "manager/manager-trips";
-//    }
 
     @GetMapping("/filter")
     public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model){
 
-        model.addAttribute("filterTrip", tripDto);
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("active", "trips");
-        model.addAttribute("alertMessage", "Przeglądasz rezerwacje dla: ");
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+
+        tripDto = tripService.completeFilterDtoData(tripDto);
+        model.addAttribute("filterDto", tripDto);
+
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("trips", tripService.findByFilter(tripDto));
         return "manager/manager-trips";
     }

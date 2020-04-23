@@ -13,6 +13,9 @@ public interface TripService extends BasicService<TripDto, Long> {
     List<TripDto> findAllByDate(LocalDate date);
 
     List<TripDto> findByFilter(TripDto filter);
+    List<TripDto> findByMessageSearch(String search);
+
+    TripDto completeFilterDtoData(TripDto tripDto);
 }
 
 

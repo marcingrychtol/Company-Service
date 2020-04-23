@@ -129,12 +129,12 @@ public class TripServiceImpl implements TripService {
     }
 
     public List<TripDto> findAllByEmployee_Id(Long id) {
-        List<Trip> tripList = tripRepository.findAllByEmployee_IdOrderByStartingDateAsc(id);
+        List<Trip> tripList = tripRepository.findAllByEmployee_IdOrderByStartingDateDesc(id);
         return tripMapper.mapToDto(tripList);
     }
 
     public List<TripDto> findAllByCar_Id(Long id) {
-        List<Trip> tripList = tripRepository.findAllByCar_IdOrderByStartingDateAsc(id);
+        List<Trip> tripList = tripRepository.findAllByCar_IdOrderByStartingDateDesc(id);
         return tripMapper.mapToDto(tripList);
     }
 
@@ -149,7 +149,8 @@ public class TripServiceImpl implements TripService {
         }
         return tripMapper.mapToDto(day.getTrips().stream()
                 .filter(trip -> !trip.getCancelled())
-                .collect(Collectors.toList()));    }
+                .collect(Collectors.toList()));
+    }
 
     public List<TripDto> findAllByDate(LocalDate date) {
         Day day;
@@ -165,45 +166,87 @@ public class TripServiceImpl implements TripService {
     @Override
     public List<TripDto> findByFilter(TripDto filter) {
 
-        LocalDate start = dateMapper.toLocalDate(filter.getStartingDate());
-        LocalDate end = dateMapper.toLocalDate( filter.getEndingDate());
+        LocalDate start;
+        LocalDate end;
 
-        Set<TripDto> tripSet = new HashSet<>();
-        List<DayDto> days;
-        if (filter.getStartingDate() != null){
+        List<DayDto> days = new ArrayList<>();
+        // at first let's find out if we have any dates provided, and get Days basing on that
+        if (filter.getStartingDate() != null) {
+            start = dateMapper.toLocalDate(filter.getStartingDate());
             if (filter.getEndingDate() != null) {
+                end = dateMapper.toLocalDate(filter.getEndingDate());
                 days = dayService.getDaysDtoBetween(start, end);
             } else {
                 days = dayService.getDaysDtoAfter(start);
             }
-        } else {
-            if (filter.getEndingDate() != null) {
-                days = dayService.getDaysDtoBefore(end);
-            } else {
-                days = dayService.getAllDto();
-            }
+        } else if (filter.getEndingDate() != null) {
+            end = dateMapper.toLocalDate(filter.getEndingDate());
+            days = dayService.getDaysDtoBefore(end);
         }
 
+        if (days.isEmpty()) {
+            return filterWhenNoDates(filter);
+        }
+        return filterWhenDatesGiven(days, filter);
+
+    }
+
+    private List<TripDto> filterWhenNoDates(TripDto filter) {
+        List<TripDto> tripList = new ArrayList<>();
+        boolean haveTouchedTripRepository = false;
+
+        if (filter.getCarId() != null) {
+            tripList = tripMapper.mapToDto(
+                    tripRepository.findAllByCar_IdOrderByStartingDateDesc(filter.getCarId())
+            );
+            haveTouchedTripRepository = true;
+        }
+
+        if (filter.getEmployeeId() != null) {
+            if (haveTouchedTripRepository) {
+                tripList = tripList.stream()
+                        .filter(t -> t.getEmployeeId().equals(filter.getEmployeeId()))
+                        .collect(Collectors.toList());
+            } else {
+                tripRepository.findAllByEmployee_IdOrderByStartingDateDesc(filter.getCarId());
+            }
+        }
+        return tripList;
+    }
+
+    private List<TripDto> filterWhenDatesGiven(List<DayDto> days, TripDto filter) {
+        Set<TripDto> tripSet = new HashSet<>();
+        List<TripDto> tripList;
         days.stream()
                 .map(DayDto::getTrips)
                 .forEach(tripSet::addAll);
+        tripList = new ArrayList<>(tripSet);
 
-        if (filter.getCarId() != null){
-            tripSet = tripSet.stream()
+        Comparator<TripDto> compareByStartingDate = Comparator.comparing(TripDto::getStartingDate, Comparator.reverseOrder());
+        tripList.sort(compareByStartingDate);
+
+        if (filter.getCarId() != null) {
+            tripList = tripList.stream()
                     .filter(t -> t.getCarId().equals(filter.getCarId()))
-            .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
-
-        if (filter.getEmployeeId() != null){
-            tripSet = tripSet.stream()
+        if (filter.getEmployeeId() != null) {
+            tripList = tripList.stream()
                     .filter(t -> t.getEmployeeId().equals(filter.getEmployeeId()))
-            .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
-
-        List<TripDto> tripList = new ArrayList<>(tripSet);
-        Collections.sort(tripList);
-
         return tripList;
+    }
+
+    @Override
+    public List<TripDto> findByMessageSearch(String search) {
+        List<Trip> trips = tripRepository.findAllByAdditionalMessageContainingIgnoreCaseOrderByStartingDateAsc(search);
+        return tripMapper.mapToDto(trips);
+    }
+
+    @Override
+    public TripDto completeFilterDtoData(TripDto tripDto) {
+        return tripMapper.completeTripData(tripDto);
     }
 
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {

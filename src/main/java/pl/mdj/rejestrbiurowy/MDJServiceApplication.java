@@ -11,17 +11,17 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 public class MDJServiceApplication {
 
-    private MdjRunner mdjRunner;
-
-    @Autowired
-    public MDJServiceApplication(MdjRunner mdjRunner) {
-        this.mdjRunner = mdjRunner;
-    }
-
-    @PostConstruct
-    private void postConstruct(){
-        mdjRunner.run();
-    }
+//    private MdjRunner mdjRunner;
+//
+//    @Autowired
+//    public MDJServiceApplication(MdjRunner mdjRunner) {
+//        this.mdjRunner = mdjRunner;
+//    }
+//
+//    @PostConstruct
+//    private void postConstruct(){
+//        mdjRunner.run();
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(MDJServiceApplication.class, args);

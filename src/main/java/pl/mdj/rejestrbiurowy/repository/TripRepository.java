@@ -13,8 +13,8 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     List<Trip> findByOrderByStartingDateDesc();
     List<Trip> findAll(Sort sort);
 
-    List<Trip> findAllByEmployee_IdOrderByStartingDateAsc(Long id);
-    List<Trip> findAllByCar_IdOrderByStartingDateAsc(Long id);
+    List<Trip> findAllByEmployee_IdOrderByStartingDateDesc(Long id);
+    List<Trip> findAllByCar_IdOrderByStartingDateDesc(Long id);
     List<Trip> findAllByAdditionalMessageContainingIgnoreCaseOrderByStartingDateAsc(String search);
     //    @EntityGraph(value = "Trip")
 }
