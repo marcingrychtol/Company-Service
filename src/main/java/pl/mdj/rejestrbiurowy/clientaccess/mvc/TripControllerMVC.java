@@ -14,8 +14,6 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
-import pl.mdj.rejestrbiurowy.model.dto.CarDto;
-import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
@@ -25,7 +23,6 @@ import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Optional;
 
 
 @Controller
@@ -49,32 +46,21 @@ public class TripControllerMVC {
 
     @GetMapping("" +
             "")
-    public String getAllTrips(@ModelAttribute TripDto tripDto, Model model){
+    public String getAllTrips(@ModelAttribute TripDto filter, Model model){
 
-        model.addAttribute("active", "trips");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
-        model.addAttribute("filterDto", new TripDto());
-
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
         model.addAttribute("trips", tripService.getAll());
         return "manager/manager-trips";
     }
 
 
     @GetMapping("/filter")
-    public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model){
+    public String getTripsFiltered(@ModelAttribute TripDto filter, Model model){
 
-        model.addAttribute("active", "trips");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        filter = tripService.completeFilterDtoData(filter);
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, filter);
+        model.addAttribute("trips", tripService.findByFilter(filter));
 
-        tripDto = tripService.completeFilterDtoData(tripDto);
-        model.addAttribute("filterDto", tripDto);
-
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("trips", tripService.findByFilter(tripDto));
         return "manager/manager-trips";
     }
 
@@ -94,8 +80,8 @@ public class TripControllerMVC {
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("active", "trips");
-        model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("filterTrip", new TripDto());
+        model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("filter", new TripDto());
         model.addAttribute("trips", tripService.getAll());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
@@ -115,8 +101,8 @@ public class TripControllerMVC {
         }
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("active", "trips");
-        model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("filterTrip", new TripDto());
+        model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("filter", new TripDto());
         model.addAttribute("trips", tripService.getAll());
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
@@ -138,10 +124,11 @@ public class TripControllerMVC {
 
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
-        model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("filterTrip", new TripDto());
+        model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("filter", new TripDto());
         model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
+
 
         return "main/browser";
     }
@@ -160,10 +147,14 @@ public class TripControllerMVC {
         binder.registerCustomEditor(Date.class, editor);
     }
 
-    private void addTripsMainSiteAttributesToModel(Model model){
-        model.addAttribute("cars", carService.getAllActive());
-        model.addAttribute("employees", employeeService.getAllActive());
-        model.addAttribute("tripDto", new TripDto());
+
+    private void addTripsPageAttributesToModel(Model model, ActivePage active, TripDto filter){
+        model.addAttribute("active", active.get());
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("filter", filter);
     }
 
 }

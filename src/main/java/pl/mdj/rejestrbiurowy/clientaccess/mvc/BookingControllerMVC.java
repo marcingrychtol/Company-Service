@@ -16,7 +16,6 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
-import pl.mdj.rejestrbiurowy.clientaccess.mvc.interfaces.BasicController;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.DayService;
@@ -28,7 +27,7 @@ import java.util.Date;
 
 @Controller
 @RequestMapping("/")
-public class BookingControllerMVC implements BasicController {
+public class BookingControllerMVC {
 
     Logger LOG = LoggerFactory.getLogger(BookingControllerMVC.class);
 

@@ -12,7 +12,7 @@
 
 
 <!-- filtering below -->
-<div class="container-fluid mx-1"cal>
+<div class="container">
     <div class="row">
         <p>
             <a class="shadow btn btn-secondary m-1" data-toggle="collapse" href="#collapseFilter"
@@ -23,7 +23,7 @@
         </p>
         <div class="collapse" id="collapseFilter">
             <div class="shadow alert bg-dark border-secondary text-white m-1">
-                <form class="form-inline" th:action="@{/trips/filter}" th:object="${filterDto}" method="get">
+                <form class="form-inline" th:action="@{/trips/filter}" th:object="${filter}" method="get">
 
                     <div class="form-group">
                         <label class="my-1 mx-2" for="startDate">Od:</label>
@@ -76,7 +76,7 @@
 <div th:replace="fragments/message"></div>
 <div th:replace="fragments/trip-filter-properties"></div>
 <!-- table below -->
-<div class="container-fluid mx-1">
+<div class="container">
     <div class="row p-1 m-1">
         <div class="table-responsive">
             <table class="table table-hover table-dark">
@@ -132,7 +132,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form th:action="@{/trips/edit}" th:object="${tripDto}" method="post">
+                <form th:action="@{/trips/edit}" th:object="${newTrip}" method="post">
                     <div class="modal-body">
                         <p>
                             W tym miejscu możesz zmienić opis rezerwacji.
@@ -194,7 +194,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form th:action="@{/trips/cancel}" th:object="${tripDto}" method="post">
+                <form th:action="@{/trips/cancel}" th:object="${newTrip}" method="post">
                     <div class="modal-body">
                         <p>
                             Zaraz anulujesz rezerwację.
