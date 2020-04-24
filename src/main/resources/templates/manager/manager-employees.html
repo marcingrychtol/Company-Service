@@ -10,9 +10,9 @@
 <div th:replace="fragments/nav-bar"></div>
 <div th:replace="fragments/message"></div>
 
-<div class="container p-1">
+<div class="container-xl p-1">
 
-    <button type="button" class="btn btn-info btn-block text-center" data-toggle="modal" data-target="#newEmployeeModal">
+    <button type="button" class="btn btn-success btn-block text-center" data-toggle="modal" data-target="#newEmployeeModal">
         Dodaj nowego pracownika
     </button>
     <div class="modal fade" id="newEmployeeModal" data-backdrop="static" tabindex="-1" role="dialog"
@@ -50,6 +50,7 @@
                     <div class="modal-footer">
                         <button type="button" class="shadow btn btn-sm btn-secondary " data-dismiss="modal">Zamknij bez zapisywania</button>
                         <button type="submit" class="shadow btn btn-sm btn-primary ">Dodaj pracownika</button>
+
                     </div>
                 </form>
             </div>
@@ -70,21 +71,28 @@
             </thead>
             <tbody>
 
-            <tr th:each="emp: ${employees}" th:class="${emp.cancelled} ? 'bg-dark text-secondary' : ''">
-                <th scope="row" th:text="${emp.getId()}"></th>
-                <td th:text="${emp.getSecondName()} + ' ' + ${emp.getName()}"></td>
-                <td th:text="${emp.getEmail()}"></td>
-                <td th:text="${emp.getPhoneNumber()}"></td>
+            <tr th:each="dto: ${employees}" th:class="${dto.cancelled} ? 'bg-dark text-secondary' : ''">
+                <th scope="row" th:text="${dto.getId()}"></th>
+                <td th:text="${dto.getSecondName()} + ' ' + ${dto.getName()}"></td>
+                <td th:text="${dto.getEmail()}"></td>
+                <td th:text="${dto.getPhoneNumber()}"></td>
                 <td>
-                    <button type="button" class="shadow btn bg-info "
+
+                    <button type="button" class="shadow btn btn-secondary "
                             data-toggle="modal"
-                            th:attr="data-target='#empEdit'+${emp.getId()}">
-                        Szczegóły
+                            th:attr="data-target='#dtoEdit'+${dto.getId()}">
+                        Edycja
                     </button>
-                    <button type="button" class="shadow btn btn-danger "
+                    <button type="button" th:class="${dto.cancelled} ? 'shadow btn btn-success' : 'shadow btn btn-warning' "
+                            th:text="${dto.cancelled} ? 'Aktywuj' : 'Wyłącz' "
                             data-toggle="modal"
-                            th:attr="data-target='#empCancel'+${emp.getId()}">
+                            th:attr="data-target='#dtoCancel'+${dto.getId()}">
                         Wyłącz
+                    </button>
+                    <button type="button" class="shadow btn btn-danger"
+                            data-toggle="modal"
+                            th:attr="data-target='#dtoCancel'+${dto.getId()}">
+                        Usuń
                     </button>
                 </td>
             </tr>
@@ -175,20 +183,17 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez
-                                    zmian
+                                    zapisywania
                                 </button>
                                 <button type="submit" class="shadow btn btn-danger ">Wyłącz pracownika</button>
+
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-
         </tr>
-
     </div>
-
-
 </div>
 <div th:replace="fragments/bootstrap-scripts"></div>
 </body>

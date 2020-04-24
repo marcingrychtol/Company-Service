@@ -13,11 +13,9 @@
 <div th:replace="fragments/nav-bar"></div>
 
 
-<div class="container-fluid">
-
     <div th:replace="fragments/message"></div>
 
-    <div class="container-fluid bg-warning pt-2 px-2 mb-2 rounded">
+    <div class="container-xl bg-warning pt-2 px-2 mb-2 rounded">
 
         <div class="row">
             <div class="col-12 col-md-4 mb-2">
@@ -61,7 +59,7 @@
         </div>
     </div>
 
-    <div class="container-fluid bg-secondary p-2 mb-2 rounded">
+    <div class="container-xl bg-secondary p-2 mb-2 rounded">
         <div class="row">
             <tr th:each="car: ${cars}">
                 <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-1">
@@ -89,6 +87,7 @@
         </div>
     </div>
 
+<div class="container-xl">
     <div class="row m-2">
         <div class="table-responsive">
             <table class="table table-hover table-dark">
@@ -262,7 +261,6 @@
         </div>
     </div>
 </div>
-
 <div th:replace="fragments/bootstrap-scripts"></div>
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script th:inline="javascript">

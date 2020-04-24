@@ -44,12 +44,12 @@ public class TripControllerMVC {
         this.dateMapper = dateMapper;
     }
 
-    @GetMapping("" +
-            "")
+    @GetMapping("")
     public String getAllTrips(@ModelAttribute TripDto filter, Model model){
 
         addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
         model.addAttribute("trips", tripService.getAll());
+        model.addAttribute("filterIsActive", "false");
         return "manager/manager-trips";
     }
 
@@ -60,7 +60,7 @@ public class TripControllerMVC {
         filter = tripService.completeFilterDtoData(filter);
         addTripsPageAttributesToModel(model, ActivePage.TRIPS, filter);
         model.addAttribute("trips", tripService.findByFilter(filter));
-
+        model.addAttribute("filterIsActive", "true");
         return "manager/manager-trips";
     }
 

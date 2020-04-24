@@ -12,71 +12,59 @@
 
 
 <!-- filtering below -->
-<div class="container">
+<div class="container-xl text-white">
     <div class="row">
-        <p>
-            <a class="shadow btn btn-secondary m-1" data-toggle="collapse" href="#collapseFilter"
-               role="button"
-               aria-expanded="false" aria-controls="collapseFilter">
-                Filtrowanie
-            </a>
-        </p>
-        <div class="collapse" id="collapseFilter">
-            <div class="shadow alert bg-dark border-secondary text-white m-1">
-                <form class="form-inline" th:action="@{/trips/filter}" th:object="${filter}" method="get">
+        <form class="form-inline" th:action="@{/trips/filter}" th:object="${filter}" method="get">
+                <div class="form-group">
+                    <label class="my-1 mx-2" for="startDate">Od:</label>
+                    <input type="text" readonly="true" class="shadow bg-secondary text-white" id="startDate"
+                           th:field="*{startingDate}"/>
+                </div>
 
-                    <div class="form-group">
-                        <label class="my-1 mx-2" for="startDate">Od:</label>
-                        <input type="text" readonly="true" class="shadow bg-secondary text-white" id="startDate"
-                               th:field="*{startingDate}"/>
-                    </div>
+                <div class="form-group">
+                    <label class="my-1 mx-2" for="endDate">Do:</label>
+                    <input type="text" readonly="true" class="shadow bg-secondary text-white" id="endDate"
+                           th:field="*{endingDate}"/>
+                </div>
 
-                    <div class="form-group">
-                        <label class="my-1 mx-2" for="endDate">Do:</label>
-                        <input type="text" readonly="true" class="shadow bg-secondary text-white" id="endDate"
-                               th:field="*{endingDate}"/>
-                    </div>
+                <div class="form-group">
+                    <label class="my-1 mx-2" for="selectCar">Auto:</label>
+                    <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1"
+                            th:field="*{carId}">
+                        <option value=""></option>
+                        <option th:each="car : ${cars}" th:value="${car.getId()}"
+                                th:text="${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
+                        </option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <label class="my-1 mx-2" for="selectCar">Pojazd:</label>
-                        <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1" th:field="*{carId}">
-                            <option value=""></option>
-                            <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                    th:text="${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
-                            </option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
+                    <select id="selectEmployee" class="shadow custom-select bg-secondary text-white" size="1"
+                            th:field="*{employeeId}">
+                        <option value=""></option>
+                        <option th:each="emp : ${employees}" th:value="${emp.getId()}"
+                                th:text="${emp.getName()} + ' ' + ${emp.getSecondName()}">
+                        </option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
-                        <select id="selectEmployee" class="shadow custom-select bg-secondary text-white" size="1"
-                                th:field="*{employeeId}">
-                            <option value=""></option>
-                            <option th:each="emp : ${employees}" th:value="${emp.getId()}"
-                                    th:text="${emp.getName()} + ' ' + ${emp.getSecondName()}">
-                            </option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label class="my-1 mx-2" for="selectEmployee">Opis:</label>
+                    <textarea class="shadow form-control bg-secondary text-white" rows="1"
+                              th:field="*{additionalMessage}"></textarea>
+                </div>
 
-                    <div class="form-group">
-                        <label class="my-1 mx-2" for="selectEmployee">Opis:</label>
-                        <textarea class="shadow form-control bg-secondary text-white" rows="1"
-                                  th:field="*{additionalMessage}"></textarea>
-                    </div>
-
-                    <button type="submit" class="shadow btn btn-secondary my-1 ml-2">Filtruj!
-                    </button>
-
-                </form>
-            </div>
-        </div>
+                <button type="submit" class="shadow btn btn-block btn-success my-1 ml-2">Filtruj!
+                </button>
+        </form>
     </div>
 </div>
 
 <div th:replace="fragments/message"></div>
 <div th:replace="fragments/trip-filter-properties"></div>
 <!-- table below -->
-<div class="container">
+<div class="container-xl">
     <div class="row p-1 m-1">
         <div class="table-responsive">
             <table class="table table-hover table-dark">

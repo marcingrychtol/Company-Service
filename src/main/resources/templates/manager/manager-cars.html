@@ -10,9 +10,9 @@
 <div th:replace="fragments/nav-bar"></div>
 <div th:replace="fragments/message"></div>
 
-<div class="container p-1">
+<div class="container-xl p-1">
     <!-- Button trigger modal -->
-    <button type="button" class="shadow btn btn-info btn-block text-center" data-toggle="modal" data-target="#newCarModal">
+    <button type="button" class="shadow btn btn-success btn-block text-center" data-toggle="modal" data-target="#newCarModal">
         Dodaj nowy pojazd
     </button>
 
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Close</button>
+                        <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij</button>
                         <button type="submit" class="shadow btn btn-primary ">Dodaj pojazd</button>
                     </div>
                 </form>
@@ -76,15 +76,21 @@
                 <td th:text="${dto.getBrand()} + ' ' + ${dto.getModel()}"></td>
                 <td th:text="${dto.getRegistration()}"></td>
                 <td>
-                    <button type="button" class="shadow btn bg-secondary "
+                    <button type="button" class="shadow btn btn-secondary "
                             data-toggle="modal"
                             th:attr="data-target='#dtoEdit'+${dto.getId()}">
-                        Szczegóły
+                        Edycja
                     </button>
-                    <button type="button" class="shadow btn btn-danger "
+                    <button type="button" th:class="${dto.cancelled} ? 'shadow btn btn-success' : 'shadow btn btn-warning' "
+                            th:text="${dto.cancelled} ? 'Aktywuj' : 'Wyłącz' "
                             data-toggle="modal"
                             th:attr="data-target='#dtoCancel'+${dto.getId()}">
                         Wyłącz
+                    </button>
+                    <button type="button" class="shadow btn btn-danger"
+                            data-toggle="modal"
+                            th:attr="data-target='#dtoCancel'+${dto.getId()}">
+                        Usuń
                     </button>
                 </td>
             </tr>
@@ -128,8 +134,8 @@
                                 <input type="hidden" name="id" th:value="${dto.getId()}">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Close</button>
-                                <button type="submit" class="shadow btn btn-primary ">Save changes</button>
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez zapisywania</button>
+                                <button type="submit" class="shadow btn btn-primary ">Zapisz zmiany</button>
                             </div>
                         </form>
                     </div>
@@ -166,18 +172,15 @@
                                 <input type="hidden" name="id" th:value="${dto.getId()}">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Close</button>
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez zapisywania</button>
                                 <button type="submit" class="shadow btn btn-small btn-danger ">Delete Car</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-
         </tr>
     </div>
-
-
 </div>
 <div th:replace="fragments/bootstrap-scripts"></div>
 </body>

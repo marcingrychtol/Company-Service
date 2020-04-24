@@ -1,4 +1,5 @@
 <nav class="shadow-sm navbar sticky-top navbar-expand-lg navbar-dark bg-info mb-2" xmlns:th="http://www.thymeleaf.org">
+    <div class="container-xl">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -12,9 +13,6 @@
             <li th:class="${active == 'calendar'} ? 'nav-item active' : 'nav-item'">
                 <a class=" nav-link " th:href="@{/calendar/14/0}">Kalendarz</a>
             </li>
-            <!--            <li class="border-left nav-item active">-->
-            <!--                <a class=" nav-link " th:href="@{/calendar/7/0}">Tydzień</a>-->
-            <!--            </li>-->
             <li th:class="${active == 'day'} ? 'nav-item active' : 'nav-item'">
                 <a class=" nav-link " th:href="@{/calendar/browser}">Dzień</a>
             </li>
@@ -46,4 +44,5 @@
         </button>
         <input type="hidden" name="localDate" th:value="${today.getLocalDate()}">
     </form>
+    </div>
 </nav>
