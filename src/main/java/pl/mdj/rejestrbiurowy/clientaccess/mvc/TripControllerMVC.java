@@ -14,6 +14,7 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
+import pl.mdj.rejestrbiurowy.model.dto.FilterDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
@@ -45,9 +46,9 @@ public class TripControllerMVC {
     }
 
     @GetMapping("")
-    public String getAllTrips(@ModelAttribute TripDto filter, Model model){
+    public String getAllTrips(@ModelAttribute FilterDto filter, Model model){
 
-        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new FilterDto());
         model.addAttribute("trips", tripService.getAll());
         model.addAttribute("filterIsActive", "false");
         return "manager/manager-trips";
@@ -55,57 +56,48 @@ public class TripControllerMVC {
 
 
     @GetMapping("/filter")
-    public String getTripsFiltered(@ModelAttribute TripDto filter, Model model){
+    public String getTripsFiltered(@ModelAttribute FilterDto filter, Model model){
 
-        filter = tripService.completeFilterDtoData(filter);
         addTripsPageAttributesToModel(model, ActivePage.TRIPS, filter);
         model.addAttribute("trips", tripService.findByFilter(filter));
-        model.addAttribute("filterIsActive", "true");
         return "manager/manager-trips";
     }
 
     @PostMapping("/cancel")
-    public String cancelTrip(@ModelAttribute TripDto tripDto, Model model){
+    public String cancelTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model){
 
         try {
-            tripService.deleteByDto(tripDto);
+            tripService.deleteByDto(newTrip);
             model.addAttribute("successMessage", "Poprawnie usunięto rezerwację!");
         } catch (WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (CannotFindEntityException e) {
             model.addAttribute("infomessage", e.getMessage());
         } catch (DataIntegrityViolationException e){
-            tripService.cancelByDto(tripDto);
+            tripService.cancelByDto(newTrip);
             model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
         }
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("active", "trips");
-        model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("filter", new TripDto());
+
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new FilterDto());
         model.addAttribute("trips", tripService.getAll());
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
         return "manager/manager-trips";
     }
 
     @PostMapping("/edit")
-    public String editTrip(@ModelAttribute TripDto tripDto, Model model){
+    public String editTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model){
 
+        TripDto filterDto = new FilterDto();
         try {
-            tripService.update(tripDto);
+            tripService.update(newTrip);
             model.addAttribute("successMessage", "Poprawnie zmieniono rezerwację!");
         } catch (WrongInputDataException | EntityConflictException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (CannotFindEntityException e) {
             model.addAttribute("infomessage", e.getMessage());
         }
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("active", "trips");
-        model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("filter", new TripDto());
-        model.addAttribute("trips", tripService.getAll());
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
+
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, filter);
+        model.addAttribute("trips", tripService.findByFilter(filter));
         return "manager/manager-trips";
     }
 
@@ -125,10 +117,9 @@ public class TripControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("filter", new TripDto());
+        model.addAttribute("filter", new FilterDto());
         model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
-
 
         return "main/browser";
     }
@@ -148,13 +139,27 @@ public class TripControllerMVC {
     }
 
 
-    private void addTripsPageAttributesToModel(Model model, ActivePage active, TripDto filter){
+    private void addTripsPageAttributesToModel(Model model, ActivePage active, FilterDto filter){
         model.addAttribute("active", active.get());
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAll());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("newTrip", new TripDto());
+
+        filter = tripService.completeFilterDtoData(filter);
         model.addAttribute("filter", filter);
+        if (
+                filter.getStartingDate() != null
+                        || filter.getEndingDate() != null
+                        || filter.getEmployeeId() != null
+                        || filter.getCarId() != null
+                        || (filter.getAdditionalMessage() != null
+                        && !filter.getAdditionalMessage().equals("") )
+        ) {
+            model.addAttribute("filterIsActive", "true");
+        } else {
+            model.addAttribute("filterIsActive", "false");
+        }
     }
 
 }
