@@ -1,6 +1,7 @@
 package pl.mdj.rejestrbiurowy.service;
 
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
+import pl.mdj.rejestrbiurowy.model.dto.FilterDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public interface TripService extends BasicService<TripDto, Long> {
     List<TripDto> findByFilter(TripDto filter);
     List<TripDto> findByMessageSearch(String search);
 
-    TripDto completeFilterDtoData(TripDto tripDto);
+    FilterDto completeFilterDtoData(FilterDto tripDto);
 }
 
 

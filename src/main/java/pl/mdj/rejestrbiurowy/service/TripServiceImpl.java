@@ -11,6 +11,7 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
+import pl.mdj.rejestrbiurowy.model.dto.FilterDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
@@ -269,7 +270,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripDto completeFilterDtoData(TripDto tripDto) {
+    public FilterDto completeFilterDtoData(FilterDto tripDto) {
         return tripMapper.completeTripData(tripDto);
     }
 

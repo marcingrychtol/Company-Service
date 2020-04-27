@@ -1,4 +1,4 @@
-<div th:unless="${filterIsActive == 'false'}" class="container-xl px-2">
+<div th:if="${filterIsActive == 'true'}" class="container-xl px-2">
     <div class="alert alert-success alert-dismissible fade show " role="alert">Aktywne filtry:
         <td th:unless="${filter.getStartingDate() == null}">
             <span class="badge badge-success text-wrap" th:text="'Po: '+${filter.getStartingDate()}"></span>
