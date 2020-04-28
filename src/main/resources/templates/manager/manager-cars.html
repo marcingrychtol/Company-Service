@@ -89,7 +89,7 @@
                     </button>
                     <button type="button" class="shadow btn btn-danger"
                             data-toggle="modal"
-                            th:attr="data-target='#dtoCancel'+${dto.getId()}">
+                            th:attr="data-target='#dtoDelete'+${dto.getId()}">
                         Usuń
                     </button>
                 </td>
@@ -146,6 +146,34 @@
                  role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content bg-warning ">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="CarCancelModalTitle"
+                                th:text="${dto.getId()}+'. '+${dto.getBrand()} + ' ' + ${dto.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="${dto.isCancelled()} ? @{/cars/enable} : @{/cars/cancel}" th:object="${newCar}" method="post">
+                            <div class="modal-body">
+                                <p th:text="${dto.cancelled} ? 'Zaraz włączysz ponownie pojazd' : 'Zaraz wyłączysz pojazd z rezerwacji'">
+                                    Zaraz zmienisz status pojazdu.
+                                </p>
+                                <input type="hidden" name="id" th:value="${dto.getId()}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez zapisywania</button>
+                                <button type="submit" class="shadow btn btn-small btn-danger ">Zmień status pojazdu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="'dtoDelete'+${dto.getId()}" data-backdrop="static" tabindex="-1"
+                 role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content bg-danger ">
                         <div class="modal-header">
                             <h5 class="modal-title" id="CarDeleteModalTitle"
@@ -159,26 +187,27 @@
                                 <p>
                                     Zaraz usuniesz pojazd.
 
-                                    W tym celu przepisz dokładnie jego numer rejestracyjny do poniższego pola.
-                                    Jeśli pojazd jest przypisany do jakiejkolwiek rezerwacji, jego usunięcie nie będzie możliwe.
-                                    W tym przypadku zostanie on ustawiony jako niedostepny do dalszych rezerwacji.
+                                    W tym celu przepsiz jego numer rejestracyjny do poniższego pola.
+                                    W przypadku rezerwacji przypisanych do tego pojazdy nie będzie to możliwe.
+                                    Spróbuj wtedy zmienić jego status na wyłączony.
                                 </p>
                                 <div class="form-group ">
-                                    <label for="carDeleteInput1">Nr rejestracyjny: </label>
-                                    <input type="text" class="shadow form-control " th:field="*{registration}"
+                                    <label for="carDeleteInput1" th:text="${dto.getRegistration()}">email</label>
+                                    <input type="text" class="form-control " th:field="*{registration}"
                                            id="carDeleteInput1">
-                                    <small id="carDeleteHelp12" class="form-text text-muted">Marka, model</small>
                                 </div>
                                 <input type="hidden" name="id" th:value="${dto.getId()}">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez zapisywania</button>
-                                <button type="submit" class="shadow btn btn-small btn-danger ">Delete Car</button>
+                                <button type="submit" class="shadow btn btn-small btn-danger ">Usuń pojazd</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
+
         </tr>
     </div>
 </div>

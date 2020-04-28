@@ -33,17 +33,8 @@ public class CarControllerMVC {
         this.dateMapper = dateMapper;
     }
 
-    @GetMapping("")
-    public String getAll(Model model){
-        model.addAttribute("active", "data");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("cars", carService.getAllActive());
-        model.addAttribute("newCar", new CarDto());
-        return ("main/cars");
-    }
-
     @GetMapping(path = "/manager")
-    public String postEdit(Model model){
+    public String getCars(Model model) {
         model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.getAll());
@@ -52,7 +43,7 @@ public class CarControllerMVC {
     }
 
     @PostMapping("/edit")
-    public String getAdd(@ModelAttribute CarDto carDto, Model model){
+    public String editCar(@ModelAttribute CarDto carDto, Model model) {
 
         try {
             carService.update(carDto);
@@ -60,15 +51,12 @@ public class CarControllerMVC {
         } catch (EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-        model.addAttribute("active", "data");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("newCar", new CarDto());
-        return ("manager/manager-cars");
+
+        return getCars(model);
     }
 
     @PostMapping("/add")
-    public String addCar(@ModelAttribute CarDto car, Model model){
+    public String addCar(@ModelAttribute CarDto car, Model model) {
         try {
             carService.addOne(car);
             model.addAttribute("successMessage", "Pojazd dodano poprawnie!");
@@ -76,29 +64,45 @@ public class CarControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("active", "data");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("newCar", new CarDto());
-        return ("manager/manager-cars");    }
+        return getCars(model);
+    }
 
     @PostMapping("/delete")
-    public String deleteCar(@ModelAttribute CarDto carDto, Model model){
+    public String deleteCar(@ModelAttribute CarDto carDto, Model model) {
         try {
             carService.deleteByDto(carDto);
             model.addAttribute("successMessage", "Pojazd usunięto!");
         } catch (WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            carService.cancelByDto(carDto);
-            model.addAttribute("infoMessage", "Pojazd nie został usunięty, oznaczono jako niedostępny do dalszej rezerwacji");
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("infoMessage", "Pojazd nie został usunięty, gdyż jest przypisany do rezerwacji, spróbuj opcji Wyłącz!");
         }
 
-        model.addAttribute("active", "data");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("newCar", new CarDto());
-        return ("manager/manager-cars");
+        return getCars(model);
+    }
+
+    @PostMapping("/cancel")
+    public String cancelCar(@ModelAttribute CarDto carDto, Model model) {
+        try {
+            carService.cancelByDto(carDto);
+            model.addAttribute("successMessage", "Pojazd wyłączono!");
+        } catch (WrongInputDataException | CannotFindEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return getCars(model);
+    }
+
+    @PostMapping("/enable")
+    public String enableCar(@ModelAttribute CarDto carDto, Model model) {
+        try {
+            carService.enableByDto(carDto);
+            model.addAttribute("successMessage", "Pojazd włączono!");
+        } catch (CannotFindEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return getCars(model);
     }
 
 

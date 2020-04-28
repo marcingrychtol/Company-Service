@@ -28,16 +28,8 @@ public class EmployeeControllerMVC {
         this.dateMapper = dateMapper;
     }
 
-    @GetMapping("")
-    public String getEmployees(Model model){
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("active", "data");
-        model.addAttribute("employees", employeeService.getAllActive());
-        return "main/employees";
-    }
-
     @GetMapping("/manager")
-    public String editEmployees(Model model){
+    public String getEmployees(Model model){
         model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("employees", employeeService.getAll());
@@ -51,15 +43,10 @@ public class EmployeeControllerMVC {
             employeeService.addOne(employee);
             model.addAttribute("successMessage", "Poprawnie dodano pracownika!");
         } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
-            e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("active", "data");
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("newEmployee", new EmployeeDto());
-        return "manager/manager-employees";
+        return getEmployees(model);
     }
 
     @PostMapping("/delete")
@@ -70,15 +57,37 @@ public class EmployeeControllerMVC {
         } catch (WrongInputDataException | CannotFindEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (DataIntegrityViolationException e){
-            employeeService.cancelByDto(employeeDto);
-            model.addAttribute("infoMessage", "Nie można usunąć pracownika, ustawiono jako nieaktywny!");
+            model.addAttribute("infoMessage", "Nie można usunąć pracownika, gdyż ma rezerwacje. Spróbuj opcji Wyłącz!");
         }
 
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("active", "data");
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("newEmployee", new EmployeeDto());
-        return "manager/manager-employees";
+        return getEmployees(model);
+    }
+
+    @PostMapping("/cancel")
+    public String cancelEmployee(@ModelAttribute EmployeeDto employeeDto, Model model){
+        try {
+            employeeService.cancelByDto(employeeDto);
+            model.addAttribute("successMessage", "Poprawnie wyłączono pracownika!");
+        } catch (CannotFindEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        } catch (DataIntegrityViolationException e){
+            model.addAttribute("infoMessage", "DataIntegrityViolationException - WTF?");
+        } catch (WrongInputDataException ignored) {
+        }
+
+        return getEmployees(model);
+    }
+
+    @PostMapping("/enable")
+    public String enableEmployee(@ModelAttribute EmployeeDto employeeDto, Model model){
+        try {
+            employeeService.enableByDto(employeeDto);
+            model.addAttribute("successMessage", "Poprawnie włączono pracownika!");
+        } catch (CannotFindEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return getEmployees(model);
     }
 
     @PostMapping("/edit")
@@ -90,10 +99,6 @@ public class EmployeeControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("active", "data");
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("newEmployee", new EmployeeDto());
-        return "manager/manager-employees";
+        return getEmployees(model);
     }
 }

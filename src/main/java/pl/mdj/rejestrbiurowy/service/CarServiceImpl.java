@@ -77,14 +77,16 @@ public class CarServiceImpl implements CarService {
         carRepository.save(entity);
     }
 
-    /** Should be called only after deleteByDto is called.
-     * No confirmation data is checked.
-     * Existence of entity is not being checked - uses lazy loading getOne().
+    /**
      * @param carDto
      */
     @Override
-    public void cancelByDto(CarDto carDto) {
-        Car car = carRepository.getOne(carDto.getId());
+    public void cancelByDto(CarDto carDto) throws CannotFindEntityException {
+        Optional<Car> carOptional = carRepository.findById(carDto.getId());
+        if (!carOptional.isPresent()) {
+            throw new CannotFindEntityException("Wystąpił błąd, nie ma takiego pojazdu");
+        }
+        Car car = carOptional.get();
         car.setCancelled(true);
         carRepository.save(car);
     }
@@ -100,12 +102,24 @@ public class CarServiceImpl implements CarService {
     public void deleteByDto(CarDto carDto) throws WrongInputDataException, CannotFindEntityException, DataIntegrityViolationException {
         Optional<Car> carOptional = carRepository.findById(carDto.getId());
         if (!carOptional.isPresent()) {
-            throw new CannotFindEntityException("Wystąpił błąd, nie ma takeigo pojazdu");
+            throw new CannotFindEntityException("Wystąpił błąd, nie ma takiego pojazdu");
         }
         if (!carOptional.get().getRegistration().equals(carDto.getRegistration())) {
             throw new WrongInputDataException("Niepoprawne dane, nie można usunąć pojazdu!");
         }
         carRepository.deleteById(carDto.getId());
+    }
+
+    @Override
+    public void enableByDto(CarDto carDto) throws CannotFindEntityException {
+
+        Optional<Car> carOptional = carRepository.findById(carDto.getId());
+        if (!carOptional.isPresent()) {
+            throw new CannotFindEntityException("Wystąpił błąd, nie ma takiego pojazdu");
+        }
+        Car car = carOptional.get();
+        car.setCancelled(false);
+        carRepository.save(car);
     }
 
     /**

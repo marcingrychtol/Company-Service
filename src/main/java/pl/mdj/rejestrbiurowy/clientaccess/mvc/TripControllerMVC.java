@@ -63,8 +63,8 @@ public class TripControllerMVC {
         return "manager/manager-trips";
     }
 
-    @PostMapping("/cancel")
-    public String cancelTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model){
+    @PostMapping("/delete")
+    public String deleteTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model) {
 
         try {
             tripService.deleteByDto(newTrip);
@@ -73,9 +73,25 @@ public class TripControllerMVC {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (CannotFindEntityException e) {
             model.addAttribute("infomessage", e.getMessage());
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("successMessage", "Nie można usunąć, spróbuj użyć opcji Wyłącz!");
+        }
+
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new FilterDto());
+        model.addAttribute("trips", tripService.getAll());
+        return "manager/manager-trips";
+    }
+
+    @PostMapping("/cancel")
+    public String cancelTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model){
+
+        try {
             tripService.cancelByDto(newTrip);
-            model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
+            model.addAttribute("successMessage", "Poprawnie usunięto rezerwację!");
+        } catch (WrongInputDataException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        } catch (CannotFindEntityException e) {
+            model.addAttribute("infomessage", e.getMessage());
         }
 
         addTripsPageAttributesToModel(model, ActivePage.TRIPS, new FilterDto());
@@ -86,7 +102,6 @@ public class TripControllerMVC {
     @PostMapping("/edit")
     public String editTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model){
 
-        TripDto filterDto = new FilterDto();
         try {
             tripService.update(newTrip);
             model.addAttribute("successMessage", "Poprawnie zmieniono rezerwację!");

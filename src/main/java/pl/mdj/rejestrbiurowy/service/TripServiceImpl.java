@@ -92,13 +92,16 @@ public class TripServiceImpl implements TripService {
     }
 
     /**
-     * Should be used only after deleteByDto(), no checking performed
      *
      * @param tripDto
      */
     @Override
-    public void cancelByDto(TripDto tripDto) {
-        Trip trip = tripRepository.getOne(tripDto.getId());
+    public void cancelByDto(TripDto tripDto) throws CannotFindEntityException {
+        Optional<Trip> tripOptional = tripRepository.findById(tripDto.getId());
+        if (!tripOptional.isPresent()){
+            throw new CannotFindEntityException("Nie można znaleźć rezerwacji (jednoczesta edycja z innego stanowiska)!");
+        }
+        Trip trip = tripOptional.get();
         trip.setCancelled(true);
         trip.setCancelledTime(LocalDateTime.now());
         tripRepository.save(trip);
@@ -121,6 +124,17 @@ public class TripServiceImpl implements TripService {
             throw new WrongInputDataException("Niepoprawne dane, nie można anulować rezerwacji!");
         }
         throw new DataIntegrityViolationException("Usuwanie rezerwacji nie jest możliwe w tej wersji systemu!");
+    }
+
+    @Override
+    public void enableByDto(TripDto tripDto) throws CannotFindEntityException {
+        Optional<Trip> tripOptional = tripRepository.findById(tripDto.getId());
+        if (!tripOptional.isPresent()){
+            throw new CannotFindEntityException("Nie można znaleźć rezerwacji (jednoczesta edycja z innego stanowiska)!");
+        }
+        Trip trip = tripOptional.get();
+        trip.setCancelled(false);
+        tripRepository.save(trip);
     }
 
     @Override
@@ -273,7 +287,6 @@ public class TripServiceImpl implements TripService {
     public FilterDto completeFilterDtoData(FilterDto tripDto) {
         return tripMapper.completeTripData(tripDto);
     }
-
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {
 
         Car car = trip.getCar();

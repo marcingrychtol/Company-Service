@@ -9,14 +9,32 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.mdj</groupId>
-    <artifactId>rcp</artifactId>
-    <version>0.0.7-h2</version>
-    <name>MDJ-Service</name>
-    <description>Welcome to MDJ-Service</description>
+    <artifactId>MDJ-Rezerwator</artifactId>
+    <version>1.0.2-release</version>
+    <name>MDJ-Rezerwator</name>
+    <description>Rezerwacja pojazdów służbowych</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>9</java.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <activatedProperties>dev</activatedProperties>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <activatedProperties>prod</activatedProperties>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->

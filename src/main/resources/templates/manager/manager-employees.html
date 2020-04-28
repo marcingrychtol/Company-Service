@@ -91,7 +91,7 @@
                     </button>
                     <button type="button" class="shadow btn btn-danger"
                             data-toggle="modal"
-                            th:attr="data-target='#dtoCancel'+${dto.getId()}">
+                            th:attr="data-target='#dtoDelete'+${dto.getId()}">
                         Usuń
                     </button>
                 </td>
@@ -102,7 +102,7 @@
 
         <tr th:each="emp: ${employees}">
 
-            <div class="modal fade" th:id="'empEdit'+${emp.getId()}" data-backdrop="static" tabindex="-1" role="dialog"
+            <div class="modal fade" th:id="'dtoEdit'+${emp.getId()}" data-backdrop="static" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content ">
@@ -151,7 +151,39 @@
                 </div>
             </div>
 
-            <div class="modal fade" th:id="'empCancel'+${emp.getId()}" data-backdrop="static" tabindex="-1"
+            <div class="modal fade" th:id="'dtoCancel'+${emp.getId()}" data-backdrop="static" tabindex="-1"
+                 role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content bg-warning text-white ">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="CarCancelModalTitle"
+                                th:text="${emp.getId()}+'. '+${emp.getName()} +' '+${emp.getSecondName()}">Modal
+                                title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="${emp.cancelled} ? @{/employees/enable} : @{/employees/cancel}" th:object="${newEmployee}" method="post">
+                            <div class="modal-body">
+                                <p th:text="${emp.cancelled} ? 'Zaraz włączysz ponownie pracownika!' : 'Zaraz wyłączysz pracownika z rezerwacji'">
+                                    Zaraz zmienisz status pracownika!
+                                </p>
+                                <input type="hidden" name="id" th:value="${emp.getId()}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez
+                                    zmian
+                                </button>
+                                <button type="submit" class="shadow btn btn-danger ">Zmień status pracownika</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="'dtoDelete'+${emp.getId()}" data-backdrop="static" tabindex="-1"
                  role="dialog"
                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -172,7 +204,7 @@
                                     W tym celu przepisz dokładnie jego adres e-mail do poniższego pola.
                                     Jeśli pracownik jest przypisany do jakiejkolwiek rezerwacji, jego usunięcie nie
                                     będzie możliwe.
-                                    W tym przypadku zostanie on ustawiony jako niedostepny do dalszych rezerwacji.
+                                    Możesz wtedy użyć opcji Wyłącz.
                                 </p>
                                 <div class="form-group ">
                                     <label for="carDeleteInput1" th:text="${emp.getEmail()}">email</label>
@@ -183,15 +215,16 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez
-                                    zapisywania
+                                    zmian
                                 </button>
-                                <button type="submit" class="shadow btn btn-danger ">Wyłącz pracownika</button>
+                                <button type="submit" class="shadow btn btn-danger ">Usuń pracownika</button>
 
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
         </tr>
     </div>
 </div>

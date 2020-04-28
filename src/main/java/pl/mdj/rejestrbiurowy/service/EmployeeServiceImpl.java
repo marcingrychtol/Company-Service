@@ -71,8 +71,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void cancelByDto(EmployeeDto employeeDto){
-        Employee employee = employeeRepository.getOne(employeeDto.getId());
+    public void cancelByDto(EmployeeDto employeeDto) throws CannotFindEntityException {
+        Optional<Employee> empOptional = employeeRepository.findById(employeeDto.getId());
+        if (!empOptional.isPresent()){
+            throw new CannotFindEntityException("Pracownik nie istnieje, wystąpił błąd! (jednoczesna edycja z innego stanowiska)");
+        }
+        Employee employee = empOptional.get();
         employee.setCancelled(true);
         employeeRepository.save(employee);
     }
@@ -84,9 +88,20 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new CannotFindEntityException("Pracownik nie istnieje, wystąpił błąd! (jednoczesna edycja z innego stanowiska)");
         }
         if (!empOptional.get().getEmail().equals(employeeDto.getEmail())) {
-            throw new WrongInputDataException("Niepoprawne dane, nie można usunąć pojazdu!");
+            throw new WrongInputDataException("Niepoprawne dane, nie można usunąć pracownika!");
         }
         employeeRepository.deleteById(employeeDto.getId());
+    }
+
+    @Override
+    public void enableByDto(EmployeeDto employeeDto) throws CannotFindEntityException {
+        Optional<Employee> empOptional = employeeRepository.findById(employeeDto.getId());
+        if (!empOptional.isPresent()){
+            throw new CannotFindEntityException("Pracownik nie istnieje, wystąpił błąd! (jednoczesna edycja z innego stanowiska)");
+        }
+        Employee employee = empOptional.get();
+        employee.setCancelled(false);
+        employeeRepository.save(employee);
     }
 
     @Override
