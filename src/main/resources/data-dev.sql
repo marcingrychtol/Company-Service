@@ -31,7 +31,7 @@ INSERT INTO employee
 
 INSERT INTO trip
     (id, additional_message, cancelled, cancelled_time, created_time, ending_date, last_modified_time, starting_date, car_id, employee_id)
-    VALUES (1, N'', 0, null, N'2020-04-27 15:09:27.1023693', N'2020-04-28', N'2020-04-27 15:09:27.1023693', N'2020-04-27', 2, 2);
+    VALUES (1, N'asdf', 0, null, N'2020-04-27 15:09:27.1023693', N'2020-04-28', N'2020-04-27 15:09:27.1023693', N'2020-04-27', 2, 2);
 INSERT INTO trip
     (id, additional_message, cancelled, cancelled_time, created_time, ending_date, last_modified_time, starting_date, car_id, employee_id)
     VALUES (2, N'', 0, null, N'2020-04-27 15:09:27.2089643', N'2020-05-01', N'2020-04-27 15:09:27.2089643', N'2020-04-29', 2, 1);

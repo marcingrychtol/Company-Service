@@ -32,7 +32,7 @@ public class EmployeeControllerMVC {
     public String getEmployees(Model model){
         model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("employees", employeeService.findAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";
     }

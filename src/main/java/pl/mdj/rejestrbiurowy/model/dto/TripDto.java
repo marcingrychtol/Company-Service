@@ -24,7 +24,6 @@ public class TripDto{
     private Date startingDate;
     @DateTimeFormat(pattern = "MM/dd/YYYY")
     private Date endingDate;
-    private Integer durationDays;
 
     private String createdTime;
     private String lastModifiedTime;  // TODO: not working
@@ -32,5 +31,23 @@ public class TripDto{
     private Boolean cancelled = false;
 
     private String additionalMessage;
+
+
+    private Long filterId;
+    private Long filterCarId;
+    private CarDto filterCar;
+    private Long filterEmployeeId;
+    private EmployeeDto filterEmployee;
+
+    @DateTimeFormat(pattern = "MM/dd/YYYY")
+    private Date filterStartingDate;
+    @DateTimeFormat(pattern = "MM/dd/YYYY")
+    private Date filterEndingDate;
+
+    private String filterCreatedTime;
+    private String filterLastModifiedTime;
+    private Boolean filterCancelled = false;
+
+    private String filterAdditionalMessage;
 
 }

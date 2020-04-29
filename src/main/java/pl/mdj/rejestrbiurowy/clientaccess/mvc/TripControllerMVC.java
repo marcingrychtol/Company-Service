@@ -14,7 +14,6 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
-import pl.mdj.rejestrbiurowy.model.dto.FilterDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
@@ -46,28 +45,24 @@ public class TripControllerMVC {
     }
 
     @GetMapping("")
-    public String getAllTrips(@ModelAttribute FilterDto filter, Model model){
-
-        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new FilterDto());
-        model.addAttribute("trips", tripService.getAll());
-        model.addAttribute("filterIsActive", "false");
+    public String getAllTrips(@ModelAttribute TripDto tripDto, Model model){
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
         return "manager/manager-trips";
     }
 
 
     @GetMapping("/filter")
-    public String getTripsFiltered(@ModelAttribute FilterDto filter, Model model){
+    public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model){
 
-        addTripsPageAttributesToModel(model, ActivePage.TRIPS, filter);
-        model.addAttribute("trips", tripService.findByFilter(filter));
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, tripDto);
         return "manager/manager-trips";
     }
 
     @PostMapping("/delete")
-    public String deleteTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model) {
+    public String deleteTrip(@ModelAttribute TripDto tripDto, Model model) {
 
         try {
-            tripService.deleteByDto(newTrip);
+            tripService.deleteByDto(tripDto);
             model.addAttribute("successMessage", "Poprawnie usunięto rezerwację!");
         } catch (WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -77,16 +72,15 @@ public class TripControllerMVC {
             model.addAttribute("successMessage", "Nie można usunąć, spróbuj użyć opcji Wyłącz!");
         }
 
-        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new FilterDto());
-        model.addAttribute("trips", tripService.getAll());
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
         return "manager/manager-trips";
     }
 
     @PostMapping("/cancel")
-    public String cancelTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model){
+    public String cancelTrip(@ModelAttribute TripDto tripDto, Model model){
 
         try {
-            tripService.cancelByDto(newTrip);
+            tripService.cancelByDto(tripDto);
             model.addAttribute("successMessage", "Poprawnie usunięto rezerwację!");
         } catch (WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -94,16 +88,15 @@ public class TripControllerMVC {
             model.addAttribute("infomessage", e.getMessage());
         }
 
-        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new FilterDto());
-        model.addAttribute("trips", tripService.getAll());
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
         return "manager/manager-trips";
     }
 
     @PostMapping("/edit")
-    public String editTrip(@ModelAttribute TripDto newTrip, @ModelAttribute FilterDto filter, Model model){
+    public String editTrip(@ModelAttribute TripDto tripDto, Model model){
 
         try {
-            tripService.update(newTrip);
+            tripService.update(tripDto);
             model.addAttribute("successMessage", "Poprawnie zmieniono rezerwację!");
         } catch (WrongInputDataException | EntityConflictException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -111,8 +104,7 @@ public class TripControllerMVC {
             model.addAttribute("infomessage", e.getMessage());
         }
 
-        addTripsPageAttributesToModel(model, ActivePage.TRIPS, filter);
-        model.addAttribute("trips", tripService.findByFilter(filter));
+        addTripsPageAttributesToModel(model, ActivePage.TRIPS, tripDto);
         return "manager/manager-trips";
     }
 
@@ -132,7 +124,7 @@ public class TripControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("filter", new FilterDto());
+        model.addAttribute("filter", new TripDto());
         model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
@@ -154,27 +146,28 @@ public class TripControllerMVC {
     }
 
 
-    private void addTripsPageAttributesToModel(Model model, ActivePage active, FilterDto filter){
+    private void addTripsPageAttributesToModel(Model model, ActivePage active, TripDto tripDto){
         model.addAttribute("active", active.get());
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("cars", carService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("cars", carService.findAll());
+        model.addAttribute("employees", employeeService.findAll());
 
-        filter = tripService.completeFilterDtoData(filter);
-        model.addAttribute("filter", filter);
-        if (
-                filter.getStartingDate() != null
-                        || filter.getEndingDate() != null
-                        || filter.getEmployeeId() != null
-                        || filter.getCarId() != null
-                        || (filter.getAdditionalMessage() != null
-                        && !filter.getAdditionalMessage().equals("") )
+        if (tripDto.getFilterStartingDate() != null
+                        || tripDto.getFilterEndingDate() != null
+                        || tripDto.getFilterEmployeeId() != null
+                        || tripDto.getFilterCarId() != null
+                        || (tripDto.getFilterAdditionalMessage() != null
+                        && !tripDto.getFilterAdditionalMessage().equals("") )
         ) {
             model.addAttribute("filterIsActive", "true");
+            model.addAttribute("trips", tripService.findByFilter(tripDto));
+            tripDto = tripService.completeFilterDtoData(tripDto);
         } else {
             model.addAttribute("filterIsActive", "false");
+            model.addAttribute("trips", tripService.findAll());
         }
+
+        model.addAttribute("tripDto", tripDto);
     }
 
 }

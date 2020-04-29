@@ -16,8 +16,8 @@ import java.util.List;
  * @param <I> id, is usually Long
  */
 public interface BasicService<D, I> {
-    List<D> getAll();
-    List<D> getAllActive();
+    List<D> findAll();
+    List<D> findAllActive();
     D findById(I id) throws CannotFindEntityException;
     void addOne(D d) throws EntityNotCompleteException, EntityConflictException, WrongInputDataException, CannotFindEntityException;
     void cancelByDto(D d) throws CannotFindEntityException, WrongInputDataException;

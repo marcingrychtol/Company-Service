@@ -37,7 +37,7 @@ public class CarControllerMVC {
     public String getCars(Model model) {
         model.addAttribute("active", "data");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("cars", carService.getAll());
+        model.addAttribute("cars", carService.findAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");
     }

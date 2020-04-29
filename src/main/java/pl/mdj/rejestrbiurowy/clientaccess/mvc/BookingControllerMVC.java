@@ -62,8 +62,8 @@ public class BookingControllerMVC {
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("requestedTrip", requestedTrip);
         model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("employees", employeeService.getAllActive());
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("employees", employeeService.findAllActive());
+        model.addAttribute("cars", carService.findAllActive());
         return "main/booking";
     }
 
@@ -86,8 +86,8 @@ public class BookingControllerMVC {
         model.addAttribute("requestedTrip", tripDto);
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("newDate", new DateDto());
-        model.addAttribute("employees", employeeService.getAllActive());
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("employees", employeeService.findAllActive());
+        model.addAttribute("cars", carService.findAllActive());
         return "main/booking";
     }
 

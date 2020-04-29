@@ -11,7 +11,6 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
-import pl.mdj.rejestrbiurowy.model.dto.FilterDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
@@ -53,13 +52,13 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public List<TripDto> getAll() {
+    public List<TripDto> findAll() {
         return tripMapper.mapToDto(tripRepository.findByOrderByStartingDateDesc());
     }
 
     @Override
-    public List<TripDto> getAllActive() {
-        List<TripDto> activeTrips = getAll();
+    public List<TripDto> findAllActive() {
+        List<TripDto> activeTrips = findAll();
         return activeTrips.stream()
                 .filter(trip -> !trip.getCancelled())
                 .collect(Collectors.toList());
@@ -146,16 +145,6 @@ public class TripServiceImpl implements TripService {
         });
     }
 
-    public List<TripDto> findAllByEmployee_Id(Long id) {
-        List<Trip> tripList = tripRepository.findAllByEmployee_IdOrderByStartingDateDesc(id);
-        return tripMapper.mapToDto(tripList);
-    }
-
-    public List<TripDto> findAllByCar_Id(Long id) {
-        List<Trip> tripList = tripRepository.findAllByCar_IdOrderByStartingDateDesc(id);
-        return tripMapper.mapToDto(tripList);
-    }
-
     @Override
     public List<TripDto> findAllActiveByDate(LocalDate date) {
         Day day;
@@ -169,6 +158,7 @@ public class TripServiceImpl implements TripService {
                 .filter(trip -> !trip.getCancelled())
                 .collect(Collectors.toList()));
     }
+
 
     public List<TripDto> findAllByDate(LocalDate date) {
         Day day;
@@ -190,17 +180,17 @@ public class TripServiceImpl implements TripService {
 
         List<DayDto> days = new ArrayList<>();
         // at first let's find out if we have any dates provided, and get Days basing on that
-        if (filter.getStartingDate() != null) {
-            start = dateMapper.toLocalDate(filter.getStartingDate());
+        if (filter.getFilterStartingDate() != null) {
+            start = dateMapper.toLocalDate(filter.getFilterStartingDate());
             datesGiven = true;
-            if (filter.getEndingDate() != null) {
-                end = dateMapper.toLocalDate(filter.getEndingDate());
+            if (filter.getFilterEndingDate() != null) {
+                end = dateMapper.toLocalDate(filter.getFilterEndingDate());
                 days = dayService.getDaysDtoBetween(start, end);
             } else {
                 days = dayService.getDaysDtoAfter(start);
             }
-        } else if (filter.getEndingDate() != null) {
-            end = dateMapper.toLocalDate(filter.getEndingDate());
+        } else if (filter.getFilterEndingDate() != null) {
+            end = dateMapper.toLocalDate(filter.getFilterEndingDate());
             days = dayService.getDaysDtoBefore(end);
             datesGiven = true;
         }
@@ -216,31 +206,31 @@ public class TripServiceImpl implements TripService {
         List<TripDto> tripList = new ArrayList<>();
         boolean haveTouchedTripRepository = false;
 
-        if (filter.getCarId() != null) {
+        if (filter.getFilterCarId() != null) {
             tripList = tripMapper.mapToDto(
-                    tripRepository.findAllByCar_IdOrderByStartingDateDesc(filter.getCarId())
+                    tripRepository.findAllByCar_IdOrderByStartingDateDesc(filter.getFilterCarId())
             );
             haveTouchedTripRepository = true;
         }
 
-        if (filter.getEmployeeId() != null) {
+        if (filter.getFilterEmployeeId() != null) {
             if (haveTouchedTripRepository) {
                 tripList = tripList.stream()
-                        .filter(t -> t.getEmployeeId().equals(filter.getEmployeeId()))
+                        .filter(t -> t.getEmployeeId().equals(filter.getFilterEmployeeId()))
                         .collect(Collectors.toList());
             } else {
-                tripList = tripMapper.mapToDto(tripRepository.findAllByEmployee_IdOrderByStartingDateDesc(filter.getEmployeeId()));
+                tripList = tripMapper.mapToDto(tripRepository.findAllByEmployee_IdOrderByStartingDateDesc(filter.getFilterEmployeeId()));
                 haveTouchedTripRepository=true;
             }
         }
 
-        if (filter.getAdditionalMessage() != null  && !filter.getAdditionalMessage().equals("")) {
+        if (filter.getFilterAdditionalMessage() != null  && !filter.getFilterAdditionalMessage().equals("")) {
             if (haveTouchedTripRepository) {
                 tripList = tripList.stream()
-                        .filter(t -> Pattern.compile(Pattern.quote(filter.getAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
+                        .filter(t -> Pattern.compile(Pattern.quote(filter.getFilterAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
                         .collect(Collectors.toList());
             } else {
-                tripList = tripMapper.mapToDto(tripRepository.findAllByAdditionalMessageContainingIgnoreCase(filter.getAdditionalMessage()));
+                tripList = tripMapper.mapToDto(tripRepository.findAllByAdditionalMessageContainingIgnoreCase(filter.getFilterAdditionalMessage()));
             }
         }
 
@@ -255,38 +245,34 @@ public class TripServiceImpl implements TripService {
                 .forEach(tripSet::addAll);
         tripList = new ArrayList<>(tripSet);
 
-        Comparator<TripDto> compareByStartingDate = Comparator.comparing(TripDto::getStartingDate, Comparator.reverseOrder());
+        Comparator<TripDto> compareByStartingDate = Comparator.comparing(TripDto::getFilterStartingDate, Comparator.reverseOrder());
         tripList.sort(compareByStartingDate);
 
-        if (filter.getCarId() != null) {
+        if (filter.getFilterCarId() != null) {
             tripList = tripList.stream()
-                    .filter(t -> t.getCarId().equals(filter.getCarId()))
+                    .filter(t -> t.getCarId().equals(filter.getFilterCarId()))
                     .collect(Collectors.toList());
         }
-        if (filter.getEmployeeId() != null) {
+        if (filter.getFilterEmployeeId() != null) {
             tripList = tripList.stream()
-                    .filter(t -> t.getEmployeeId().equals(filter.getEmployeeId()))
+                    .filter(t -> t.getEmployeeId().equals(filter.getFilterEmployeeId()))
                     .collect(Collectors.toList());
         }
 
-        if (filter.getAdditionalMessage() != null && !filter.getAdditionalMessage().equals("")) {
+        if (filter.getFilterAdditionalMessage() != null && !filter.getFilterAdditionalMessage().equals("")) {
                 tripList = tripList.stream()
-                        .filter(t -> Pattern.compile(Pattern.quote(filter.getAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
+                        .filter(t -> Pattern.compile(Pattern.quote(filter.getFilterAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
                         .collect(Collectors.toList());
         }
         return tripList;
     }
 
-    @Override
-    public List<TripDto> findByMessageSearch(String search) {
-        List<Trip> trips = tripRepository.findAllByAdditionalMessageContainingIgnoreCase(search);
-        return tripMapper.mapToDto(trips);
-    }
 
     @Override
-    public FilterDto completeFilterDtoData(FilterDto tripDto) {
+    public TripDto completeFilterDtoData(TripDto tripDto) {
         return tripMapper.completeTripData(tripDto);
     }
+
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {
 
         Car car = trip.getCar();

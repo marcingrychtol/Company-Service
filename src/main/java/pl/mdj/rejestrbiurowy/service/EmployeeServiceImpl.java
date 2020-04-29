@@ -7,9 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
-import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
-import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
@@ -17,7 +15,6 @@ import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,13 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDto> getAll() {
+    public List<EmployeeDto> findAll() {
         return employeeMapper.mapToDto(employeeRepository.findAll());
     }
 
     @Override
-    public List<EmployeeDto> getAllActive() {
-        List<EmployeeDto> dtoList = getAll();
+    public List<EmployeeDto> findAllActive() {
+        List<EmployeeDto> dtoList = findAll();
         List<EmployeeDto> dtoListActive = new ArrayList<>();
         for (EmployeeDto emp :
                 dtoList) {

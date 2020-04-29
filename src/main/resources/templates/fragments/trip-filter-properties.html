@@ -1,19 +1,19 @@
 <div th:if="${filterIsActive == 'true'}" class="container-xl px-2">
     <div class="alert alert-success alert-dismissible fade show " role="alert">Aktywne filtry:
-        <td th:unless="${filter.getStartingDate() == null}">
-            <span class="badge badge-success text-wrap" th:text="'Po: '+${filter.getStartingDate()}"></span>
+        <td th:unless="${tripDto.getFilterStartingDate() == null}">
+            <span class="badge badge-success text-wrap" th:text="'Po: '+${tripDto.getFilterStartingDate()}"></span>
         </td>
-        <td th:unless="${filter.getEndingDate() == null}">
-            <span class="badge badge-success text-wrap" th:text="'Przed: '+${filter.getEndingDate()}"></span>
+        <td th:unless="${tripDto.getFilterEndingDate() == null}">
+            <span class="badge badge-success text-wrap" th:text="'Przed: '+${tripDto.getFilterEndingDate()}"></span>
         </td>
-        <td th:unless="${filter.getCarId() == null}">
-            <span class="badge badge-success text-wrap" th:text="'Pojazd: '+${filter.getCar().getModel()}"></span>
+        <td th:unless="${tripDto.getFilterCarId() == null}">
+            <span class="badge badge-success text-wrap" th:text="'Pojazd: '+${tripDto.getFilterCar().getModel()}"></span>
         </td>
-        <td th:unless="${filter.getEmployeeId() == null}">
-            <span class="badge badge-success text-wrap" th:text="'Pracownik: '+${filter.getEmployee().getSecondName()}"></span>
+        <td th:unless="${tripDto.getFilterEmployeeId() == null}">
+            <span class="badge badge-success text-wrap" th:text="'Pracownik: '+${tripDto.getFilterEmployee().getSecondName()}"></span>
         </td>
-        <td th:unless="${filter.getAdditionalMessage() == '' || filter.getAdditionalMessage() == null }">
-            <span class="badge badge-success text-wrap" th:text="'Wyszukiwane słowo: '+${filter.getAdditionalMessage()}"></span>
+        <td th:unless="${tripDto.getFilterAdditionalMessage() == '' || tripDto.getFilterAdditionalMessage() == null }">
+            <span class="badge badge-success text-wrap" th:text="'Wyszukiwane słowo: '+${tripDto.getFilterAdditionalMessage()}"></span>
         </td>
         <a th:href="@{/trips}" type="button" class="close">
            <span> &times;</span>

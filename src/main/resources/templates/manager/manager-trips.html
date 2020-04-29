@@ -14,23 +14,23 @@
 <!-- filtering below -->
 <div class="container-xl text-white">
     <div class="row">
-        <form class="form-inline" th:action="@{/trips/filter}" th:object="${filter}" method="get">
+        <form class="form-inline" th:action="@{/trips/filter}" th:object="${tripDto}" method="get">
                 <div class="form-group">
                     <label class="my-1 mx-2" for="startDate">Od:</label>
                     <input type="text" readonly="true" class="shadow bg-secondary text-white" id="startDate"
-                           th:field="*{startingDate}"/>
+                           th:field="*{filterStartingDate}"/>
                 </div>
 
                 <div class="form-group">
                     <label class="my-1 mx-2" for="endDate">Do:</label>
                     <input type="text" readonly="true" class="shadow bg-secondary text-white" id="endDate"
-                           th:field="*{endingDate}"/>
+                           th:field="*{filterEndingDate}"/>
                 </div>
 
                 <div class="form-group">
                     <label class="my-1 mx-2" for="selectCar">Auto:</label>
                     <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1"
-                            th:field="*{carId}">
+                            th:field="*{filterCarId}">
                         <option value=""></option>
                         <option th:each="car : ${cars}" th:value="${car.getId()}"
                                 th:text="${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
                     <select id="selectEmployee" class="shadow custom-select bg-secondary text-white" size="1"
-                            th:field="*{employeeId}">
+                            th:field="*{filterEmployeeId}">
                         <option value=""></option>
                         <option th:each="emp : ${employees}" th:value="${emp.getId()}"
                                 th:text="${emp.getName()} + ' ' + ${emp.getSecondName()}">
@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label class="my-1 mx-2" for="selectEmployee">Opis:</label>
                     <textarea class="shadow form-control bg-secondary text-white" rows="1"
-                              th:field="*{additionalMessage}"></textarea>
+                              th:field="*{filterAdditionalMessage}"></textarea>
                 </div>
 
                 <button type="submit" class="shadow btn btn-block btn-success my-1 ml-2">Filtruj!
@@ -120,7 +120,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form th:action="@{/trips/edit}" th:object="${newTrip}" method="post">
+                <form th:action="@{/trips/edit}" th:object="${tripDto}" method="post">
                     <div class="modal-body">
                         <p>
                             W tym miejscu możesz zmienić opis rezerwacji.
@@ -171,6 +171,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" th:id="'tripCancel'+${trip.getId()}" data-backdrop="static" tabindex="-1"
          role="dialog"
          aria-labelledby="tripCancelModalCenterTitle" aria-hidden="true">
@@ -182,7 +183,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form th:action="@{/trips/cancel}" th:object="${newTrip}" method="post">
+                <form th:action="@{/trips/cancel}" th:object="${tripDto}" method="post">
                     <div class="modal-body">
                         <p>
                             Zaraz anulujesz rezerwację.

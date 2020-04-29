@@ -48,12 +48,12 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDto> getAll() {
+    public List<CarDto> findAll() {
         return carMapper.mapToDto(carRepository.findAllByOrderByBrand());    }
 
     @Override
-    public List<CarDto> getAllActive() {
-        return getAll().stream()
+    public List<CarDto> findAllActive() {
+        return findAll().stream()
                 .filter(car -> !car.isCancelled())
                 .collect(Collectors.toList());
     }

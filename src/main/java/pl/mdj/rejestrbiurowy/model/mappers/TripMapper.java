@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.mdj.rejestrbiurowy.model.dto.FilterDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
@@ -39,13 +38,13 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
         this.dateMapper = dateMapper;
     }
 
-    public FilterDto completeTripData(FilterDto tripDto) {
-        Optional.ofNullable(tripDto.getCarId())
+    public TripDto completeTripData(TripDto tripDto) {
+        Optional.ofNullable(tripDto.getFilterCarId())
                 .flatMap(carId -> carRepository.findById(carId))
-                .ifPresent(car -> tripDto.setCar(carMapper.mapToDto(car)));
-        Optional.ofNullable(tripDto.getEmployeeId())
+                .ifPresent(car -> tripDto.setFilterCar(carMapper.mapToDto(car)));
+        Optional.ofNullable(tripDto.getFilterEmployeeId())
                 .flatMap(empId -> employeeRepository.findById(empId))
-                .ifPresent(emp -> tripDto.setEmployee(employeeMapper.mapToDto(emp)));
+                .ifPresent(emp -> tripDto.setFilterEmployee(employeeMapper.mapToDto(emp)));
         return tripDto;
     }
 

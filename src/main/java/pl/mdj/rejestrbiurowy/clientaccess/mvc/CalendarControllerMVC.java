@@ -79,7 +79,7 @@ public class CalendarControllerMVC {
         model.addAttribute("active", "calendar");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(Integer.parseInt(page), Integer.parseInt(scope)));
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("cars", carService.findAllActive());
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         return "main/calendar";
@@ -94,7 +94,7 @@ public class CalendarControllerMVC {
         model.addAttribute("active", "calendar");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, 14));
-        model.addAttribute("cars", carService.getAllActive());
+        model.addAttribute("cars", carService.findAllActive());
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         return "redirect:/calendar/14/"+page;
