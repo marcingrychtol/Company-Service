@@ -16,4 +16,8 @@ public class CarDto {
     private LocalDate insuranceExpiration;
     private LocalDate inspectionExpiration;
     private int mileage;
+
+    private byte[] image;
+    private String imageName;
+    private String fileType;
 }

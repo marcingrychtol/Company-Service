@@ -4,9 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
@@ -15,6 +19,7 @@ import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import pl.mdj.rejestrbiurowy.service.CarService;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 
 @Controller
@@ -42,6 +47,20 @@ public class CarControllerMVC {
         return ("manager/manager-cars");
     }
 
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") long carId) {
+
+        CarDto car = new CarDto();
+        try {
+            car = carService.findById(carId);
+        } catch (CannotFindEntityException ignored) {
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+
+        return new ResponseEntity<>(car.getImage(), headers, HttpStatus.OK);
+    }
+
     @PostMapping("/edit")
     public String editCar(@ModelAttribute CarDto carDto, Model model) {
 
@@ -61,6 +80,18 @@ public class CarControllerMVC {
             carService.addOne(car);
             model.addAttribute("successMessage", "Pojazd dodano poprawnie!");
         } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return getCars(model);
+    }
+
+    @PostMapping("/addimage/{id}")
+    public String addPhoto(@RequestParam("image") MultipartFile img, @PathVariable("id") long carId, Model model) {
+        try {
+            carService.addPhoto(img, carId);
+            model.addAttribute("successMessage", "Zdjęcie dodano poprawnie!");
+        } catch (CannotFindEntityException | WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
 

@@ -32,6 +32,10 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
         Optional.ofNullable(entity.getMileage().intValue()).ifPresent(dto::setMileage);
         dto.setCancelled(entity.getCancelled());
 
+        Optional.ofNullable(entity.getImage()).ifPresent(dto::setImage);
+        Optional.ofNullable(entity.getImageName()).ifPresent(dto::setImageName);
+        Optional.ofNullable(entity.getFileType()).ifPresent(dto::setFileType);
+
         return dto;
     }
 
@@ -53,6 +57,7 @@ public class CarMapper implements BasicMapper<Car, CarDto> {
         Optional.ofNullable(dto.getInsuranceExpiration()).ifPresent(entity::setInsuranceExpiration);
         Optional.of(dto.getMileage()).ifPresent(mileage -> entity.setMileage(Long.valueOf(mileage)));
         entity.setCancelled(dto.isCancelled());
+
         return entity;
     }
 

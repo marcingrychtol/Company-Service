@@ -57,6 +57,7 @@
         </div>
     </div>
 
+<!--    TABELA -->
     <div class="row p-2 m-2">
 
         <table class="table table-hover table-dark">
@@ -91,6 +92,11 @@
                             data-toggle="modal"
                             th:attr="data-target='#dtoDelete'+${dto.getId()}">
                         Usuń
+                    </button>
+                    <button type="button" class="shadow btn btn-primary"
+                            data-toggle="modal"
+                            th:attr="data-target='#dtoImage'+${dto.getId()}">
+                        Image
                     </button>
                 </td>
             </tr>
@@ -138,6 +144,36 @@
                                 <button type="submit" class="shadow btn btn-primary ">Zapisz zmiany</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="'dtoImage'+${dto.getId()}" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="carImageTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="carImageModalTitle"
+                                th:text="${dto.getId()}+'. '+${dto.getBrand()} + ' ' + ${dto.getModel()} +' '+${dto.getRegistration()}">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form th:action="@{/cars/addimage/{id}(id=${dto.getId()})}" enctype="multipart/form-data" method="post">
+                            <div class="modal-body">
+                                <img th:src="@{/cars/image/{id}(id=${dto.getId()})}" alt="No such car image" class="img-thumbnail">
+                                <div class="form-group ">
+                                <label for="exampleFormControlFile1">Example file input</label>
+                                <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="shadow btn btn-secondary " data-dismiss="modal">Zamknij bez zapisywania</button>
+                                <button type="submit" value="Submit" class="shadow btn btn-primary ">Zapisz zmiany</button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>

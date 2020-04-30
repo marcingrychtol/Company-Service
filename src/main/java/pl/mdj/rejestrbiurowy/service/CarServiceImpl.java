@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
@@ -20,6 +22,7 @@ import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.CarMapper;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -175,6 +178,31 @@ public class CarServiceImpl implements CarService {
                         .map(car -> carMapper.mapToDto(car))
                         .collect(Collectors.toList())
         ).orElseGet(ArrayList::new);
+
+    }
+
+    @Override
+    public void addPhoto(MultipartFile photo, Long id) throws CannotFindEntityException, WrongInputDataException {
+
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(photo.getOriginalFilename()));
+
+        try {
+            if(fileName.contains("..")){
+                throw new WrongInputDataException("Jakieś nieuznawalne znaki w nazwie pliku... " + fileName);
+            }
+            Optional<Car> carOptional = carRepository.findById(id);
+            if (!carOptional.isPresent()) {
+                throw new CannotFindEntityException("Brak takiego pojazdu w bazie, spróbuj ponownie");
+            }
+            Car car = carOptional.get();
+            car.setImage(photo.getBytes());
+            car.setImageName(fileName);
+            car.setFileType(photo.getContentType());
+            carRepository.save(car);
+        } catch (IOException e) {
+            LOG.error("Błąd odczytu bajtów z pliku!" + e.getMessage());
+            throw new WrongInputDataException("Błąd odczytu bajtów z pliku! Nie wiem." + e.getMessage());
+        }
 
     }
 

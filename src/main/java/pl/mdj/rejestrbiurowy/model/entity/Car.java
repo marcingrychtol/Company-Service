@@ -32,6 +32,11 @@ public class Car {
     @Nullable
     private Long mileage;
 
+    @Lob
+    private byte[] image;
+    private String imageName;
+    private String fileType;
+
     @OneToMany(mappedBy = "car")
     private List<Trip> trips;
 

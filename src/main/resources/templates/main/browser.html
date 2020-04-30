@@ -13,85 +13,90 @@
 <div th:replace="fragments/nav-bar"></div>
 
 
-    <div th:replace="fragments/message"></div>
+<div th:replace="fragments/message"></div>
 
-    <div class="container-xl bg-warning pt-2 px-2 mb-2 rounded">
+<div class="container-xl bg-warning pt-2 px-2 mb-2 rounded">
 
-        <div class="row">
-            <div class="col-12 col-md-4 mb-2">
-                <button type="button" class="btn btn-block btn-warning" th:text="
+    <div class="row">
+        <div class="col-12 col-md-4 mb-2">
+            <button type="button" class="btn btn-block btn-warning" th:text="
                     'Wyświetlasz: ' + ${requestedDate.getDayOfWeekPL()}
                     + ' '
                     + ${requestedDate.getLocalDate().getDayOfMonth()}
                     + ' '
                     + ${requestedDate.getMonthPL()}">
+            </button>
+        </div>
+        <div class="col-3 col-md-1 mb-2">
+            <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+                <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().minusDays(1)}"/>
+                <button type="submit" class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
+                    &laquo;
                 </button>
-            </div>
-            <div class="col-3 col-md-1 mb-2">
-                <form th:action="@{/calendar/browser}" th:object="${dateDto}">
-                    <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().minusDays(1)}"/>
-                    <button type="submit" class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
-                        &laquo;
-                    </button>
-                </form>
-            </div>
-            <div class="col-6 col-md-2 mb-2">
-                <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
-                    <input type="text" readonly="true" class="bg-light" id="requestedDatepicker" th:field="*{startingDate}"/>
-                </form>
-            </div>
-            <div class="col-3 col-md-1 mb-2">
-                <form th:action="@{/calendar/browser}" th:object="${dateDto}">
-                    <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().plusDays(1)}"/>
-                    <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
-                        &raquo;
-                    </button>
-                </form>
-            </div>
-            <div class="col-12 col-md-4 mb-2">
-                <form th:action="@{/calendar/find}" th:object="${dateDto}">
-                    <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()}"/>
-                    <button type="submit" class="btn btn-block btn-outline-dark text-dark bg-warning">
-                        Pokaż w kalendarzu
-                    </button>
-                </form>
-            </div>
+            </form>
+        </div>
+        <div class="col-6 col-md-2 mb-2">
+            <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
+                <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
+                       th:field="*{startingDate}"/>
+            </form>
+        </div>
+        <div class="col-3 col-md-1 mb-2">
+            <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+                <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().plusDays(1)}"/>
+                <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
+                    &raquo;
+                </button>
+            </form>
+        </div>
+        <div class="col-12 col-md-4 mb-2">
+            <form th:action="@{/calendar/find}" th:object="${dateDto}">
+                <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()}"/>
+                <button type="submit" class="btn btn-block btn-outline-dark text-dark bg-warning">
+                    Pokaż w kalendarzu
+                </button>
+            </form>
         </div>
     </div>
+</div>
 
-    <div class="container-xl bg-secondary p-2 mb-2 rounded">
-        <div class="row">
-            <tr th:each="car: ${cars}">
-                <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-1">
+<div class="container-xl bg-secondary p-2 mb-2 rounded">
+    <div class="row">
+        <tr th:each="car: ${cars}">
+            <div class="col-6 col-md-4 col-lg-3 mb-1">
+                <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
                     <div class="shadow card text-white bg-info text-center h-100">
-                        <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
-                            <h5 class="card-header">
-                                <!--                        <td th:text="${car.getId()}"></td>-->
-                                <td th:text="${car.getBrand()} + ' ' + ${car.getModel()}"></td>
-                            </h5>
-                            <div class="card-body">
-                                <p class="card-text">
-                                <td th:text="${car.getRegistration()}"></td>
-                                </p>
-                            </div>
+                        <div class="card-header" th:text="${car.getBrand()}
+                        + ' '
+                        + ${car.getModel()}
+                        + ' - '
+                        + ${car.getRegistration()}"></div>
+                        <img th:src="@{/cars/image/{id}(id=${car.getId()})}" alt="No such car image"
+                             class="img-thumbnail">
+                        <div class="card-img-overlay h-100">
+
                             <input type="hidden" name="carId" th:value="${car.getId()}">
                             <input type="hidden" name="startingDate"
                                    th:value="${requestedDate.getLocalDateFormatted()}">
-                            <button type="submit"
-                                    class="btn btn-info stretched-link btn-block text-white">Rezerwuj
-                            </button>
-                        </form>
+
+                        </div>
+                        <button type="submit"
+                                class="btn btn-info stretched-link btn-block text-white">Rezerwuj
+                        </button>
                     </div>
-                </div>
-            </tr>
-        </div>
+                </form>
+            </div>
+        </tr>
     </div>
+</div>
 
 <div class="container-xl">
     <div class="row m-2">
         <div class="table-responsive">
             <table class="table table-hover table-dark">
-                <caption th:text="'Lista rezerwacji w dniu '+${requestedDate.getLocalDateFormatted()}">Lista rezerwacji w dniu</caption>
+                <caption th:text="'Lista rezerwacji w dniu '+${requestedDate.getLocalDateFormatted()}">Lista rezerwacji
+                    w dniu
+                </caption>
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -273,7 +278,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer:true,
+        footer: true,
         format: 'dd/mm/yyyy',
         value: [(${requestedDate.getDayValueWithZeroJS()})]
             + "/"
@@ -291,7 +296,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer:true,
+        footer: true,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
