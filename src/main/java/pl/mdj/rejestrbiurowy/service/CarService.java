@@ -14,4 +14,6 @@ public interface CarService extends BasicService<CarDto, Long> {
     List<CarDto> getNotAvailableCarsByDay(LocalDate date);
 
     void addPhoto(MultipartFile photo, Long id) throws CannotFindEntityException, WrongInputDataException;
+
+    List<CarDto> findAllByDay(LocalDate date);
 }

@@ -65,7 +65,8 @@ public class CalendarControllerMVC {
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("dateDto", new DateDto());
-        model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
+        model.addAttribute("carsByDay", carService.findAllByDay(requestedDate));
+        model.addAttribute("notAvailableCars", carService.getNotAvailableCarsByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllActiveByDate(requestedDate));
         return "main/browser";
     }

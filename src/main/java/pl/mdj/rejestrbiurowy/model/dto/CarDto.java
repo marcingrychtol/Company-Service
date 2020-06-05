@@ -12,6 +12,7 @@ public class CarDto {
     private String registration;
     private boolean cancelled;
     private boolean available;
+    private EmployeeDto occupier;
     private String fuel;
     private LocalDate insuranceExpiration;
     private LocalDate inspectionExpiration;

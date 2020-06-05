@@ -28,37 +28,36 @@
                 ? 'shadow alert bg-warning h-100 p-0 m-0'
                 : 'alert text-white bg-dark h-100 p-0 m-0'">
                     <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
-<!--                        <div class="card-body">-->
-                            <input type="hidden" name="localDate" th:value="${day.id.localDate}">
-                            <button type="submit" id="dayButton"
-                                    th:text="
+                        <input type="hidden" name="localDate" th:value="${day.id.localDate}">
+                        <button type="submit" id="dayButton"
+                                th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
                                     ? ${day.getId().getDayOfWeekPL()}
                                     : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPL()} "
-                                    th:class="
+                                th:class="
                                     ${day.getId().equals(today)}
                                     ? 'btn btn-sm text-dark stretched-link'
                                     : 'btn btn-sm text-white stretched-link'"
-                                    ></button>
-                            <table class="shadow table table-sm table-dark p-0">
-                                <tr th:each="car :${cars}"
-                                    th:class="${day.availableCars.contains(car.getId())}
+                        ></button>
+                        <table class="shadow table table-sm table-dark p-0">
+                            <tr th:each="car :${cars}"
+                                th:class="${day.availableCars.contains(car.getId())}
                                         ? 'bg-info'
                                         : 'bg-secondary text-dark font-weight-light'">
-                                    <td th:text="
+                                <td th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
                                     ? ${car.getModel()}
-                                    : ${car.getBrand()} + ' ' + ${car.getModel()}" ></td>
-                                </tr>
-                            </table>
-<!--                        </div>-->
+                                    : ${car.getBrand()} + ' ' + ${car.getModel()}"></td>
+                            </tr>
+                        </table>
                     </form>
                 </div>
-
             </div>
         </tr>
     </div>
 </div>
+
+
 <div th:replace="fragments/calendar-page-switch"></div>
 
 <div th:replace="fragments/bootstrap-scripts"></div>
