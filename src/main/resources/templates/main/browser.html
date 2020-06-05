@@ -64,7 +64,10 @@
     <div class="row">
         <tr th:each="car: ${carsByDay}">
             <div class="col-6 col-md-4 col-lg-3 mb-1">
-                <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}" method="get">
+
+                <span th:if="${car.isAvailable()}">
+                    <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}"
+                                                         method="get">
                     <div th:class="${car.isAvailable()}
                                         ? 'shadow card text-white bg-info text-center h-100'
                                         : 'shadow card text-white bg-danger text-center h-100'"
@@ -95,6 +98,41 @@
                         </button>
                     </div>
                 </form>
+                </span>
+
+                <span th:if="${car.available==false}">
+
+                    <div th:class="${car.isAvailable()}
+                                        ? 'shadow card text-white bg-info text-center h-100'
+                                        : 'shadow card text-white bg-danger text-center h-100'"
+                    >
+                        <div class="card-header" th:text="${car.getBrand()}
+                        + ' '
+                        + ${car.getModel()}
+                        + ' - '
+                        + ${car.getRegistration()}"></div>
+                        <img th:src="@{/cars/image/{id}(id=${car.getId()})}" alt="No such car image"
+                             class="img-thumbnail">
+                        <div class="card-img-overlay h-100">
+
+                            <input type="hidden" name="carId" th:value="${car.getId()}">
+                            <input type="hidden" name="startingDate"
+                                   th:value="${requestedDate.getLocalDateFormatted()}">
+
+                        </div>
+                        <button type="submit"
+                                th:class="${car.isAvailable()}
+                                        ? 'btn btn-info stretched-link btn-block text-white'
+                                        : 'btn btn-danger stretched-link btn-block text-white'"
+                                th:text="${car.isAvailable()}
+                                        ? 'Rezerwuj'
+                                        : ${car.getOccupier().getSecondName()}"
+
+                        >Rezerwuj
+                        </button>
+                    </div>
+                </span>
+
             </div>
         </tr>
     </div>

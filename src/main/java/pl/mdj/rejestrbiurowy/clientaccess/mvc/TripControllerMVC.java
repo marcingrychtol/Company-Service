@@ -125,7 +125,7 @@ public class TripControllerMVC {
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("filter", new TripDto());
-        model.addAttribute("cars", carService.getAvailableCarsByDay(requestedDate));
+        model.addAttribute("carsByDay", carService.findAllByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
         return "main/browser";

@@ -11,7 +11,7 @@ public class CarDto {
     private String model;
     private String registration;
     private boolean cancelled;
-    private boolean available;
+    private boolean available = true;
     private EmployeeDto occupier;
     private String fuel;
     private LocalDate insuranceExpiration;

@@ -206,7 +206,7 @@ public class CarServiceImpl implements CarService {
             });
         });
 
-        return null;
+        return carDtos;
     }
 
     @Override
