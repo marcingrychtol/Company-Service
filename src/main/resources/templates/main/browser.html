@@ -102,9 +102,7 @@
 
                 <span th:if="${car.available==false}">
 
-                    <div th:class="${car.isAvailable()}
-                                        ? 'shadow card text-white bg-info text-center h-100'
-                                        : 'shadow card text-white bg-danger text-center h-100'"
+                    <div class="shadow card text-white bg-danger text-center h-100"
                     >
                         <div class="card-header" th:text="${car.getBrand()}
                         + ' '
@@ -120,15 +118,10 @@
                                    th:value="${requestedDate.getLocalDateFormatted()}">
 
                         </div>
-                        <button type="submit"
-                                th:class="${car.isAvailable()}
-                                        ? 'btn btn-info stretched-link btn-block text-white'
-                                        : 'btn btn-danger stretched-link btn-block text-white'"
-                                th:text="${car.isAvailable()}
-                                        ? 'Rezerwuj'
-                                        : ${car.getOccupier().getSecondName()}"
-
-                        >Rezerwuj
+                        <button type="button"
+                                class="btn btn-danger stretched-link btn-block text-white"
+                                th:text="${car.getOccupier().getName()} + ' ' + ${car.getOccupier().getSecondName()}"
+                        >
                         </button>
                     </div>
                 </span>
@@ -147,23 +140,21 @@
                 </caption>
                 <thead>
                 <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Od</th>
                     <th scope="col">Do</th>
                     <th scope="col">Pojazd</th>
                     <th scope="col">Osoba</th>
-                    <th scope="col">Telefon</th>
+                    <th scope="col">Opis</th>
                     <th scope="col">Funkcje</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="trip: ${trips}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
-                    <th scope="row" th:text="${trip.getId()}"></th>
                     <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
                     <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
-                    <td th:text="${trip.car.brand} + ' ' + ${trip.car.model} +' - '+${trip.car.registration}"></td>
+                    <td th:text="${trip.car.model}"></td>
                     <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
-                    <td th:text="${trip.employee.phoneNumber}"></td>
+                    <td th:text="${trip.additionalMessage}"></td>
                     <td>
                         <button type="button" class="shadow btn btn-info"
                                 data-toggle="modal"
