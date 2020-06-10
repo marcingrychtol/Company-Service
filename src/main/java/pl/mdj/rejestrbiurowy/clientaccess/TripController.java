@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.clientaccess.mvc;
+package pl.mdj.rejestrbiurowy.clientaccess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +27,9 @@ import java.util.Date;
 
 @Controller
 @RequestMapping(path = "trips")
-public class TripControllerMVC {
+public class TripController {
 
-    private Logger LOG = LoggerFactory.getLogger(TripControllerMVC.class);
+    private Logger LOG = LoggerFactory.getLogger(TripController.class);
 
     TripService tripService;
     EmployeeService employeeService;
@@ -37,7 +37,7 @@ public class TripControllerMVC {
     DateMapper dateMapper;
 
     @Autowired
-    public TripControllerMVC(TripService tripService, EmployeeService employeeService, CarService carService, DateMapper dateMapper) {
+    public TripController(TripService tripService, EmployeeService employeeService, CarService carService, DateMapper dateMapper) {
         this.tripService = tripService;
         this.employeeService = employeeService;
         this.carService = carService;
@@ -128,7 +128,7 @@ public class TripControllerMVC {
         model.addAttribute("carsByDay", carService.findAllByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
-        return "main/browser";
+        return "main/day";
     }
 
     @InitBinder

@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.clientaccess.mvc;
+package pl.mdj.rejestrbiurowy.clientaccess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +28,9 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 @Controller
 @RequestMapping(path ="/calendar")
-public class CalendarControllerMVC {
+public class CalendarController {
 
-    private Logger LOG = LoggerFactory.getLogger(CalendarControllerMVC.class);
+    private Logger LOG = LoggerFactory.getLogger(CalendarController.class);
 
     TripService tripService;
     CarService carService;
@@ -39,7 +39,7 @@ public class CalendarControllerMVC {
     DayService dayService;
 
     @Autowired
-    public CalendarControllerMVC(TripService tripService, CarService carService, EmployeeService employeeService, DateMapper dateMapper, DayService dayService) {
+    public CalendarController(TripService tripService, CarService carService, EmployeeService employeeService, DateMapper dateMapper, DayService dayService) {
         this.tripService = tripService;
         this.carService = carService;
         this.employeeService = employeeService;
@@ -47,8 +47,8 @@ public class CalendarControllerMVC {
         this.dayService = dayService;
     }
 
-    @GetMapping("/browser")
-    public String getCalendarBrowser(@ModelAttribute TripDto tripDto, @ModelAttribute DateDto dateDto, Model model) {
+    @GetMapping("/day")
+    public String getDay(@ModelAttribute(name = "tripDto") TripDto tripDto, @ModelAttribute DateDto dateDto, Model model) {
 
         LocalDate requestedDate;
 
@@ -64,14 +64,15 @@ public class CalendarControllerMVC {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
+        model.addAttribute("bookingParams", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         model.addAttribute("carsByDay", carService.findAllByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllActiveByDate(requestedDate));
-        return "main/browser";
+        return "main/day";
     }
 
     @GetMapping("/{scope}/{page}")
-    public String getMonth(Model model, @PathVariable String page, @PathVariable String scope) {
+    public String getMonth(Model model, @PathVariable("page") String page, @PathVariable("scope") String scope) {
 
 
         model.addAttribute("page", page);

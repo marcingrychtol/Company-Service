@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.clientaccess.mvc;
+package pl.mdj.rejestrbiurowy.clientaccess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +8,7 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.DateDto;
@@ -26,10 +23,10 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/")
-public class BookingControllerMVC {
+@RequestMapping("/booking")
+public class BookingController {
 
-    Logger LOG = LoggerFactory.getLogger(BookingControllerMVC.class);
+    Logger LOG = LoggerFactory.getLogger(BookingController.class);
 
     EmployeeService employeeService;
     CarService carService;
@@ -37,19 +34,39 @@ public class BookingControllerMVC {
     DateMapper dateMapper;
 
     @Autowired
-    public BookingControllerMVC(EmployeeService employeeService, CarService carService, DayService dayService, DateMapper dateMapper) {
+    public BookingController(EmployeeService employeeService, CarService carService, DayService dayService, DateMapper dateMapper) {
         this.employeeService = employeeService;
         this.carService = carService;
         this.dayService = dayService;
         this.dateMapper = dateMapper;
     }
 
-    @GetMapping("/")
-    public String getHome(Model model){
-        return "redirect:/calendar/14/0";
+
+    @GetMapping
+    public String getBookingByCar(@ModelAttribute(name="bookingParams") TripDto bookingParams, Model model){
+
+        CarDto carDto = new CarDto();
+        try {
+            carDto = carService.findById(bookingParams.getCarId());
+        } catch (CannotFindEntityException e) {
+            LOG.warn("No car with ID: " + bookingParams.getCarId());
+        }
+
+        bookingParams.setCar(carDto);
+
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("active", "booking");
+
+        model.addAttribute("requestedDate", dateMapper.getDateDto(dateMapper.toLocalDate(bookingParams.getStartingDate())));
+        model.addAttribute("bookingParams", bookingParams);
+        model.addAttribute("newTrip", new TripDto());
+        model.addAttribute("dateDto", new DateDto());
+        model.addAttribute("employees", employeeService.findAllActive());
+        model.addAttribute("cars", carService.findAllActive());
+        return "main/booking-car-calendar";
     }
 
-    @GetMapping("/fast")
+    @GetMapping("/0")
     public String getFast(Model model){
 
         LocalDate requestedDate = LocalDate.now();
@@ -67,29 +84,7 @@ public class BookingControllerMVC {
         return "main/booking";
     }
 
-    @GetMapping("/booking")
-    public String getHomeBooking(@ModelAttribute TripDto tripDto, Model model){
 
-        CarDto carDto = new CarDto();
-        try {
-            carDto = carService.findById(tripDto.getCarId());
-        } catch (CannotFindEntityException e) {
-            LOG.warn("No car with ID: " + tripDto.getCarId());
-        }
-
-        tripDto.setCar(carDto);
-
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("active", "booking");
-
-        model.addAttribute("requestedDate", dateMapper.getDateDto(dateMapper.toLocalDate(tripDto.getStartingDate())));
-        model.addAttribute("requestedTrip", tripDto);
-        model.addAttribute("newTrip", new TripDto());
-        model.addAttribute("newDate", new DateDto());
-        model.addAttribute("employees", employeeService.findAllActive());
-        model.addAttribute("cars", carService.findAllActive());
-        return "main/booking";
-    }
 
 
     @InitBinder

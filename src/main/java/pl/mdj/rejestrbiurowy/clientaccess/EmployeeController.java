@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.clientaccess.mvc;
+package pl.mdj.rejestrbiurowy.clientaccess;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,13 +17,13 @@ import java.time.LocalDate;
 
 @Controller
 @RequestMapping("employees")
-public class EmployeeControllerMVC {
+public class EmployeeController {
 
     EmployeeService employeeService;
     DateMapper dateMapper;
 
     @Autowired
-    public EmployeeControllerMVC(EmployeeService employeeService, DateMapper dateMapper) {
+    public EmployeeController(EmployeeService employeeService, DateMapper dateMapper) {
         this.employeeService = employeeService;
         this.dateMapper = dateMapper;
     }

@@ -13,32 +13,32 @@
 
 <!-- filtering below -->
 <div class="container-xl text-white">
-    <div class="row">
-        <form class="form-inline" th:action="@{/trips/filter}" th:object="${tripDto}" method="get">
-                <div class="form-group">
+        <form th:action="@{/trips/filter}" th:object="${tripDto}" method="get">
+            <div class="form-row">
+                <div class="col-2">
                     <label class="my-1 mx-2" for="startDate">Od:</label>
                     <input type="text" readonly="true" class="shadow bg-secondary text-white" id="startDate"
                            th:field="*{filterStartingDate}"/>
                 </div>
 
-                <div class="form-group">
+                <div class="col-2">
                     <label class="my-1 mx-2" for="endDate">Do:</label>
                     <input type="text" readonly="true" class="shadow bg-secondary text-white" id="endDate"
                            th:field="*{filterEndingDate}"/>
                 </div>
 
-                <div class="form-group">
+                <div class="col-2">
                     <label class="my-1 mx-2" for="selectCar">Auto:</label>
                     <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1"
                             th:field="*{filterCarId}">
                         <option value=""></option>
                         <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                th:text="${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
+                                th:text="${car.getModel()}">
                         </option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="col-3">
                     <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
                     <select id="selectEmployee" class="shadow custom-select bg-secondary text-white" size="1"
                             th:field="*{filterEmployeeId}">
@@ -49,16 +49,16 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="col-3">
                     <label class="my-1 mx-2" for="selectEmployee">Opis:</label>
                     <textarea class="shadow form-control bg-secondary text-white" rows="1"
                               th:field="*{filterAdditionalMessage}"></textarea>
                 </div>
+            </div>
 
-                <button type="submit" class="shadow btn btn-block btn-success my-1 ml-2">Filtruj!
-                </button>
+            <button type="submit" class="shadow btn btn-block btn-success my-2">Filtruj!
+            </button>
         </form>
-    </div>
 </div>
 
 <div th:replace="fragments/message"></div>
@@ -247,7 +247,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer: true,
+        footer: false,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
@@ -261,7 +261,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer: true,
+        footer: false,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',

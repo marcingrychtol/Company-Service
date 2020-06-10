@@ -1,4 +1,4 @@
-package pl.mdj.rejestrbiurowy.clientaccess.mvc;
+package pl.mdj.rejestrbiurowy.clientaccess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,21 +19,20 @@ import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import pl.mdj.rejestrbiurowy.service.CarService;
 
-import java.io.InputStream;
 import java.time.LocalDate;
 
 @Controller
 @RequestMapping(path = "cars")
-public class CarControllerMVC {
+public class CarController {
 
     private static final String REDIR_MAIN_CAR = "redirect:/cars";
     private static final String REDIR_MANAGER_CARS = "redirect:/cars/manager";
-    Logger LOG = LoggerFactory.getLogger(CarControllerMVC.class);
+    Logger LOG = LoggerFactory.getLogger(CarController.class);
     private CarService carService;
     private DateMapper dateMapper;
 
     @Autowired
-    public CarControllerMVC(CarService carService, DateMapper dateMapper) {
+    public CarController(CarService carService, DateMapper dateMapper) {
         this.carService = carService;
         this.dateMapper = dateMapper;
     }

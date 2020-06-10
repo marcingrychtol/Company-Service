@@ -44,10 +44,7 @@
                                 th:class="${day.availableCars.contains(car.getId())}
                                         ? 'bg-info'
                                         : 'bg-secondary text-dark font-weight-light'">
-                                <td th:text="
-                                    ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
-                                    ? ${car.getModel()}
-                                    : ${car.getBrand()} + ' ' + ${car.getModel()}"></td>
+                                <td th:text="${car.getModel()}"></td>
                             </tr>
                         </table>
                     </form>

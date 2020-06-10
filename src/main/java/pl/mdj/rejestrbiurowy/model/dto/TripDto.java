@@ -32,7 +32,6 @@ public class TripDto{
 
     private String additionalMessage;
 
-
     private Long filterId;
     private Long filterCarId;
     private CarDto filterCar;
@@ -49,5 +48,7 @@ public class TripDto{
     private Boolean filterCancelled = false;
 
     private String filterAdditionalMessage;
+
+    private Integer bookingScope;
 
 }

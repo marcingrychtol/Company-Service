@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pl-PL" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="fragments/bootstrap-styles"></div>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
+
+</head>
+<body class="bg-dark">
+<div th:replace="fragments/nav-bar"></div>
+
+
+<div th:replace="fragments/message"></div>
+
+
+<!-- filtering below -->
+<div class="container-xl bg-warning pt-2 px-2 mb-2 rounded">
+    <form th:action="@{/calendar/booking}" th:object="${newTrip}" method="get">
+        <div class="form-row">
+
+            <div class="col-3 col-md-1 mb-2">
+                <label class="my-1 mx-2" for="-7">Cofej:</label>
+                <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+                    <input type="hidden" id="-7" name="localDate"
+                           th:value="${requestedDate.getLocalDate().minusDays(7)}"/>
+                    <button type="submit"
+                            class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
+                        -7
+                    </button>
+                </form>
+            </div>
+            <div class="col-6 col-md-2 mb-2">
+                <label class="my-1 mx-2" for="chooseDate">Wybrane:</label>
+                <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${bookingParams}">
+                    <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
+                           th:field="*{startingDate}"/>
+                </form>
+            </div>
+            <div class="col-3 col-md-1 mb-2">
+                <label class="my-1 mx-2" for="+7">Pociś:</label>
+                <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+                    <input type="hidden" id="+7" name="localDate"
+                           th:value="${requestedDate.getLocalDate().plusDays(7)}"/>
+                    <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
+                        +7
+                    </button>
+                </form>
+            </div>
+
+            <div class="col-4">
+                <label class="my-1 mx-2" for="selectScope">Wyświetlaj dni:</label>
+                <select id="selectScope" class="shadow custom-select bg-secondary text-white" size="1"
+                        th:field="*{bookingScope}">
+                    <option value="1">1 tydzień</option>
+                    <option selected value="2">2 tygodnie</option>
+                    <option value="4">4 tygodnie</option>
+                </select>
+            </div>
+
+            <div class="col-4">
+                <label class="my-1 mx-2" for="selectCar">Auto:</label>
+                <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1"
+                        th:field="*{filterCarId}">
+                    <option value=""></option>
+                    <option th:each="car : ${cars}" th:value="${car.getId()}"
+                            th:text="${car.getModel()}"></option>
+                </select>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<div class="container-xl bg-secondary p-2 mb-2 rounded">
+    <div class="row">
+        <div class="col-12">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Poniedziałek" autocomplete="off"> Poniedziałek
+                </label>
+                <label class="btn btn-lg btn-danger">
+                    <input type="checkbox" name="options" id="Wtorek" autocomplete="off"> Wtorek
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Środa" autocomplete="off"> Środa
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Czwartek" autocomplete="off"> Czwartek
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Piątek" autocomplete="off"> Piątek
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Sobota" autocomplete="off"> Sobota
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Niedziela" autocomplete="off"> Niedziela
+                </label>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Poniedziałek2" autocomplete="off"> Poniedziałek
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Wtorek2" autocomplete="off"> Wtorek
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Środa2" autocomplete="off"> Środa
+                </label>
+                <label class="btn btn-lg btn-warning">
+                    <input type="checkbox" name="options" id="Czwartek2" autocomplete="off"> Czwartek
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Piątek2" autocomplete="off"> Piątek
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Sobota2" autocomplete="off"> Sobota
+                </label>
+                <label class="btn btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="Niedziela2" autocomplete="off"> Niedziela
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-xl">
+    <div class="row">
+        <tr th:each="day :${calendarPreview}">
+            <div th:class="
+            ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
+            ? 'col-3 col-sm-2 col-lg-1 p-0 pb-1'
+            : 'col-6 col-sm-4 col-lg-2 p-0 pb-1'">
+                <div th:class="
+                ${day.getId().equals(today)}
+                ? 'shadow alert bg-warning h-100 p-0 m-0'
+                : 'alert text-white bg-dark h-100 p-0 m-0'">
+                    <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
+                        <input type="hidden" name="localDate" th:value="${day.id.localDate}">
+                        <button type="submit" id="dayButton"
+                                th:text="
+                                    ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
+                                    ? ${day.getId().getDayOfWeekPL()}
+                                    : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPL()} "
+                                th:class="
+                                    ${day.getId().equals(today)}
+                                    ? 'btn btn-sm text-dark stretched-link'
+                                    : 'btn btn-sm text-white stretched-link'"
+                        ></button>
+                        <table class="shadow table table-sm table-dark p-0">
+                            <tr th:each="car :${cars}"
+                                th:class="${day.availableCars.contains(car.getId())}
+                                        ? 'bg-info'
+                                        : 'bg-secondary text-dark font-weight-light'">
+                                <td th:text="${car.getModel()}"></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </tr>
+    </div>
+</div>
+
+
+<div th:replace="fragments/bootstrap-scripts"></div>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<script th:inline="javascript">
+    var today = new Date(
+        [(${requestedDate.getYear()})],
+        [(${requestedDate.getMonthValueWithZeroJS()})],
+        [(${requestedDate.getDayValueWithZeroJS()})]);
+
+    $('#requestedDatepicker').datepicker({
+        showOnFocus: true,
+        showRightIcon: false,
+        header: false,
+        footer: false,
+        format: 'dd/mm/yyyy',
+        value: [(${requestedDate.getDayValueWithZeroJS()})]
+            + "/"
+            + [(${requestedDate.getMonthValueWithZeroJS()})]
+            + "/" + [(${requestedDate.getYear()})],
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'fontawesome',
+        ignoreReadonly: true,
+
+        maxDate: function () {
+            return $('#endDate').val();
+        }
+    });
+    $('#endDate').datepicker({
+        showOnFocus: true,
+        showRightIcon: false,
+        header: false,
+        footer: false,
+        format: 'dd/mm/yyyy',
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'fontawesome',
+        ignoreReadonly: true,
+
+        minDate: function () {
+            return $('#requestedDatepicker').val();
+        }
+    });
+
+    var x = document.getElementById("requestedDatepicker").value;
+
+    $('#requestedDatepicker').change(
+        function () {
+            if (x != document.getElementById("requestedDatepicker").value) {
+                $('#chooseDate').submit();
+            }
+        });
+
+</script>
+</body>
+</html>

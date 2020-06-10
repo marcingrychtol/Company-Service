@@ -66,7 +66,7 @@
             <div class="col-6 col-md-4 col-lg-3 mb-1">
 
                 <span th:if="${car.isAvailable()}">
-                    <form id="dayForm" th:action="@{/booking}" th:object="${tripDto}"
+                    <form id="dayForm" th:action="@{/booking/}" th:object="${bookingParams}"
                                                          method="get">
                     <div th:class="${car.isAvailable()}
                                         ? 'shadow card text-white bg-info text-center h-100'
@@ -317,7 +317,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer: true,
+        footer: false,
         format: 'dd/mm/yyyy',
         value: [(${requestedDate.getDayValueWithZeroJS()})]
             + "/"
@@ -335,7 +335,7 @@
         showOnFocus: true,
         showRightIcon: false,
         header: false,
-        footer: true,
+        footer: false,
         format: 'dd/mm/yyyy',
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',

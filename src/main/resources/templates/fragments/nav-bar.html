@@ -11,14 +11,14 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
+            <li th:class="${active == 'day'} ? 'nav-item active' : 'nav-item'">
+                <a class=" nav-link " th:href="@{/calendar/day}">Wybierz dzień</a>
+            </li>
             <li th:class="${active == 'calendar'} ? 'nav-item active' : 'nav-item'">
                 <a class=" nav-link " th:href="@{/calendar/14/0}">Kalendarz</a>
             </li>
-            <li th:class="${active == 'day'} ? 'nav-item active' : 'nav-item'">
-                <a class=" nav-link " th:href="@{/calendar/browser}">Dzień</a>
-            </li>
             <li th:class="${active == 'booking'} ? 'nav-item active' : 'nav-item'">
-                <a class="nav-link" th:href="@{/fast}">Rezerwacja</a>
+                <a class="nav-link" th:href="@{/booking/0}">Rezerwacja zaawansowana</a>
             </li>
             <li th:class="${active == 'trips'} ? 'nav-item active' : 'nav-item'">
                 <a class="nav-link" th:href="@{/trips}">Przeglądaj</a>
@@ -36,7 +36,7 @@
         </ul>
     </div>
 
-    <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+    <form th:action="@{/calendar/day}" th:object="${dateDto}">
         <button type="submit" class="shadow btn btn-warning mt-1" th:text="'Dziś: ' + ${today.getDayOfWeekPL()} + ' '
               + ${today.getDayValueWithZero()} + ' '
               + ${today.getMonthPL()} + ' '
