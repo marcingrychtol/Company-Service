@@ -16,12 +16,11 @@
 <div th:replace="fragments/message"></div>
 
 
-<!-- filtering below -->
-<div class="container-xl bg-warning pt-2 px-2 mb-2 rounded">
+<!-- option panel -->
+<div class="container-xl bg-warning pb-2 px-2 mb-1 rounded">
     <form th:action="@{/calendar/booking}" th:object="${newTrip}" method="get">
         <div class="form-row">
-
-            <div class="col-3 col-md-1 mb-2">
+            <div class="col-3 col-md-1">
                 <label class="my-1 mx-2" for="-7">Cofej:</label>
                 <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" id="-7" name="localDate"
@@ -32,14 +31,14 @@
                     </button>
                 </form>
             </div>
-            <div class="col-6 col-md-2 mb-2">
+            <div class="col-6 col-md-2">
                 <label class="my-1 mx-2" for="chooseDate">Wybrane:</label>
                 <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${bookingParams}">
                     <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
                            th:field="*{startingDate}"/>
                 </form>
             </div>
-            <div class="col-3 col-md-1 mb-2">
+            <div class="col-3 col-md-1">
                 <label class="my-1 mx-2" for="+7">Pociś:</label>
                 <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" id="+7" name="localDate"
@@ -50,7 +49,7 @@
                 </form>
             </div>
 
-            <div class="col-4">
+            <div class="col-6 col-md-4">
                 <label class="my-1 mx-2" for="selectScope">Wyświetlaj dni:</label>
                 <select id="selectScope" class="shadow custom-select bg-secondary text-white" size="1"
                         th:field="*{bookingScope}">
@@ -60,7 +59,7 @@
                 </select>
             </div>
 
-            <div class="col-4">
+            <div class="col-6 col-md-4">
                 <label class="my-1 mx-2" for="selectCar">Auto:</label>
                 <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1"
                         th:field="*{filterCarId}">
@@ -75,55 +74,62 @@
     </form>
 </div>
 
-<div class="container-xl bg-secondary p-2 mb-2 rounded">
+<!-- kalendarz -->
+<div class="shadow container-xl bg-secondary px-2 py-1 mb-1 rounded">
     <div class="row">
-        <div class="col-12">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Poniedziałek" autocomplete="off"> Poniedziałek
-                </label>
-                <label class="btn btn-lg btn-danger">
-                    <input type="checkbox" name="options" id="Wtorek" autocomplete="off"> Wtorek
-                </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Środa" autocomplete="off"> Środa
-                </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Czwartek" autocomplete="off"> Czwartek
-                </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Piątek" autocomplete="off"> Piątek
-                </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Sobota" autocomplete="off"> Sobota
-                </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Niedziela" autocomplete="off"> Niedziela
+        <div class="col-4 col-lg-2  py-1">
+            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-block btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="d11" autocomplete="off" th:text="Poniedziałek">
+                    <div class="rounded bg-info" style="height: 21px;"></div>
                 </label>
             </div>
         </div>
-        <div class="col-12">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Poniedziałek2" autocomplete="off"> Poniedziałek
+        <div class="col-4 col-lg-2  py-1">
+            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-block btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="d12" autocomplete="off" th:text="Poniedziałek">
+                    <div class="rounded bg-info" style="height: 21px;"></div>
                 </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Wtorek2" autocomplete="off"> Wtorek
+            </div>
+        </div>
+        <div class="col-4 col-lg-2  py-1">
+            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-block btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="d13" autocomplete="off" th:text="16.06">
+                    <div class="rounded bg-danger" style="height: 21px;"></div>
                 </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Środa2" autocomplete="off"> Środa
+            </div>
+        </div>
+        <div class="col-4 col-lg-2  py-1">
+            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-block btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="d14" autocomplete="off" th:text="Poniedziałek">
+                    <div class="rounded bg-info" style="height: 21px;"></div>
                 </label>
-                <label class="btn btn-lg btn-warning">
-                    <input type="checkbox" name="options" id="Czwartek2" autocomplete="off"> Czwartek
+            </div>
+        </div>
+        <div class="col-4 col-lg-2  py-1">
+            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-block btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="d15" autocomplete="off" th:text="Poniedziałek">
+                    <div class="rounded bg-info" style="height: 21px;"></div>
                 </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Piątek2" autocomplete="off"> Piątek
+            </div>
+        </div>
+        <div class="col-2 col-lg-1  py-1">
+            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-block btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="d16" autocomplete="off" th:text="So">
+                    <div class="rounded bg-danger" style="height: 21px;"></div>
                 </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Sobota2" autocomplete="off"> Sobota
-                </label>
-                <label class="btn btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="Niedziela2" autocomplete="off"> Niedziela
+            </div>
+        </div>
+        <div class="col-2 col-lg-1 py-1">
+            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-block btn-lg btn-secondary">
+                    <input type="checkbox" name="options" id="d17" autocomplete="off" th:text="Nie">
+                    <div class="rounded bg-info" style="height: 21px;"></div>
                 </label>
             </div>
         </div>
