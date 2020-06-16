@@ -27,7 +27,7 @@
                 ${day.getId().equals(today)}
                 ? 'shadow alert bg-warning h-100 p-0 m-0'
                 : 'alert text-white bg-dark h-100 p-0 m-0'">
-                    <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
+                    <form id="dayForm" th:action="@{/calendar/day}" th:object="${dateDto}" method="get">
                         <input type="hidden" name="localDate" th:value="${day.id.localDate}">
                         <button type="submit" id="dayButton"
                                 th:text="

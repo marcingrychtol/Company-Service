@@ -18,13 +18,13 @@
 
 <!-- option panel -->
 <div class="container-xl bg-warning pb-2 px-2 mb-1 rounded">
-    <form th:action="@{/calendar/bookingParams}" th:object="${bookingParams}" method="get">
+    <form th:action="@{/booking/}" th:object="${bookingParams}" method="get">
         <div class="form-row">
 
             <div class="col-3 col-md-1">
-                <label class="my-1 mx-2" for="-7">Cofej:</label>
-                <input type="hidden" id="-7" name="localDate"
-                       th:value="${requestedDate.getLocalDate().minusDays(7)}"/>
+                <label class="my-1 mx-2" for="backSeven">Cofej:</label>
+                <input type="hidden" id="backSeven" name="requestedDate"
+                       th:value="${bookingParams.getRequestedDate().minusDays(7)}"/>
                 <button type="submit"
                         class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
                     -7
@@ -36,9 +36,10 @@
                        th:field="*{requestedDate}"/>
             </div>
             <div class="col-3 col-md-1">
-                <label class="my-1 mx-2" for="+7">Pociś:</label>
-                <input type="hidden" id="+7" name="localDate"
-                       th:value="${requestedDate.getLocalDate().plusDays(7)}"/>
+<!--                TODO why is this not going back... because it is in one form, so only first one is readed-->
+                <label class="my-1 mx-2" for="aheadSeven">Pociś:</label>
+                <input type="hidden" id="aheadSeven" name="requestedDate"
+                       th:value="${bookingParams.getRequestedDate().plusDays(7)}"/>
                 <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
                     +7
                 </button>
@@ -70,21 +71,24 @@
 </div>
 
 <!-- kalendarz -->
-<div class="shadow container-xl bg-secondary px-2 py-1 mb-1 rounded">
+<div class="shadow container-xl bg-secondary rounded">
     <div class="row">
         <tr th:each="day:${carCalendarInfo.getCarDayInfoList()}">
             <div th:class="
             ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
-            ? 'col-3 col-sm-2 col-lg-1 p-0 pb-1'
-            : 'col-6 col-sm-4 col-lg-2 p-0 pb-1'">
+            ? 'col-3 col-sm-2 col-lg-1 p-1'
+            : 'col-6 col-sm-4 col-lg-2 p-1'">
                 <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-block btn-lg btn-secondary">
-                        <input type="checkbox" name="options" autocomplete="off" th:text="
+                    <label class="btn btn-block btn-secondary">
+                        <input type="checkbox" name="options" autocomplete="off" >
+                        <small th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
-                                    ? ${day.getId().getDayOfWeekPL()}
+                                    ? ${day.getId().getDayValueWithZero()} + ' - ' +${day.getId().getDayOfWeekPLShort()}
                                     : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPL()}
-                                    ">
-                        <div th:class="${day.available} ? 'rounded bg-info' : 'rounded bg-danger'" th:text="${!day.available} ? ${day.employeeDto.getSecondName()} : ''" style="height: 21px;"></div>
+                                    " ></small>
+                        <div th:class="${day.available} ? 'rounded bg-info' : 'rounded bg-danger'" style="height: 26px;">
+                            <small th:text="${!day.available} ? ${day.employeeDto.getSecondName()} : ''" ></small>
+                        </div>
                     </label>
                 </div>
             </div>

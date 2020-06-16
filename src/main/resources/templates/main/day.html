@@ -28,7 +28,7 @@
             </button>
         </div>
         <div class="col-3 col-md-1 mb-2">
-            <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+            <form th:action="@{/calendar/day}" th:object="${dateDto}">
                 <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().minusDays(1)}"/>
                 <button type="submit" class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
                     &laquo;
@@ -36,13 +36,13 @@
             </form>
         </div>
         <div class="col-6 col-md-2 mb-2">
-            <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${tripDto}">
+            <form id="chooseDate" th:action="@{/calendar/day}" th:object="${tripDto}">
                 <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
                        th:field="*{startingDate}"/>
             </form>
         </div>
         <div class="col-3 col-md-1 mb-2">
-            <form th:action="@{/calendar/browser}" th:object="${dateDto}">
+            <form th:action="@{/calendar/day}" th:object="${dateDto}">
                 <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().plusDays(1)}"/>
                 <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
                     &raquo;
