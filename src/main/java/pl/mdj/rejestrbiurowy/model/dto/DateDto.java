@@ -10,6 +10,8 @@ import java.util.Date;
 
 /**
  * Object designed to transfer specifically formatted date elements into template engine
+ *
+ * Do not create that object manually, only by DateMapper
  */
 @Data
 @NoArgsConstructor

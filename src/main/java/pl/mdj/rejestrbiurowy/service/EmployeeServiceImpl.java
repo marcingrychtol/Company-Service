@@ -125,11 +125,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     private void checkInputLengthData(EmployeeDto employeeDto) throws WrongInputDataException {
         if (
                 employeeDto.getEmail().length() < 5
-                        || employeeDto.getName().length() < 3
-                        || employeeDto.getSecondName().length() < 5
-                        || employeeDto.getPhoneNumber().length() < 5
+                        || employeeDto.getName().length() < 2
+                        || employeeDto.getSecondName().length() < 3
+                        || employeeDto.getPhoneNumber().length() < 9
         ) {
-            throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 5 znaków...");
+            throw new WrongInputDataException("Weźże wprowadź dane dłuższe niż 3 znaki...");
         }
     }
 

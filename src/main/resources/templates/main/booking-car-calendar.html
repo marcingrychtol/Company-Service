@@ -21,36 +21,36 @@
     <form th:action="@{/calendar/bookingParams}" th:object="${bookingParams}" method="get">
         <div class="form-row">
 
-        <div class="col-3 col-md-1">
+            <div class="col-3 col-md-1">
                 <label class="my-1 mx-2" for="-7">Cofej:</label>
-                    <input type="hidden" id="-7" name="localDate"
-                           th:value="${requestedDate.getLocalDate().minusDays(7)}"/>
-                    <button type="submit"
-                            class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
-                        -7
-                    </button>
+                <input type="hidden" id="-7" name="localDate"
+                       th:value="${requestedDate.getLocalDate().minusDays(7)}"/>
+                <button type="submit"
+                        class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
+                    -7
+                </button>
             </div>
             <div class="col-6 col-md-2">
                 <label class="my-1 mx-2" for="requestedDatepicker">Wybrane:</label>
-                    <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
-                           th:field="*{requestedDate}"/>
+                <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
+                       th:field="*{requestedDate}"/>
             </div>
             <div class="col-3 col-md-1">
                 <label class="my-1 mx-2" for="+7">Pociś:</label>
-                    <input type="hidden" id="+7" name="localDate"
-                           th:value="${requestedDate.getLocalDate().plusDays(7)}"/>
-                    <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
-                        +7
-                    </button>
+                <input type="hidden" id="+7" name="localDate"
+                       th:value="${requestedDate.getLocalDate().plusDays(7)}"/>
+                <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
+                    +7
+                </button>
             </div>
 
             <div class="col-6 col-md-4">
                 <label class="my-1 mx-2" for="selectScope">Wyświetlaj dni:</label>
                 <select id="selectScope" class="shadow custom-select bg-secondary text-white" size="1"
                         th:field="*{scope}">
-                    <option value="1">1 tydzień</option>
-                    <option selected value="2">2 tygodnie</option>
-                    <option value="4">4 tygodnie</option>
+                    <option value="7">1 tydzień</option>
+                    <option selected value="14">2 tygodnie</option>
+                    <option value="28">4 tygodnie</option>
                 </select>
             </div>
 
@@ -72,102 +72,27 @@
 <!-- kalendarz -->
 <div class="shadow container-xl bg-secondary px-2 py-1 mb-1 rounded">
     <div class="row">
-        <div class="col-4 col-lg-2  py-1">
-            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="d11" autocomplete="off" th:text="Poniedziałek">
-                    <div class="rounded bg-info" style="height: 21px;"></div>
-                </label>
-            </div>
-        </div>
-        <div class="col-4 col-lg-2  py-1">
-            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="d12" autocomplete="off" th:text="Poniedziałek">
-                    <div class="rounded bg-info" style="height: 21px;"></div>
-                </label>
-            </div>
-        </div>
-        <div class="col-4 col-lg-2  py-1">
-            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="d13" autocomplete="off" th:text="16.06">
-                    <div class="rounded bg-danger" style="height: 21px;"></div>
-                </label>
-            </div>
-        </div>
-        <div class="col-4 col-lg-2  py-1">
-            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="d14" autocomplete="off" th:text="Poniedziałek">
-                    <div class="rounded bg-info" style="height: 21px;"></div>
-                </label>
-            </div>
-        </div>
-        <div class="col-4 col-lg-2  py-1">
-            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="d15" autocomplete="off" th:text="Poniedziałek">
-                    <div class="rounded bg-info" style="height: 21px;"></div>
-                </label>
-            </div>
-        </div>
-        <div class="col-2 col-lg-1  py-1">
-            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="d16" autocomplete="off" th:text="So">
-                    <div class="rounded bg-danger" style="height: 21px;"></div>
-                </label>
-            </div>
-        </div>
-        <div class="col-2 col-lg-1 py-1">
-            <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-secondary">
-                    <input type="checkbox" name="options" id="d17" autocomplete="off" th:text="Nie">
-                    <div class="rounded bg-info" style="height: 21px;"></div>
-                </label>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container-xl">
-    <div class="row">
-        <tr th:each="day :${calendarPreview}">
+        <tr th:each="day:${carCalendarInfo.getCarDayInfoList()}">
             <div th:class="
             ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
             ? 'col-3 col-sm-2 col-lg-1 p-0 pb-1'
             : 'col-6 col-sm-4 col-lg-2 p-0 pb-1'">
-                <div th:class="
-                ${day.getId().equals(today)}
-                ? 'shadow alert bg-warning h-100 p-0 m-0'
-                : 'alert text-white bg-dark h-100 p-0 m-0'">
-                    <form id="dayForm" th:action="@{/calendar/browser}" th:object="${dateDto}" method="get">
-                        <input type="hidden" name="localDate" th:value="${day.id.localDate}">
-                        <button type="submit" id="dayButton"
-                                th:text="
+                <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-block btn-lg btn-secondary">
+                        <input type="checkbox" name="options" autocomplete="off" th:text="
                                     ${day.getId().getDayOfWeekPLShort() == 'Sob' || day.getId().getDayOfWeekPLShort() == 'Nie'}
                                     ? ${day.getId().getDayOfWeekPL()}
-                                    : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPL()} "
-                                th:class="
-                                    ${day.getId().equals(today)}
-                                    ? 'btn btn-sm text-dark stretched-link'
-                                    : 'btn btn-sm text-white stretched-link'"
-                        ></button>
-                        <table class="shadow table table-sm table-dark p-0">
-                            <tr th:each="car :${cars}"
-                                th:class="${day.availableCars.contains(car.getId())}
-                                        ? 'bg-info'
-                                        : 'bg-secondary text-dark font-weight-light'">
-                                <td th:text="${car.getModel()}"></td>
-                            </tr>
-                        </table>
-                    </form>
+                                    : ${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()} + ' - ' + ${day.getId().getDayOfWeekPL()}
+                                    ">
+                        <div th:class="${day.available} ? 'rounded bg-info' : 'rounded bg-danger'" th:text="${!day.available} ? ${day.employeeDto.getSecondName()} : ''" style="height: 21px;"></div>
+                    </label>
                 </div>
             </div>
+
         </tr>
     </div>
 </div>
+
 
 
 <div th:replace="fragments/bootstrap-scripts"></div>

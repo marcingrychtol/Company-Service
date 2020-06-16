@@ -1,15 +1,15 @@
 package pl.mdj.rejestrbiurowy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
-import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
+import pl.mdj.rejestrbiurowy.model.dto.CarDayInfoDto;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
-import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.model.mappers.DayMapper;
@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,7 +29,7 @@ public class DayServiceImpl implements DayService {
     DayMapper dayMapper;
 
     @Autowired
-    public DayServiceImpl(DayRepository dayRepository, DayMapper dayMapper) {
+    public DayServiceImpl(DayRepository dayRepository, @Lazy DayMapper dayMapper) {
         this.dayRepository = dayRepository;
         this.dayMapper = dayMapper;
     }
@@ -81,6 +82,16 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
+    public List<Trip> findTripsByDay(LocalDate date) {
+        return dayRepository.findById(date).map(
+                day1 -> day1.getTrips()
+                        .stream()
+                        .filter(trip -> !trip.getCancelled())
+                        .collect(Collectors.toList())
+        ).orElseGet(ArrayList::new);
+    }
+
+    @Override
     public List<LocalDate> getLocalDatesBetween(LocalDate start, LocalDate end){
         List<LocalDate> dates = new ArrayList<>();
         int i = 0;
@@ -95,6 +106,8 @@ public class DayServiceImpl implements DayService {
     public List<DayDto> getAllDto() {
         return dayMapper.mapToDto(dayRepository.findAll());
     }
+
+
 
     private List<Day> getDaysBetween(LocalDate start, LocalDate end) {
         fillGapsWithinRequest(start, end);

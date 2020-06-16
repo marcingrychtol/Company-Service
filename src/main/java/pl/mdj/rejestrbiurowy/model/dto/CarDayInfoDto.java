@@ -8,6 +8,8 @@ import lombok.Data;
  * List of this objects is wrapped in BookingDto
  * Related Car is defined in BookingDto object
  *
+ * Get that object by geCarDayInfo() in DayService
+ *
  * @field requested is set to true, if user wants to make reservation (into app direction)
  */
 @Data

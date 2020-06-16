@@ -67,11 +67,8 @@
 
                 <span th:if="${car.isAvailable()}">
                     <form id="dayForm" th:action="@{/booking/}" th:object="${bookingParams}"
-                                                         method="get">
-                    <div th:class="${car.isAvailable()}
-                                        ? 'shadow card text-white bg-info text-center h-100'
-                                        : 'shadow card text-white bg-danger text-center h-100'"
-                    >
+                          method="get">
+                    <div class="shadow card text-white bg-info text-center h-100">
                         <div class="card-header" th:text="${car.getBrand()}
                         + ' '
                         + ${car.getModel()}
@@ -101,9 +98,9 @@
                 </span>
 
                 <span th:if="${car.available==false}">
-
-                    <div class="shadow card text-white bg-danger text-center h-100"
-                    >
+                    <form id="dayForm1" th:action="@{/booking/}" th:object="${bookingParams}"
+                    method="get">
+                    <div class="shadow card text-white bg-danger text-center h-100">
                         <div class="card-header" th:text="${car.getBrand()}
                         + ' '
                         + ${car.getModel()}
@@ -114,16 +111,17 @@
                         <div class="card-img-overlay h-100">
 
                             <input type="hidden" name="carId" th:value="${car.getId()}">
-                            <input type="hidden" name="startingDate"
-                                   th:value="${requestedDate.getLocalDateFormatted()}">
+                            <input type="hidden" name="requestedDate"
+                                   th:value="${requestedDate.getLocalDate()}">
 
                         </div>
-                        <button type="button"
+                        <button type="submit"
                                 class="btn btn-danger stretched-link btn-block text-white"
                                 th:text="${car.getOccupier().getName()} + ' ' + ${car.getOccupier().getSecondName()}"
                         >
                         </button>
                     </div>
+                    </form>
                 </span>
 
             </div>

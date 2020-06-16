@@ -3,6 +3,8 @@ package pl.mdj.rejestrbiurowy.service;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
+import pl.mdj.rejestrbiurowy.model.dto.CarDayInfoDto;
+import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
@@ -18,4 +20,6 @@ public interface DayService {
     List<DayDto> getDaysDtoBetween(LocalDate start, LocalDate end);
     List<DayDto> getDaysDtoAfter(LocalDate date);
     List<DayDto> getDaysDtoBefore(LocalDate date);
+
+    List<Trip> findTripsByDay(LocalDate date);
 }

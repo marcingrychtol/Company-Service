@@ -273,6 +273,11 @@ public class TripServiceImpl implements TripService {
         return tripMapper.completeTripData(tripDto);
     }
 
+    @Override
+    public List<TripDto> getTripsByCar(LocalDate startingDate, Car car, Integer scope) {
+        return null;
+    }
+
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {
 
         Car car = trip.getCar();

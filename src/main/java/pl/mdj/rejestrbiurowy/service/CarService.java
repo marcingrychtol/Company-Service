@@ -3,10 +3,8 @@ package pl.mdj.rejestrbiurowy.service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
-import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
-import pl.mdj.rejestrbiurowy.model.dto.CarCalendarInfoDto;
-import pl.mdj.rejestrbiurowy.model.dto.CarDto;
-import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.dto.*;
+import pl.mdj.rejestrbiurowy.model.entity.Car;
 
 import java.time.LocalDate;
 import java.util.List;

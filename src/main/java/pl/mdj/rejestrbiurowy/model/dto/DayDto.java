@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains all data of trips during specific day
+ * Contains all data of trips and available cars during specific day
  */
 @Getter
 @Setter

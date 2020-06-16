@@ -12,21 +12,18 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
-import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
-import pl.mdj.rejestrbiurowy.model.dto.CarCalendarInfoDto;
-import pl.mdj.rejestrbiurowy.model.dto.CarDto;
-import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.dto.*;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
-import pl.mdj.rejestrbiurowy.repository.DayRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.CarMapper;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,17 +40,17 @@ public class CarServiceImpl implements CarService {
     CarMapper carMapper;
     EmployeeMapper employeeMapper;
     TripRepository tripRepository;
-    DayRepository dayRepository;
+    DayService dayService;
     DateMapper dateMapper;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateMapper dateMapper, DayRepository dayRepository, EmployeeMapper employeeMapper) {
+    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateMapper dateMapper, EmployeeMapper employeeMapper, DayService dayService) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
         this.tripRepository = tripRepository;
         this.dateMapper = dateMapper;
-        this.dayRepository = dayRepository;
         this.employeeMapper = employeeMapper;
+        this.dayService = dayService;
     }
 
     @Override
@@ -176,45 +173,48 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDto> getNotAvailableCarsByDay(LocalDate date) {
-        Optional<Day> day = dayRepository.findById(date);
 
-        return day.map(
-                d -> d.getTrips().stream()
-                        .filter(trip -> !trip.getCancelled())
-                        .map(Trip::getCar)
-                        .filter(car -> !car.getCancelled())
-                        .map(car -> carMapper.mapToDto(car))
-                        .collect(Collectors.toList())
-        ).orElseGet(ArrayList::new);
+        try {
+            Day day = dayService.findById(date);
+            return day.getTrips().stream()
+                    .filter(trip -> !trip.getCancelled())
+                    .map(Trip::getCar)
+                    .filter(car -> !car.getCancelled())
+                    .map(car -> carMapper.mapToDto(car))
+                    .collect(Collectors.toList());
+        } catch (CannotFindEntityException e) {
+            return new ArrayList<>();
+        }
 
     }
 
     @Override
     public List<CarDto> findAllByDay(LocalDate date) {
+
         List<CarDto> carDtos = carMapper.mapToDto(carRepository.findAllByOrderByBrand());
 
-        List<Trip> tripsByDay = dayRepository.findById(date).map(
-                day1 -> day1.getTrips()
-                        .stream()
-                        .filter(trip -> !trip.getCancelled())
-                        .collect(Collectors.toList())
-        ).orElseGet(ArrayList::new);
-
-        tripsByDay.forEach(trip -> {
-            carDtos.forEach(carDto -> {
-                if (carDto.getId().equals(trip.getCar().getId())) {
-                    carDto.setAvailable(false);
-                    carDto.setOccupier(employeeMapper.mapToDto(trip.getEmployee()));
-                }
-            });
-        });
+        carDtos.forEach(carDto -> setOccupier(carDto, date));
 
         return carDtos;
     }
 
+    private void setOccupier(CarDto carDto, LocalDate date) {
+        List<Trip> tripsByDay = dayService.findTripsByDay(date);
+        tripsByDay.forEach(trip -> {
+            if (carDto.getId().equals(trip.getCar().getId())) {
+                carDto.setAvailable(false);
+                carDto.setOccupier(employeeMapper.mapToDto(trip.getEmployee()));
+            }
+        });
+    }
+
     @Override
     public CarCalendarInfoDto getCarCalendarInfo(BookingParamsDto bookingParams) {
-        return null;
+// TODO does not check every day
+        CarCalendarInfoDto carCalendarInfoDto = new CarCalendarInfoDto();
+        carCalendarInfoDto.setCar(bookingParams.getCar());
+        carCalendarInfoDto.setCarDayInfoList(getCarDayInfoList(bookingParams.getRequestedDate(), bookingParams.getCar(), bookingParams.getScope()));
+        return carCalendarInfoDto;
     }
 
     @Override
@@ -269,5 +269,33 @@ public class CarServiceImpl implements CarService {
             );
         }
     }
+
+    private List<CarDayInfoDto> getCarDayInfoList(LocalDate requestedDate, CarDto car, Integer scope) {
+
+        LocalDate start = requestedDate.with(DayOfWeek.MONDAY);
+        LocalDate end = start.plusDays(scope - 1);
+
+        List<LocalDate> localDateList = dayService.getLocalDatesBetween(start, end);
+
+        List<CarDayInfoDto> carDayInfoDtoList = new ArrayList<>();
+        CarDayInfoDto carDayInfoDto;
+
+        for (LocalDate date : localDateList) {
+            carDayInfoDto = new CarDayInfoDto();
+            carDayInfoDto.setId(dateMapper.getDateDto(date));
+            List<CarDto> notAvailableCarList = getNotAvailableCarsByDay(date); // TODO dto contains field called occupier
+            if (!notAvailableCarList.contains(car)) {
+                carDayInfoDto.setAvailable(true);
+            } else {
+                carDayInfoDto.setAvailable(false);
+                setOccupier(car, date);
+                carDayInfoDto.setEmployeeDto(car.getOccupier());
+            }
+            carDayInfoDtoList.add(carDayInfoDto);
+        }
+
+        return carDayInfoDtoList;
+    }
+
 
 }

@@ -16,9 +16,5 @@ public class CarCalendarInfoDto {
 
 //    from app
     private CarDto car;
-//    into app
-    private Long carId;
-    private Long scope;
-
-    private List<CarDayInfoDto> carDayList;
+    private List<CarDayInfoDto> carDayInfoList;
 }
