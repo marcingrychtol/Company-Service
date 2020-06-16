@@ -1,15 +1,17 @@
 package pl.mdj.rejestrbiurowy.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 import java.util.Date;
 
+
+/**
+ * Object used to transfer data between application and template engine
+ *
+ */
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -49,6 +51,5 @@ public class TripDto{
 
     private String filterAdditionalMessage;
 
-    private Integer bookingScope;
 
 }

@@ -82,8 +82,8 @@
                         <div class="card-img-overlay h-100">
 
                             <input type="hidden" name="carId" th:value="${car.getId()}">
-                            <input type="hidden" name="startingDate"
-                                   th:value="${requestedDate.getLocalDateFormatted()}">
+                            <input type="hidden" name="requestedDate"
+                                   th:value="${requestedDate.getLocalDate()}">
 
                         </div>
                         <button type="submit"
@@ -91,10 +91,10 @@
                                         ? 'btn btn-info stretched-link btn-block text-white'
                                         : 'btn btn-danger stretched-link btn-block text-white'"
                                 th:text="${car.isAvailable()}
-                                        ? 'Rezerwuj'
+                                        ? 'Wybierz'
                                         : ${car.getOccupier().getSecondName()}"
 
-                        >Rezerwuj
+                        >Wybierz
                         </button>
                     </div>
                 </form>

@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/**
+ * Object designed to transfer specifically formatted date elements into template engine
+ */
 @Data
 @NoArgsConstructor
 public class DateDto {

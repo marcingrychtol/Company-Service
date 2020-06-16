@@ -3,7 +3,10 @@ package pl.mdj.rejestrbiurowy.service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
+import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
+import pl.mdj.rejestrbiurowy.model.dto.CarCalendarInfoDto;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,4 +19,6 @@ public interface CarService extends BasicService<CarDto, Long> {
     void addPhoto(MultipartFile photo, Long id) throws CannotFindEntityException, WrongInputDataException;
 
     List<CarDto> findAllByDay(LocalDate date);
+
+    CarCalendarInfoDto getCarCalendarInfo(BookingParamsDto bookingParams);
 }

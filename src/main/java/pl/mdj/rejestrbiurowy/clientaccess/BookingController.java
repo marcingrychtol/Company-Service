@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
+import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
 import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
@@ -42,8 +43,15 @@ public class BookingController {
     }
 
 
+    /**
+     * Entry point for Car-calendar
+     *
+     * @param bookingParams contains requested date, car model, scope
+     * @param model
+     * @return supplemented CarCalendarInfoDto
+     */
     @GetMapping
-    public String getBookingByCar(@ModelAttribute(name="bookingParams") TripDto bookingParams, Model model){
+    public String getBookingByCar(@ModelAttribute(name="bookingParams") BookingParamsDto bookingParams, Model model){
 
         CarDto carDto = new CarDto();
         try {
@@ -57,12 +65,13 @@ public class BookingController {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("active", "booking");
 
-        model.addAttribute("requestedDate", dateMapper.getDateDto(dateMapper.toLocalDate(bookingParams.getStartingDate())));
+        model.addAttribute("requestedDate", dateMapper.getDateDto(bookingParams.getRequestedDate()));
         model.addAttribute("bookingParams", bookingParams);
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         model.addAttribute("employees", employeeService.findAllActive());
         model.addAttribute("cars", carService.findAllActive());
+        model.addAttribute("carCalendarInfo", carService.getCarCalendarInfo(bookingParams));
         return "main/booking-car-calendar";
     }
 

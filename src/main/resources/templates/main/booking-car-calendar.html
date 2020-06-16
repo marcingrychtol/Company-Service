@@ -18,41 +18,36 @@
 
 <!-- option panel -->
 <div class="container-xl bg-warning pb-2 px-2 mb-1 rounded">
-    <form th:action="@{/calendar/booking}" th:object="${newTrip}" method="get">
+    <form th:action="@{/calendar/bookingParams}" th:object="${bookingParams}" method="get">
         <div class="form-row">
-            <div class="col-3 col-md-1">
+
+        <div class="col-3 col-md-1">
                 <label class="my-1 mx-2" for="-7">Cofej:</label>
-                <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" id="-7" name="localDate"
                            th:value="${requestedDate.getLocalDate().minusDays(7)}"/>
                     <button type="submit"
                             class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
                         -7
                     </button>
-                </form>
             </div>
             <div class="col-6 col-md-2">
-                <label class="my-1 mx-2" for="chooseDate">Wybrane:</label>
-                <form id="chooseDate" th:action="@{/calendar/browser}" th:object="${bookingParams}">
+                <label class="my-1 mx-2" for="requestedDatepicker">Wybrane:</label>
                     <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
-                           th:field="*{startingDate}"/>
-                </form>
+                           th:field="*{requestedDate}"/>
             </div>
             <div class="col-3 col-md-1">
                 <label class="my-1 mx-2" for="+7">Pociś:</label>
-                <form th:action="@{/calendar/browser}" th:object="${dateDto}">
                     <input type="hidden" id="+7" name="localDate"
                            th:value="${requestedDate.getLocalDate().plusDays(7)}"/>
                     <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
                         +7
                     </button>
-                </form>
             </div>
 
             <div class="col-6 col-md-4">
                 <label class="my-1 mx-2" for="selectScope">Wyświetlaj dni:</label>
                 <select id="selectScope" class="shadow custom-select bg-secondary text-white" size="1"
-                        th:field="*{bookingScope}">
+                        th:field="*{scope}">
                     <option value="1">1 tydzień</option>
                     <option selected value="2">2 tygodnie</option>
                     <option value="4">4 tygodnie</option>
@@ -62,7 +57,7 @@
             <div class="col-6 col-md-4">
                 <label class="my-1 mx-2" for="selectCar">Auto:</label>
                 <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1"
-                        th:field="*{filterCarId}">
+                        th:field="*{carId}">
                     <option value=""></option>
                     <option th:each="car : ${cars}" th:value="${car.getId()}"
                             th:text="${car.getModel()}"></option>

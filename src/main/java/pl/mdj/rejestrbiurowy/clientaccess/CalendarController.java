@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
 import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
@@ -64,7 +65,7 @@ public class CalendarController {
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
-        model.addAttribute("bookingParams", new TripDto());
+        model.addAttribute("bookingParams", new BookingParamsDto());
         model.addAttribute("dateDto", new DateDto());
         model.addAttribute("carsByDay", carService.findAllByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllActiveByDate(requestedDate));

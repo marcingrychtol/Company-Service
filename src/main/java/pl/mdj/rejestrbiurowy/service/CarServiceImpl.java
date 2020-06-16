@@ -12,7 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
+import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
+import pl.mdj.rejestrbiurowy.model.dto.CarCalendarInfoDto;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
+import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
@@ -207,6 +210,11 @@ public class CarServiceImpl implements CarService {
         });
 
         return carDtos;
+    }
+
+    @Override
+    public CarCalendarInfoDto getCarCalendarInfo(BookingParamsDto bookingParams) {
+        return null;
     }
 
     @Override
