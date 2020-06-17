@@ -10,18 +10,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
-import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
-import pl.mdj.rejestrbiurowy.model.dto.CarDto;
-import pl.mdj.rejestrbiurowy.model.dto.DateDto;
-import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.dto.*;
 import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.DayService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
+import pl.mdj.rejestrbiurowy.service.TripService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/booking")
@@ -93,7 +92,37 @@ public class BookingController {
         return "main/booking";
     }
 
+    @PostMapping("/resolve")
+    public String postBookingForm(@ModelAttribute(name = "bookingParams") CarCalendarInfoDto carCalendarInfoDto, Model model){
 
+        model.addAttribute("active", "booking");
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+
+        List<TripDto> resolvedTrips = glueRequestedTrips(carCalendarInfoDto);
+        LocalDate requestedDate = LocalDate.now();
+        model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
+
+        return "main/booking-conflict-confirm";
+
+    }
+
+    /**
+     * Used to find all trips around request
+     *
+     *
+     * @param carCalendarInfoDto
+     * @return
+     */
+    private List<TripDto> glueRequestedTrips(CarCalendarInfoDto carCalendarInfoDto) {
+        for (CarDayInfoDto cdi :
+                carCalendarInfoDto.getCarDayInfoList()) {
+            if (cdi.getRequested()){
+                TripDto trip = new TripDto();
+
+            }
+        }
+        return null;
+    }
 
 
     @InitBinder

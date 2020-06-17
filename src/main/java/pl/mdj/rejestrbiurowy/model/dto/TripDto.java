@@ -17,6 +17,7 @@ import java.util.Date;
 @EqualsAndHashCode
 public class TripDto{
     private Long id; // only individual database registry id
+
     private Long carId;
     private CarDto car;
     private Long employeeId;

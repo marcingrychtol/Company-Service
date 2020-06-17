@@ -210,7 +210,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarCalendarInfoDto getCarCalendarInfo(BookingParamsDto bookingParams) {
-// TODO does not check every day
         CarCalendarInfoDto carCalendarInfoDto = new CarCalendarInfoDto();
         carCalendarInfoDto.setCar(bookingParams.getCar());
         carCalendarInfoDto.setCarDayInfoList(getCarDayInfoList(bookingParams.getRequestedDate(), bookingParams.getCar(), bookingParams.getScope()));
@@ -283,7 +282,7 @@ public class CarServiceImpl implements CarService {
         for (LocalDate date : localDateList) {
             carDayInfoDto = new CarDayInfoDto();
             carDayInfoDto.setId(dateMapper.getDateDto(date));
-            List<CarDto> notAvailableCarList = getNotAvailableCarsByDay(date); // TODO dto contains field called occupier
+            List<CarDto> notAvailableCarList = getNotAvailableCarsByDay(date);
             if (!notAvailableCarList.contains(car)) {
                 carDayInfoDto.setAvailable(true);
             } else {

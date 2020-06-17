@@ -1,6 +1,9 @@
 package pl.mdj.rejestrbiurowy.model.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 /**
  * Contains information to view on booking-car-calendar (from app direction)
@@ -17,6 +20,8 @@ public class CarDayInfoDto {
 
 //    from app
     private DateDto id;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate LDid;
     private Boolean available;
     private EmployeeDto employeeDto;
 //    into app
