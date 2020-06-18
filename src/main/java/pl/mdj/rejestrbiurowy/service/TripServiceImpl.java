@@ -278,6 +278,16 @@ public class TripServiceImpl implements TripService {
         return null;
     }
 
+    /**
+     * Used to find any trips conflicted with request
+     * @param requestedTrips all trips from request joined together
+     * @return list of conflicted trips
+     */
+    @Override
+    public List<TripDto> findConflictedTrips(List<TripDto> requestedTrips) {
+        return null;
+    }
+
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {
 
         Car car = trip.getCar();
