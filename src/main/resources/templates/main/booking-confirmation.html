@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pl-PL" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="fragments/bootstrap-styles"></div>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body class="bg-dark">
+<div th:replace="fragments/nav-bar"></div>
+
+<div th:replace="fragments/message"></div>
+
+<div class="container-xl">
+    <a th:href="@{/}" class="shadow btn btn-block btn-success my-2">Potwierdź</a>
+</div>
+
+
+<div th:replace="fragments/bootstrap-scripts"></div>
+</body>
+</html>

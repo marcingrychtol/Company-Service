@@ -11,6 +11,7 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.DayDto;
+import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
@@ -82,7 +83,7 @@ public class TripServiceImpl implements TripService {
         checkAvailableCarConflict(trip); // throws EntityConflictException
         trip.setCreatedTime(LocalDateTime.now());
         trip.setLastModifiedTime(trip.getCreatedTime());
-        if (trip.getAdditionalMessage() == null){
+        if (trip.getAdditionalMessage() == null) {
             trip.setAdditionalMessage("");
         }
         tripRepository.save(trip);  // in this order to generate id before using save() inside DayService
@@ -91,13 +92,12 @@ public class TripServiceImpl implements TripService {
     }
 
     /**
-     *
      * @param tripDto
      */
     @Override
     public void cancelByDto(TripDto tripDto) throws CannotFindEntityException {
         Optional<Trip> tripOptional = tripRepository.findById(tripDto.getId());
-        if (!tripOptional.isPresent()){
+        if (!tripOptional.isPresent()) {
             throw new CannotFindEntityException("Nie można znaleźć rezerwacji (jednoczesta edycja z innego stanowiska)!");
         }
         Trip trip = tripOptional.get();
@@ -128,7 +128,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public void enableByDto(TripDto tripDto) throws CannotFindEntityException {
         Optional<Trip> tripOptional = tripRepository.findById(tripDto.getId());
-        if (!tripOptional.isPresent()){
+        if (!tripOptional.isPresent()) {
             throw new CannotFindEntityException("Nie można znaleźć rezerwacji (jednoczesta edycja z innego stanowiska)!");
         }
         Trip trip = tripOptional.get();
@@ -220,11 +220,11 @@ public class TripServiceImpl implements TripService {
                         .collect(Collectors.toList());
             } else {
                 tripList = tripMapper.mapToDto(tripRepository.findAllByEmployee_IdOrderByStartingDateDesc(filter.getFilterEmployeeId()));
-                haveTouchedTripRepository=true;
+                haveTouchedTripRepository = true;
             }
         }
 
-        if (filter.getFilterAdditionalMessage() != null  && !filter.getFilterAdditionalMessage().equals("")) {
+        if (filter.getFilterAdditionalMessage() != null && !filter.getFilterAdditionalMessage().equals("")) {
             if (haveTouchedTripRepository) {
                 tripList = tripList.stream()
                         .filter(t -> Pattern.compile(Pattern.quote(filter.getFilterAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
@@ -260,9 +260,9 @@ public class TripServiceImpl implements TripService {
         }
 
         if (filter.getFilterAdditionalMessage() != null && !filter.getFilterAdditionalMessage().equals("")) {
-                tripList = tripList.stream()
-                        .filter(t -> Pattern.compile(Pattern.quote(filter.getFilterAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
-                        .collect(Collectors.toList());
+            tripList = tripList.stream()
+                    .filter(t -> Pattern.compile(Pattern.quote(filter.getFilterAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
+                    .collect(Collectors.toList());
         }
         return tripList;
     }
@@ -280,29 +280,46 @@ public class TripServiceImpl implements TripService {
 
     /**
      * Used to find any trips conflicted with request
+     *
      * @param requestedTrips all trips from request joined together
      * @return list of conflicted trips
      */
     @Override
     public List<TripDto> findConflictedTrips(List<TripDto> requestedTrips) {
-        return null;
+
+        Set<TripDto> conflictedTripSet = new HashSet<>();
+
+        requestedTrips.forEach(trip -> {
+            conflictedTripSet.addAll(findByFilter(trip));
+        });
+
+        List<TripDto> conflictedTripList = new ArrayList<>(conflictedTripSet);
+        conflictedTripList.sort(Comparator.comparing(TripDto::getStartingDate));
+
+        return conflictedTripList;
+    }
+
+    @Override
+    public void addAll(EmployeeDto employeeDto, List<TripDto> trips) {
+
     }
 
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {
 
         Car car = trip.getCar();
         List<LocalDate> datesToCheck = dayService.getLocalDatesBetween(trip.getStartingDate(), trip.getEndingDate());
+
+        List<Trip> existingTrips = getExistingTrips(datesToCheck);
+        List<LocalDate> unavailableDates = getUnavailableDates(car, existingTrips, datesToCheck);
+
+        if (!unavailableDates.isEmpty()) {
+            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty w dniach: " + unavailableDates.toString());
+        }
+    }
+
+    private List<LocalDate> getUnavailableDates(Car car, List<Trip> existingTrips, List<LocalDate> datesToCheck) {
         List<LocalDate> unavailableDates = new ArrayList<>();
-        List<Trip> existingTrips = new ArrayList<>();
-
         for (LocalDate date : datesToCheck) {
-            try {
-                existingTrips = dayService.findById(date).getTrips().stream()
-                        .filter(t -> !t.getCancelled())
-                        .collect(Collectors.toList());
-            } catch (CannotFindEntityException ignored) {
-            }
-
             for (Trip existingTrip :
                     existingTrips) {
                 if (car == existingTrip.getCar()) {
@@ -310,11 +327,20 @@ public class TripServiceImpl implements TripService {
                 }
             }
         }
+        return unavailableDates;
+    }
 
-        if (!unavailableDates.isEmpty()) {
-            throw new EntityConflictException("Rezerwacja nie powiodła się, pojazd jest już zajęty w dniach: " + unavailableDates.toString());
+    private List<Trip> getExistingTrips(List<LocalDate> datesToCheck) {
+        List<Trip> existingTrips = new ArrayList<>();
+        for (LocalDate date : datesToCheck) {
+            try {
+                existingTrips = dayService.findById(date).getTrips().stream()
+                        .filter(t -> !t.getCancelled())
+                        .collect(Collectors.toList());
+            } catch (CannotFindEntityException ignored) {
+            }
         }
-
+        return existingTrips;
     }
 
     private void checkTripComplete(TripDto tripDto) throws EntityNotCompleteException, CannotFindEntityException {

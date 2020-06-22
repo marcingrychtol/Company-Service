@@ -19,9 +19,7 @@ import pl.mdj.rejestrbiurowy.service.TripService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/booking")
@@ -54,7 +52,7 @@ public class BookingController {
      * @return supplemented CarCalendarInfoDto
      */
     @GetMapping
-    public String getBookingByCar(@ModelAttribute(name="bookingParams") BookingParamsDto bookingParams, Model model){
+    public String getBookingByCar(@ModelAttribute(name = "bookingParams") BookingParamsDto bookingParams, Model model) {
 
         CarDto carDto = new CarDto();
         try {
@@ -62,24 +60,22 @@ public class BookingController {
         } catch (CannotFindEntityException e) {
             LOG.warn("No car with ID: " + bookingParams.getCarId());
         }
-
         bookingParams.setCar(carDto);
 
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("active", "booking");
 
         model.addAttribute("requestedDate", dateMapper.getDateDto(bookingParams.getRequestedDate()));
-        model.addAttribute("bookingParams", bookingParams);
+        model.addAttribute("bookingParams", carService.fillBookingParamsDto(bookingParams));
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         model.addAttribute("employees", employeeService.findAllActive());
         model.addAttribute("cars", carService.findAllActive());
-        model.addAttribute("carCalendarInfo", carService.getCarCalendarInfo(bookingParams));
         return "main/booking-car-calendar";
     }
 
     @GetMapping("/0")
-    public String getFast(Model model){
+    public String getFast(Model model) {
 
         LocalDate requestedDate = LocalDate.now();
 
@@ -96,75 +92,10 @@ public class BookingController {
         return "main/booking";
     }
 
-    @PostMapping("/resolve")
-    public String postBookingForm(@ModelAttribute(name = "bookingParams") CarCalendarInfoDto carCalendarInfoDto, Model model){
-
-        model.addAttribute("active", "booking");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-
-        List<TripDto> resolvedTrips = joinRequestedTrips(carCalendarInfoDto);
-        List<TripDto> conflictedTrips = tripService.findConflictedTrips(resolvedTrips);
-        model.addAttribute("conflicts", conflictedTrips);
-
-
-        LocalDate requestedDate = LocalDate.now();
-        model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
-
-        return "main/booking-conflict-confirm";
-
-    }
-
-
-    /**
-     * Used to find all trips around request
-     *
-     *
-     * @param carCalendarInfoDto
-     * @return
-     */
-    private List<TripDto> joinRequestedTrips(CarCalendarInfoDto carCalendarInfoDto) {
-
-        List<Date> requests = new ArrayList<>();
-        List<TripDto> trips = new ArrayList<>();
-
-        for (CarDayInfoDto carDayInfoDto :
-                carCalendarInfoDto.getCarDayInfoList()) {
-            if (carDayInfoDto.getRequested()){
-                Date request = new Date();
-                request = dateMapper.toDate(carDayInfoDto.getLDid());
-                requests.add(request);
-            }
-        }
-        if (requests.isEmpty()){
-            return new ArrayList<>();
-        }
-        else if (requests.size() == 1){
-            TripDto trip = new TripDto();
-            trip.setStartingDate(requests.get(0));
-            trip.setEndingDate(trip.getStartingDate());
-            trips.add(trip);
-        }
-        else {
-            for (int i=1; i < requests.size(); i++){
-                LocalDate date = dateMapper.toLocalDate(requests.get(i));
-                LocalDate predecessorDate = dateMapper.toLocalDate(requests.get(i-1));
-                if (date.equals(predecessorDate)){
-
-                }
-            }
-        }
-
-        // TODO remember to ser car id
-
-        return null;
-    }
-
-
     @InitBinder
-    public void customizeDateBinder( WebDataBinder binder )
-    {
+    public void customizeDateBinder(WebDataBinder binder) {
         // tell spring to set empty values as null instead of empty string.
-        binder.registerCustomEditor( Date.class, new StringTrimmerEditor( true ));
+        binder.registerCustomEditor(Date.class, new StringTrimmerEditor(true));
         //The date format to parse or output your dates
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         //Create a new CustomDateEditor

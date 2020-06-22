@@ -14,7 +14,7 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
-import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.dto.*;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
@@ -22,7 +22,9 @@ import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Controller
@@ -128,7 +130,26 @@ public class TripController {
         model.addAttribute("carsByDay", carService.findAllByDay(requestedDate));
         model.addAttribute("trips", tripService.findAllByDate(requestedDate));
 
-        return "main/day";
+        return "main/booking-confirmation";
+    }
+
+    @PostMapping("/add-many")
+    public String postBookingForm(@ModelAttribute(name = "bookingParams") BookingParamsDto bookingParamsDto, Model model) {
+
+        model.addAttribute("active", "booking");
+        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+
+        List<TripDto> resolvedTrips = joinRequestedTrips(bookingParamsDto);
+        List<TripDto> conflictedTrips = tripService.findConflictedTrips(resolvedTrips);
+
+        if (conflictedTrips.isEmpty()) {
+            model.addAttribute("infoMessage", "Brak konfliktów. Wybierz osobę i potwierdź rezerwacje.");
+            return "main/booking-confirmation";
+        } else {
+
+            model.addAttribute("conflicts", conflictedTrips);
+            return "main/booking-confirmation";
+        }
     }
 
     @InitBinder
@@ -168,6 +189,85 @@ public class TripController {
         }
 
         model.addAttribute("tripDto", tripDto);
+    }
+
+
+    /**
+     * Used to find all trips around request
+     *
+     * @param carCalendarInfoDto
+     * @return
+     */
+    private List<TripDto> joinRequestedTrips(BookingParamsDto carCalendarInfoDto) {
+
+        List<LocalDate> requestsDateList = new ArrayList<>();
+        List<TripDto> requestedTripList = new ArrayList<>();
+
+        for (CarDayInfoDto carDayInfoDto :
+                carCalendarInfoDto.getCarDayInfoList()) {
+            if (carDayInfoDto.getRequested()) {
+                LocalDate requestDate;
+                requestDate = carDayInfoDto.getLDid();
+                requestsDateList.add(requestDate);
+            }
+        }
+
+        // FIRST case - no requests
+        if (requestsDateList.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // SECOND case - one request
+        if (requestsDateList.size() == 1) {
+            TripDto trip = new TripDto();
+            trip.setStartingDate(dateMapper.toDate(requestsDateList.get(0)));
+            trip.setEndingDate(trip.getStartingDate());
+            trip.setCarId(carCalendarInfoDto.getCarId());
+            requestedTripList.add(trip);
+            return requestedTripList;
+        }
+
+
+        LocalDate startingDate = requestsDateList.get(0);
+        LocalDate endingDate = requestsDateList.get(0);
+        boolean done = false;
+        for (int i = 1; i < requestsDateList.size(); i++) {
+
+            // first we check IS GAP?
+            if (!requestsDateList.get(i).minusDays(1).equals(endingDate)) {
+                TripDto trip = new TripDto();
+                trip.setStartingDate(dateMapper.toDate(startingDate));
+                trip.setEndingDate(dateMapper.toDate(endingDate));
+                requestedTripList.add(trip);
+                startingDate = requestsDateList.get(i);
+                endingDate = requestsDateList.get(i);
+
+            } else if (i == requestsDateList.size() - 1) {             // was this last iteration?
+                TripDto trip = new TripDto();
+                trip.setStartingDate(dateMapper.toDate(startingDate));
+                endingDate = requestsDateList.get(i);
+                trip.setEndingDate(dateMapper.toDate(endingDate));
+                requestedTripList.add(trip);
+                done = true;
+            } else {
+                endingDate = requestsDateList.get(i);
+            }
+
+            // was this last iteration and not done yet?
+            if (i == requestsDateList.size() - 1 && !done) {
+                TripDto lastOneTrip = new TripDto();
+                lastOneTrip.setStartingDate(dateMapper.toDate(startingDate));
+                lastOneTrip.setEndingDate(dateMapper.toDate(endingDate));
+                requestedTripList.add(lastOneTrip);
+            }
+        }
+
+        for (TripDto trip :
+                requestedTripList) {
+            trip.setCarId(carCalendarInfoDto.getCarId());
+        }
+
+        return requestedTripList;
     }
 
 }

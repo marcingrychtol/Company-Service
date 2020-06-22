@@ -36,7 +36,6 @@
                        th:field="*{requestedDate}"/>
             </div>
             <div class="col-3 col-md-1">
-<!--                TODO why is this not going forth, because it is in one form, so only first one is readed-->
                 <label class="my-1 mx-2" for="aheadSeven">Pociś:</label>
                 <input type="hidden" id="aheadSeven" name="requestedDate"
                        th:value="${bookingParams.getRequestedDate().plusDays(7)}"/>
@@ -66,36 +65,54 @@
             </div>
 
         </div>
-
     </form>
 </div>
 
-<!-- kalendarz -->
 
-<form th:action="@{/booking/resolve}" th:object="${carCalendarInfo}" method="post">
-    <input type="hidden" name="carId" th:value="${bookingParams.car.id}">
-<div class="shadow container-xl bg-secondary rounded">
-    <div class="row">
-        <tr th:each="day : ${carCalendarInfo.carDayInfoList}">
-            <div class="col p-1">
-                <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-block btn-secondary">
-                        <input type="checkbox" th:field="*{carDayInfoList[__${dayStat.index}__].requested}" name="requestedDay" autocomplete="off" >
-                        <input type="hidden" th:name="carDayInfoList[__${dayStat.index}__].LDid" th:value="${day.id.getLocalDate()}">
-                        <small th:text="${day.getId().getDayOfWeekPLShort()}" ></small>
-                        <small th:text="${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()}" ></small>
-                        <div th:class="${day.available} ? 'rounded bg-info' : 'rounded bg-danger'" style="height: 26px;">
-                            <small th:text="${!day.available} ? ${day.employeeDto.getSecondName()} : ''" ></small>
-                        </div>
-                    </label>
-                </div>
+<!-- kalendarz -->
+<form th:action="@{/trips/add-many}" th:object="${bookingParams}" method="post">
+    <div class="shadow container-xl bg-danger rounded">
+        <div class="row">
+            <div class="col-12 p-1">
+                <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
+                <select id="selectEmployee" class="custom-select bg-light" size="1" th:field="*{employeeId}">
+                    <option th:each="emp : ${employees}" th:value="${emp.getId()}"
+                            th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
+                    </option>
+                </select>
             </div>
-            <div th:if="${day.getId().getDayOfWeekPLShort() == 'Nie'}" class="w-100"></div>
-        </tr>
+        </div>
     </div>
-</div>
-    <button type="submit" class="shadow btn btn-block btn-success my-2">Wyślij formularz rezerwacji
-    </button>
+    <input type="hidden" name="carId" th:value="${bookingParams.car.id}">
+    <div class="shadow container-xl bg-secondary rounded">
+        <div class="row">
+            <tr th:each="day : ${bookingParams.carDayInfoList}">
+                <div class="col p-1">
+                    <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-block btn-secondary">
+                            <input type="checkbox" th:field="*{carDayInfoList[__${dayStat.index}__].requested}"
+                                   name="requestedDay" autocomplete="off">
+                            <input type="hidden" th:name="carDayInfoList[__${dayStat.index}__].LDid"
+                                   th:value="${day.getId().getLocalDate()}">
+                            <small th:text="${day.getId().getDayOfWeekPLShort()}"></small>
+                            <small th:text="${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()}"></small>
+                            <div th:class="${day.available} ? 'rounded bg-info' : 'rounded bg-danger'"
+                                 style="height: 26px;">
+                                <small th:text="${!day.available} ? ${day.employeeDto.getSecondName()} : ''"></small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div th:if="${day.getId().getDayOfWeekPLShort() == 'Nie'}" class="w-100"></div>
+            </tr>
+        </div>
+    </div>
+
+    <div class="container-xl">
+        <button type="submit" class="shadow btn btn-block btn-success my-2">Wyślij formularz rezerwacji
+        </button>
+    </div>
+
 </form>
 
 

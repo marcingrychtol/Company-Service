@@ -198,6 +198,11 @@ public class CarServiceImpl implements CarService {
         return carDtos;
     }
 
+    /**
+     * Sets occupier AND AVAILABILITY
+     * @param carDto
+     * @param date
+     */
     private void setOccupier(CarDto carDto, LocalDate date) {
         List<Trip> tripsByDay = dayService.findTripsByDay(date);
         tripsByDay.forEach(trip -> {
@@ -208,12 +213,39 @@ public class CarServiceImpl implements CarService {
         });
     }
 
+    /**
+     * Fills CarDayInfo after getting necessary info - car, and dates
+     * @param bookingParams
+     * @return
+     */
     @Override
-    public CarCalendarInfoDto getCarCalendarInfo(BookingParamsDto bookingParams) {
-        CarCalendarInfoDto carCalendarInfoDto = new CarCalendarInfoDto();
-        carCalendarInfoDto.setCar(bookingParams.getCar());
-        carCalendarInfoDto.setCarDayInfoList(getCarDayInfoList(bookingParams.getRequestedDate(), bookingParams.getCar(), bookingParams.getScope()));
-        return carCalendarInfoDto;
+    public BookingParamsDto fillBookingParamsDto(BookingParamsDto bookingParams) {
+
+        LocalDate start = bookingParams.getRequestedDate().with(DayOfWeek.MONDAY);
+        LocalDate end = start.plusDays(bookingParams.getScope() - 1);
+        CarDto car = bookingParams.getCar();
+
+        List<LocalDate> localDateList = dayService.getLocalDatesBetween(start, end);
+
+        List<CarDayInfoDto> carDayInfoDtoList = new ArrayList<>();
+
+        for (LocalDate date : localDateList) {
+            CarDayInfoDto carDayInfoDto = new CarDayInfoDto();
+            carDayInfoDto.setId(dateMapper.getDateDto(date));
+            List<CarDto> notAvailableCarList = getNotAvailableCarsByDay(date);
+            if (!notAvailableCarList.contains(car)) {
+                carDayInfoDto.setAvailable(true);
+            } else {
+                carDayInfoDto.setAvailable(false);
+                setOccupier(car, date);
+                carDayInfoDto.setEmployeeDto(car.getOccupier());
+            }
+            carDayInfoDtoList.add(carDayInfoDto);
+        }
+
+        bookingParams.setCarDayInfoList(carDayInfoDtoList);
+
+        return bookingParams;
     }
 
     @Override
@@ -267,33 +299,6 @@ public class CarServiceImpl implements CarService {
                             + carConflictTest.get().getModel()
             );
         }
-    }
-
-    private List<CarDayInfoDto> getCarDayInfoList(LocalDate requestedDate, CarDto car, Integer scope) {
-
-        LocalDate start = requestedDate.with(DayOfWeek.MONDAY);
-        LocalDate end = start.plusDays(scope - 1);
-
-        List<LocalDate> localDateList = dayService.getLocalDatesBetween(start, end);
-
-        List<CarDayInfoDto> carDayInfoDtoList = new ArrayList<>();
-        CarDayInfoDto carDayInfoDto;
-
-        for (LocalDate date : localDateList) {
-            carDayInfoDto = new CarDayInfoDto();
-            carDayInfoDto.setId(dateMapper.getDateDto(date));
-            List<CarDto> notAvailableCarList = getNotAvailableCarsByDay(date);
-            if (!notAvailableCarList.contains(car)) {
-                carDayInfoDto.setAvailable(true);
-            } else {
-                carDayInfoDto.setAvailable(false);
-                setOccupier(car, date);
-                carDayInfoDto.setEmployeeDto(car.getOccupier());
-            }
-            carDayInfoDtoList.add(carDayInfoDto);
-        }
-
-        return carDayInfoDtoList;
     }
 
 

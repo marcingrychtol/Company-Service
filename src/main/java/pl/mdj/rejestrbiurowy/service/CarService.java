@@ -18,5 +18,5 @@ public interface CarService extends BasicService<CarDto, Long> {
 
     List<CarDto> findAllByDay(LocalDate date);
 
-    CarCalendarInfoDto getCarCalendarInfo(BookingParamsDto bookingParams);
+    BookingParamsDto fillBookingParamsDto(BookingParamsDto bookingParams);
 }
