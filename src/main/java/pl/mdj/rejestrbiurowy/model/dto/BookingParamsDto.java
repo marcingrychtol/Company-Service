@@ -20,7 +20,7 @@ public class BookingParamsDto {
     private Long employeeId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate requestedDate;
-    private Integer scope = 14;
+    private Integer scope = 7;
     private List<CarDayInfoDto> carDayInfoList;
 
 }

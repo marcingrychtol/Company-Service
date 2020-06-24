@@ -66,7 +66,8 @@ public class BookingController {
         model.addAttribute("active", "booking");
 
         model.addAttribute("requestedDate", dateMapper.getDateDto(bookingParams.getRequestedDate()));
-        model.addAttribute("bookingParams", carService.fillBookingParamsDto(bookingParams));
+        model.addAttribute("bookingParams", bookingParams);
+        model.addAttribute("requestParams", carService.fillBookingParamsDto(bookingParams));
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("dateDto", new DateDto());
         model.addAttribute("employees", employeeService.findAllActive());

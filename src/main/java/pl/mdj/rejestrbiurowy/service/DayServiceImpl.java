@@ -17,6 +17,7 @@ import pl.mdj.rejestrbiurowy.repository.DayRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -109,8 +110,16 @@ public class DayServiceImpl implements DayService {
 
 
 
-    private List<Day> getDaysBetween(LocalDate start, LocalDate end) {
+    @Override
+    public List<Day> getDaysBetween(LocalDate start, LocalDate end) {
         fillGapsWithinRequest(start, end);
+        if (start.equals(end)){
+            try {
+                return Arrays.asList(findById(start) );
+            } catch (CannotFindEntityException e) {
+                e.printStackTrace();
+            }
+        }
         return dayRepository.findAllByIdBetweenOrderByIdAsc(start, end);
     }
 

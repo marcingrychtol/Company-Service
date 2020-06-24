@@ -12,40 +12,38 @@
 <body class="bg-dark">
 <div th:replace="fragments/nav-bar"></div>
 
-
 <div th:replace="fragments/message"></div>
-
 
 <!-- option panel -->
 <div class="container-xl bg-warning pb-2 px-2 mb-1 rounded">
     <form th:action="@{/booking/}" th:object="${bookingParams}" method="get">
         <div class="form-row">
 
-            <div class="col-3 col-md-1">
+            <div class="col-2 col-md-1">
                 <label class="my-1 mx-2" for="backSeven">Cofej:</label>
                 <input type="hidden" id="backSeven" name="requestedDate"
                        th:value="${bookingParams.getRequestedDate().minusDays(7)}"/>
-                <button type="submit"
-                        class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
+                <button type="button"
+                        class="btn btn-block bg-secondary btn-outline-light text-white">
                     -7
                 </button>
             </div>
-            <div class="col-6 col-md-2">
+            <div class="col-3 col-md-2">
                 <label class="my-1 mx-2" for="requestedDatepicker">Wybrane:</label>
-                <input type="text" readonly="true" class="bg-light" id="requestedDatepicker"
+                <input type="text" readonly="true" class="bg-secondary text-white" id="requestedDatepicker"
                        th:field="*{requestedDate}"/>
             </div>
-            <div class="col-3 col-md-1">
+            <div class="col-2 col-md-1">
                 <label class="my-1 mx-2" for="aheadSeven">Pociś:</label>
                 <input type="hidden" id="aheadSeven" name="requestedDate"
                        th:value="${bookingParams.getRequestedDate().plusDays(7)}"/>
-                <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
+                <button type="button" class="btn btn-block bg-secondary text-white btn-outline-light">
                     +7
                 </button>
             </div>
 
-            <div class="col-6 col-md-4">
-                <label class="my-1 mx-2" for="selectScope">Wyświetlaj dni:</label>
+            <div class="col-5 col-md-2">
+                <label class="my-1 mx-2" for="selectScope">Wyświetlanie:</label>
                 <select id="selectScope" class="shadow custom-select bg-secondary text-white" size="1"
                         th:field="*{scope}">
                     <option value="7">1 tydzień</option>
@@ -54,7 +52,7 @@
                 </select>
             </div>
 
-            <div class="col-6 col-md-4">
+            <div class="col-6 col-md-3">
                 <label class="my-1 mx-2" for="selectCar">Auto:</label>
                 <select id="selectCar" class="shadow custom-select bg-secondary text-white" size="1"
                         th:field="*{carId}">
@@ -64,29 +62,31 @@
                 </select>
             </div>
 
-        </div>
-    </form>
-</div>
 
-
-<!-- kalendarz -->
-<form th:action="@{/trips/add-many}" th:object="${bookingParams}" method="post">
-    <div class="shadow container-xl bg-danger rounded">
-        <div class="row">
-            <div class="col-12 p-1">
+            <div class="col-6 col-md-3">
                 <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
-                <select id="selectEmployee" class="custom-select bg-light" size="1" th:field="*{employeeId}">
+                <select id="selectEmployee" class="custom-select bg-danger text-white" size="1"
+                        th:field="*{employeeId}">
                     <option th:each="emp : ${employees}" th:value="${emp.getId()}"
                             th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
                     </option>
                 </select>
             </div>
+
         </div>
-    </div>
+    </form>
+
+</div>
+
+<form th:action="@{/trips/add-many}" th:object="${requestParams}" method="post">
+
+    <input type="hidden" name="employeeId" th:value="1">
+<!--    <input type="hidden" name="employeeId" th:value="${bookingParams.employeeId}">-->
     <input type="hidden" name="carId" th:value="${bookingParams.car.id}">
+
     <div class="shadow container-xl bg-secondary rounded">
         <div class="row">
-            <tr th:each="day : ${bookingParams.carDayInfoList}">
+            <tr th:each="day : ${requestParams.carDayInfoList}">
                 <div class="col p-1">
                     <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-block btn-secondary">
@@ -107,6 +107,7 @@
             </tr>
         </div>
     </div>
+
 
     <div class="container-xl">
         <button type="submit" class="shadow btn btn-block btn-success my-2">Wyślij formularz rezerwacji

@@ -7,7 +7,7 @@ import pl.mdj.rejestrbiurowy.model.entity.Trip;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface TripRepository extends JpaRepository<Trip, Long> {
+public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositoryCustom {
 
     List<Trip> findByOrderByStartingDateAsc();
     List<Trip> findByOrderByStartingDateDesc();

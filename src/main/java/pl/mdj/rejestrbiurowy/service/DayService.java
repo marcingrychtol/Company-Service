@@ -18,6 +18,7 @@ public interface DayService {
     List<LocalDate> getLocalDatesBetween(LocalDate start, LocalDate end);
     List<DayDto> getAllDto();
     List<DayDto> getDaysDtoBetween(LocalDate start, LocalDate end);
+    List<Day> getDaysBetween(LocalDate start, LocalDate end);
     List<DayDto> getDaysDtoAfter(LocalDate date);
     List<DayDto> getDaysDtoBefore(LocalDate date);
 

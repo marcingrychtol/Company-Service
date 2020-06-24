@@ -1,6 +1,6 @@
 package pl.mdj.rejestrbiurowy.service;
 
-import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
+import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 
@@ -15,7 +15,7 @@ public interface TripService extends BasicService<TripDto, Long> {
     List<TripDto> getTripsByCar(LocalDate startingDate, Car car, Integer scope);
     List<TripDto> findConflictedTrips(List<TripDto> resolvedTrips);
 
-    void addAll(EmployeeDto employeeDto, List<TripDto> trips);
+    List<TripDto> addAll(BookingParamsDto bookingParams);
 }
 
 

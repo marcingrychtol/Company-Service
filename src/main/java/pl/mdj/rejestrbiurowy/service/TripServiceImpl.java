@@ -10,9 +10,7 @@ import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
-import pl.mdj.rejestrbiurowy.model.dto.DayDto;
-import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
-import pl.mdj.rejestrbiurowy.model.dto.TripDto;
+import pl.mdj.rejestrbiurowy.model.dto.*;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
@@ -77,9 +75,12 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public void addOne(TripDto tripDto) throws EntityNotCompleteException, EntityConflictException, CannotFindEntityException {
-
         checkTripComplete(tripDto); // throws CFEE and ENCE
         Trip trip = tripMapper.mapToEntity(tripDto);  // Need to save Entity, not Dto
+        addTrip(trip);
+    }
+
+    private void addTrip(Trip trip) throws EntityConflictException, EntityNotCompleteException {
         checkAvailableCarConflict(trip); // throws EntityConflictException
         trip.setCreatedTime(LocalDateTime.now());
         trip.setLastModifiedTime(trip.getCreatedTime());
@@ -88,7 +89,6 @@ public class TripServiceImpl implements TripService {
         }
         tripRepository.save(trip);  // in this order to generate id before using save() inside DayService
         dayService.addTripToDay(trip);
-
     }
 
     /**
@@ -171,6 +171,12 @@ public class TripServiceImpl implements TripService {
         return tripMapper.mapToDto(day.getTrips());
     }
 
+    /**
+     * Finds trips by any parameter provided, any field can be null
+     *
+     * @param filter TripDto object, any field can be null
+     * @return
+     */
     @Override
     public List<TripDto> findByFilter(TripDto filter) {
 
@@ -280,8 +286,8 @@ public class TripServiceImpl implements TripService {
 
     /**
      * Used to find any trips conflicted with request
-     *
-     * @param requestedTrips all trips from request joined together
+     * using findByFilter()
+     * @param requestedTrips all trips from request joined together, must have car, and both dates
      * @return list of conflicted trips
      */
     @Override
@@ -300,8 +306,41 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public void addAll(EmployeeDto employeeDto, List<TripDto> trips) {
+    public List<TripDto> addAll(BookingParamsDto bookingParams) {
 
+        List<TripDto> resolvedTripDtos = joinRequestedTrips(bookingParams);
+        List<Trip> resolvedTrips = tripMapper.mapToEntity(resolvedTripDtos);
+        Map<Trip, List<Trip>> conflictMap = new HashMap<>();
+        for (Trip trip :
+                resolvedTrips) {
+            Set<Trip> existingTripSet = new HashSet<>();
+            dayService.getDaysBetween(trip.getStartingDate(), trip.getEndingDate())
+                    .stream()
+                    .map(Day::getTrips)
+                    .forEach(existingTripSet::addAll);
+            existingTripSet = existingTripSet.stream()
+                    .filter(t -> t.getCar().getId().equals(bookingParams.getCarId()))
+                    .collect(Collectors.toSet());
+            List<Trip> existingTripList = new ArrayList<>(existingTripSet);
+            conflictMap.put(trip, existingTripList);
+        }
+        for (Trip newTrip :
+                conflictMap.keySet()) {
+            for (Trip existingTrip :
+                    conflictMap.get(newTrip)) {
+                removeConflicts(newTrip,existingTrip);
+            }
+        }
+        resolvedTripDtos.forEach(t -> {
+            try {
+                addOne(t);
+            } catch (EntityNotCompleteException | CannotFindEntityException e) {
+                e.printStackTrace();
+            } catch (EntityConflictException ignored) {
+            }
+        });
+
+        return resolvedTripDtos;
     }
 
     private void checkAvailableCarConflict(Trip trip) throws EntityConflictException {
@@ -359,6 +398,132 @@ public class TripServiceImpl implements TripService {
         if (tripDto.getStartingDate() == null) {
             throw new EntityNotCompleteException("Rezerwacja niemożliwa, nie ustawiono daty!");
         }
+    }
+
+    /**
+     * Used to find all trips around request
+     *
+     * @param bookingParams
+     * @return
+     */
+    private List<TripDto> joinRequestedTrips(BookingParamsDto bookingParams) {
+
+        List<LocalDate> requestsDateList = new ArrayList<>();
+        List<TripDto> requestedTripList = new ArrayList<>();
+
+        for (CarDayInfoDto carDayInfoDto :
+                bookingParams.getCarDayInfoList()) {
+            if (carDayInfoDto.getRequested()) {
+                LocalDate requestDate;
+                requestDate = carDayInfoDto.getLDid();
+                requestsDateList.add(requestDate);
+            }
+        }
+
+        // FIRST case - no requests
+        if (requestsDateList.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // SECOND case - one request
+        if (requestsDateList.size() == 1) {
+            TripDto trip = new TripDto();
+            trip.setStartingDate(dateMapper.toDate(requestsDateList.get(0)));
+            trip.setEndingDate(trip.getStartingDate());
+            requestedTripList.add(trip);
+        }
+
+
+        LocalDate startingDate = requestsDateList.get(0);
+        LocalDate endingDate = requestsDateList.get(0);
+        boolean done = false;
+        for (int i = 1; i < requestsDateList.size(); i++) {
+
+            // first we check IS GAP?
+            if (!requestsDateList.get(i).minusDays(1).equals(endingDate)) {
+                TripDto trip = new TripDto();
+                trip.setStartingDate(dateMapper.toDate(startingDate));
+                trip.setEndingDate(dateMapper.toDate(endingDate));
+                requestedTripList.add(trip);
+                startingDate = requestsDateList.get(i);
+                endingDate = requestsDateList.get(i);
+
+            } else if (i == requestsDateList.size() - 1) {             // was this last iteration?
+                TripDto trip = new TripDto();
+                trip.setStartingDate(dateMapper.toDate(startingDate));
+                endingDate = requestsDateList.get(i);
+                trip.setEndingDate(dateMapper.toDate(endingDate));
+                requestedTripList.add(trip);
+                done = true;
+            } else {
+                endingDate = requestsDateList.get(i);
+            }
+
+            // was this last iteration and not done yet?
+            if (i == requestsDateList.size() - 1 && !done) {
+                TripDto lastOneTrip = new TripDto();
+                lastOneTrip.setStartingDate(dateMapper.toDate(startingDate));
+                lastOneTrip.setEndingDate(dateMapper.toDate(endingDate));
+                requestedTripList.add(lastOneTrip);
+            }
+        }
+
+        for (TripDto trip :
+                requestedTripList) {
+            trip.setCarId(bookingParams.getCarId());
+            trip.setEmployeeId(bookingParams.getEmployeeId());
+        }
+
+        return requestedTripList;
+    }
+
+    /**
+     * Used to make place in database.
+     * Taking over only one existing trip in database. If more conflicts exists, must be called multiple times.
+     * @param existingTrip must be trip connected to database context
+     * @param requestedTrip any trip object with dates
+     */
+    private void removeConflicts(Trip requestedTrip, Trip existingTrip) {
+        existingTrip.setCancelled(true);
+        tripRepository.save(existingTrip);
+        List<Trip> newTrips = new ArrayList<>();
+        // TS after CS?
+        if (existingTrip.getStartingDate().compareTo(requestedTrip.getStartingDate()) >= 0) {
+            // TE after CE?
+            if (existingTrip.getEndingDate().compareTo(requestedTrip.getEndingDate()) > 0) {
+                Trip newTrip = new Trip();
+                newTrip.setStartingDate(requestedTrip.getEndingDate().plusDays(1));
+                newTrip.setEndingDate(existingTrip.getEndingDate());
+                newTrips.add(newTrip);
+            } else {
+                return;
+            }
+        } else {
+            if (existingTrip.getEndingDate().compareTo(requestedTrip.getEndingDate()) >= 0) {
+//                LocalDate tempDate = existingTrip.getEndingDate();
+                Trip newTrip1 = new Trip();
+                newTrip1.setStartingDate(existingTrip.getStartingDate());
+                newTrip1.setEndingDate(requestedTrip.getStartingDate().minusDays(1));
+                Trip newTrip2 = new Trip();
+                newTrip2.setStartingDate(requestedTrip.getEndingDate().plusDays(1));
+                newTrip2.setEndingDate(existingTrip.getEndingDate());
+                newTrips.addAll(Arrays.asList(newTrip1, newTrip2));
+            } else {
+                Trip newTrip = new Trip();
+                newTrip.setStartingDate(existingTrip.getStartingDate());
+                newTrip.setEndingDate(requestedTrip.getStartingDate().minusDays(1));
+                newTrips.add(newTrip);
+            }
+        }
+
+        newTrips.forEach(trip -> {
+            trip.setCar(existingTrip.getCar());
+            trip.setEmployee(existingTrip.getEmployee());
+            try {
+                addTrip(trip);
+            } catch (EntityConflictException | EntityNotCompleteException ignored) { }
+        });
+
     }
 
 
