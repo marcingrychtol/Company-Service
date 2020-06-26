@@ -44,7 +44,7 @@
                         <td th:unless="${requestedTrip.getCarId() != null}">
                             <select class="custom-select bg-light" size="6" th:field="*{carId}">
                                 <option th:each="car : ${cars}" th:value="${car.getId()}"
-                                        th:text="${car.getId()} + '. ' + ${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
+                                        th:text="${car.getBrand()} + ' ' + ${car.getModel()} + ' - ' + ${car.getRegistration()}">
                                 </option>
                             </select>
                             <small id="carHelp" class="form-text text-light">* pole wymagane</small>
@@ -67,7 +67,7 @@
                     <div class="card-body">
                         <select class="custom-select bg-light" size="6" th:field="*{employeeId}">
                             <option th:each="emp : ${employees}" th:value="${emp.getId()}"
-                                    th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
+                                    th:text="${emp.getSecondName()} + ' ' + ${emp.getName()}">
                             </option>
                         </select>
                         <small id="employeeHelp" class="form-text text-light">* pole wymagane</small>

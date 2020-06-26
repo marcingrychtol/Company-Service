@@ -16,33 +16,29 @@
 
 <!-- option panel -->
 <div class="container-xl bg-warning pb-2 px-2 mb-1 rounded">
-    <form th:action="@{/booking/}" th:object="${bookingParams}" method="get">
+    <form id="bookingParamsForm" th:action="@{/booking/}" th:object="${bookingParams}" method="get">
         <div class="form-row">
 
-            <div class="col-2 col-md-1">
-                <label class="my-1 mx-2" for="backSeven">Cofej:</label>
-                <input type="hidden" id="backSeven" name="requestedDate"
-                       th:value="${bookingParams.getRequestedDate().minusDays(7)}"/>
-                <button type="button"
-                        class="btn btn-block bg-secondary btn-outline-light text-white">
-                    -7
-                </button>
-            </div>
-            <div class="col-3 col-md-2">
+            <!--            <div class="col-2 col-md-1">-->
+            <!--                <label class="my-1 mx-2" for="backSeven">Cofej:</label>-->
+            <!--                <button id="backSeven" type="button"-->
+            <!--                        class="btn btn-block bg-secondary btn-outline-light text-white">-->
+            <!--                    -7-->
+            <!--                </button>-->
+            <!--            </div>-->
+            <div class="col-6 col-md-3">
                 <label class="my-1 mx-2" for="requestedDatepicker">Wybrane:</label>
                 <input type="text" readonly="true" class="bg-secondary text-white" id="requestedDatepicker"
                        th:field="*{requestedDate}"/>
             </div>
-            <div class="col-2 col-md-1">
-                <label class="my-1 mx-2" for="aheadSeven">Pociś:</label>
-                <input type="hidden" id="aheadSeven" name="requestedDate"
-                       th:value="${bookingParams.getRequestedDate().plusDays(7)}"/>
-                <button type="button" class="btn btn-block bg-secondary text-white btn-outline-light">
-                    +7
-                </button>
-            </div>
+            <!--            <div class="col-2 col-md-1">-->
+            <!--                <label class="my-1 mx-2" for="aheadSeven">Pociś:</label>-->
+            <!--                <button id="aheadSeven" type="button" class="btn btn-block bg-secondary text-white btn-outline-light">-->
+            <!--                    +7-->
+            <!--                </button>-->
+            <!--            </div>-->
 
-            <div class="col-5 col-md-2">
+            <div class="col-6 col-md-3">
                 <label class="my-1 mx-2" for="selectScope">Wyświetlanie:</label>
                 <select id="selectScope" class="shadow custom-select bg-secondary text-white" size="1"
                         th:field="*{scope}">
@@ -67,8 +63,9 @@
                 <label class="my-1 mx-2" for="selectEmployee">Osoba:</label>
                 <select id="selectEmployee" class="custom-select bg-danger text-white" size="1"
                         th:field="*{employeeId}">
+                    <option value="">wybierz</option>
                     <option th:each="emp : ${employees}" th:value="${emp.getId()}"
-                            th:text="${emp.getId()} + '. ' + ${emp.getName()} + ' ' + ${emp.getSecondName()}">
+                            th:text="${emp.getSecondName()} + ' ' +  ${emp.getName()}">
                     </option>
                 </select>
             </div>
@@ -78,40 +75,58 @@
 
 </div>
 
+
 <form th:action="@{/trips/add-many}" th:object="${requestParams}" method="post">
 
-    <input type="hidden" name="employeeId" th:value="1">
-<!--    <input type="hidden" name="employeeId" th:value="${bookingParams.employeeId}">-->
-    <input type="hidden" name="carId" th:value="${bookingParams.car.id}">
+    <input id="requestEmployeeId" type="hidden" name="employeeId" th:value="${bookingParams.employeeId}">
+    <input id="requestCarId" type="hidden" name="carId" th:value="${bookingParams.car.id}">
 
-    <div class="shadow container-xl bg-secondary rounded">
+    <div class="shadow container-xl bg-light rounded pt-1">
+
         <div class="row">
+            <div class="col-12 col-sm-6">
+              <textarea class="form-control bg-light" rows="1"
+                        placeholder="Miejsce na dodatkową wiadomość"
+                        th:field="*{additionalMessage}"></textarea>
+            </div>
+            <div class="col-12 col-sm-6">
+                <button type="submit" class="shadow btn btn-block btn-success" disabled id="submitRequestButton">Wybierz
+                    dni i rezerwuj
+                    (musisz wybrać pracownika z listy)
+                </button>
+            </div>
+
             <tr th:each="day : ${requestParams.carDayInfoList}">
-                <div class="col p-1">
-                    <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-block btn-secondary">
-                            <input type="checkbox" th:field="*{carDayInfoList[__${dayStat.index}__].requested}"
-                                   name="requestedDay" autocomplete="off">
+                <div class="col-6 col-sm-3 col-md p-1">
+                    <div class="card">
+                        <div class="shadow card-body border-secondary">
+                            <div class="custom-control custom-switch" th:id="'1checkSwitch'+${day.getId().hashCode()}">
+                                <input type="checkbox" class="custom-control-input "
+                                       th:id="'checkSwitch'+${day.getId().hashCode()}"
+                                       th:field="*{carDayInfoList[__${dayStat.index}__].requested}"
+                                       name="requestedDay">
+                                <label class="custom-control-label"
+                                       th:for="'checkSwitch'+${day.getId().hashCode()}"
+                                       th:text="${day.getId().getDayValueWithZero()}
+                               + '.'
+                               + ${day.getId().getMonthValueWithZero()}">
+                                </label>
+                            </div>
+                            <small th:text="${day.getId().getDayOfWeekPL()}">
+                            </small><br>
+                            <button type="button"
+                                    th:class="${day.available} ? 'btn btn-info stretched-link btn-block' : 'btn btn-danger stretched-link btn-block'"
+                                    th:text="${!day.available} ? ${day.employeeDto.getName().charAt(0) + '. ' + day.employeeDto.getSecondName().substring(0,3) + '.'} : ''"
+                                    style="height: 34px;" th:id="'checkButton'+${day.getId().hashCode()}">
+                            </button>
                             <input type="hidden" th:name="carDayInfoList[__${dayStat.index}__].LDid"
                                    th:value="${day.getId().getLocalDate()}">
-                            <small th:text="${day.getId().getDayOfWeekPLShort()}"></small>
-                            <small th:text="${day.getId().getDayValueWithZero()} + '.' + ${day.getId().getMonthValueWithZero()}"></small>
-                            <div th:class="${day.available} ? 'rounded bg-info' : 'rounded bg-danger'"
-                                 style="height: 26px;">
-                                <small th:text="${!day.available} ? ${day.employeeDto.getSecondName()} : ''"></small>
-                            </div>
-                        </label>
+                        </div>
                     </div>
                 </div>
                 <div th:if="${day.getId().getDayOfWeekPLShort() == 'Nie'}" class="w-100"></div>
             </tr>
         </div>
-    </div>
-
-
-    <div class="container-xl">
-        <button type="submit" class="shadow btn btn-block btn-success my-2">Wyślij formularz rezerwacji
-        </button>
     </div>
 
 </form>
@@ -120,10 +135,6 @@
 <div th:replace="fragments/bootstrap-scripts"></div>
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script th:inline="javascript">
-    var today = new Date(
-        [(${requestedDate.getYear()})],
-        [(${requestedDate.getMonthValueWithZeroJS()})],
-        [(${requestedDate.getDayValueWithZeroJS()})]);
 
     $('#requestedDatepicker').datepicker({
         showOnFocus: true,
@@ -138,6 +149,7 @@
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         ignoreReadonly: true,
+        weekStartDay: 1,
 
         maxDate: function () {
             return $('#endDate').val();
@@ -157,15 +169,61 @@
             return $('#requestedDatepicker').val();
         }
     });
-
-    var x = document.getElementById("requestedDatepicker").value;
-
+</script>
+<script>
+    var rdp = document.getElementById("requestedDatepicker").value;
     $('#requestedDatepicker').change(
         function () {
-            if (x != document.getElementById("requestedDatepicker").value) {
-                $('#chooseDate').submit();
+            if (rdp != document.getElementById("requestedDatepicker").value) {
+                $('#bookingParamsForm').submit();
             }
         });
+
+    var ss = document.getElementById("selectScope").value;
+    $('#selectScope').change(
+        function () {
+            if (ss != document.getElementById("selectScope").value) {
+                $('#bookingParamsForm').submit();
+            }
+        });
+
+    var sc = document.getElementById("selectCar").value;
+    $('#selectCar').change(
+        function () {
+            if (sc != document.getElementById("selectCar").value) {
+                $('#bookingParamsForm').submit();
+            }
+        });
+
+    $('#selectEmployee').change(
+        function () {
+            const selectEmployee = document.getElementById('selectEmployee');
+            const submitRequestButton = document.getElementById('submitRequestButton');
+            document.getElementById('requestEmployeeId').value = selectEmployee.value;
+            if (selectEmployee.value == "") {
+                submitRequestButton.disabled = true;
+                submitRequestButton.innerText = "Wybierz dni i rezerwuj (musisz wybrać pracownika z listy)";
+            } else {
+                submitRequestButton.removeAttribute("disabled");
+                submitRequestButton.innerText = "Rezerwuj";
+            }
+
+        });
+
+
+</script>
+<script th:inline="javascript">
+
+    /*[# th:each="day : ${requestParams.carDayInfoList}"]*/
+    $('#checkButton[(${day.getId().hashCode()})]').click(
+        function () {
+            var checkSwitch = document.getElementById('checkSwitch[(${day.getId().hashCode()})]');
+            checkSwitch.click();
+            console.log('klikniete')
+        });
+
+    /*[/]*/
+
 
 </script>
 </body>

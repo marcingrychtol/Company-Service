@@ -105,4 +105,16 @@ public class BookingController {
         binder.registerCustomEditor(Date.class, dateEditor);
     }
 
+    @InitBinder
+    public void customizeLocalDateBinder(WebDataBinder binder) {
+        // tell spring to set empty values as null instead of empty string.
+        binder.registerCustomEditor(LocalDate.class, new StringTrimmerEditor(true));
+        //The date format to parse or output your dates
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //Create a new CustomDateEditor
+        CustomDateEditor localDateEditor = new CustomDateEditor(localDateFormat, true);
+        //Register it as custom editor for the Date type
+        binder.registerCustomEditor(LocalDate.class, localDateEditor);
+    }
+
 }

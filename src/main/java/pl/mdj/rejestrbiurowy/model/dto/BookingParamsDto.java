@@ -4,11 +4,12 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Used to transfer data necessary to view car-calendar
- * Default view is one week
+ * Can set default view here
  */
 
 @Data
@@ -19,8 +20,11 @@ public class BookingParamsDto {
     private EmployeeDto employee;
     private Long employeeId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate requestedDate;
-    private Integer scope = 7;
+    private LocalDate requestedLocalDate;
+    @DateTimeFormat(pattern = "MM/dd/YYYY")
+    private Date requestedDate;
+    private Integer scope = 28;
     private List<CarDayInfoDto> carDayInfoList;
+    private String additionalMessage;
 
 }

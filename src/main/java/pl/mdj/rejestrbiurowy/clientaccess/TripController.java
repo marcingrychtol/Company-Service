@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -47,14 +48,14 @@ public class TripController {
     }
 
     @GetMapping("")
-    public String getAllTrips(@ModelAttribute TripDto tripDto, Model model){
+    public String getAllTrips(@ModelAttribute TripDto tripDto, Model model) {
         addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
         return "manager/manager-trips";
     }
 
 
     @GetMapping("/filter")
-    public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model){
+    public String getTripsFiltered(@ModelAttribute TripDto tripDto, Model model) {
 
         addTripsPageAttributesToModel(model, ActivePage.TRIPS, tripDto);
         return "manager/manager-trips";
@@ -79,11 +80,11 @@ public class TripController {
     }
 
     @PostMapping("/cancel")
-    public String cancelTrip(@ModelAttribute TripDto tripDto, Model model){
+    public String cancelTrip(@ModelAttribute TripDto tripDto, Model model) {
 
         try {
             tripService.cancelByDto(tripDto);
-            model.addAttribute("successMessage", "Poprawnie usunięto rezerwację!");
+            model.addAttribute("successMessage", "Poprawnie anulowano rezerwację!");
         } catch (WrongInputDataException e) {
             model.addAttribute("errorMessage", e.getMessage());
         } catch (CannotFindEntityException e) {
@@ -95,7 +96,7 @@ public class TripController {
     }
 
     @PostMapping("/edit")
-    public String editTrip(@ModelAttribute TripDto tripDto, Model model){
+    public String editTrip(@ModelAttribute TripDto tripDto, Model model) {
 
         try {
             tripService.update(tripDto);
@@ -111,13 +112,13 @@ public class TripController {
     }
 
     @PostMapping("/add")
-    public String addTrip(@ModelAttribute TripDto tripDto, Model model){
+    public String addTrip(@ModelAttribute TripDto tripDto, Model model) {
 
         LocalDate requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
 
         try {
             tripService.addOne(tripDto);
-            model.addAttribute("successMessage","Rezerwacja dodana poprawnie!");
+            model.addAttribute("successMessage", "Rezerwacja dodana poprawnie!");
         } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
             LOG.info(e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
@@ -138,24 +139,26 @@ public class TripController {
 
         model.addAttribute("active", "booking");
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("cars", carService.findAll());
+        model.addAttribute("employees", employeeService.findAll());
 
-        List<TripDto> resolvedTrips = tripService.addAll(bookingParamsDto);
-        model.addAttribute("reservations", resolvedTrips);
-
-        List<TripDto> conflictedTrips = tripService.findConflictedTrips(resolvedTrips);
+        List<TripDto> conflictedTrips = tripService.findConflictedTrips(tripService.joinRequestedTrips(bookingParamsDto));
         if (!conflictedTrips.isEmpty()) {
             model.addAttribute("conflicts", conflictedTrips);
         }
-        model.addAttribute("success", "Brak konfliktów. Wybierz osobę i potwierdź rezerwacje.");
+
+        List<TripDto> reservations = tripService.addAll(bookingParamsDto);
+        model.addAttribute("reservations", reservations);
+
+        model.addAttribute("infoMessage", "Rezerwacja powiodła się");
         return "main/booking-confirmation";
 
     }
 
     @InitBinder
-    public void customizeDateBinder( WebDataBinder binder )
-    {
+    public void customizeDateBinder(WebDataBinder binder) {
         // tell spring to set empty values as null instead of empty string.
-        binder.registerCustomEditor( Date.class, new StringTrimmerEditor( true ));
+        binder.registerCustomEditor(Date.class, new StringTrimmerEditor(true));
 
         //The date format to parse or output your dates
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -165,25 +168,28 @@ public class TripController {
         binder.registerCustomEditor(Date.class, editor);
     }
 
-    private void addTripsPageAttributesToModel(Model model, ActivePage active, TripDto tripDto){
+    private void addTripsPageAttributesToModel(Model model, ActivePage active, TripDto tripDto) {
+
         model.addAttribute("active", active.get());
         model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("employees", employeeService.findAll());
 
         if (tripDto.getFilterStartingDate() != null
-                        || tripDto.getFilterEndingDate() != null
-                        || tripDto.getFilterEmployeeId() != null
-                        || tripDto.getFilterCarId() != null
-                        || (tripDto.getFilterAdditionalMessage() != null
-                        && !tripDto.getFilterAdditionalMessage().equals("") )
+                || tripDto.getFilterEndingDate() != null
+                || tripDto.getFilterEmployeeId() != null
+                || tripDto.getFilterCarId() != null
+                || (tripDto.getFilterAdditionalMessage() != null
+                && !tripDto.getFilterAdditionalMessage().equals(""))
         ) {
             model.addAttribute("filterIsActive", "true");
             model.addAttribute("trips", tripService.findByFilter(tripDto));
             tripDto = tripService.completeFilterDtoData(tripDto);
         } else {
             model.addAttribute("filterIsActive", "false");
-            model.addAttribute("trips", tripService.findAll());
+            model.addAttribute("trips", tripService.findAllActive().stream()
+                    .filter(t -> !t.getEndingDate().before(new Date(System.currentTimeMillis())))
+                    .collect(Collectors.toList()));
         }
 
         model.addAttribute("tripDto", tripDto);

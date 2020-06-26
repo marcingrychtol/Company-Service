@@ -127,5 +127,9 @@ public class DateMapperImpl implements DateMapper {
         return dateDto;
     }
 
+    @Override
+    public DateDto getDateDto(Date date) {
+        return getDateDto(toLocalDate(date));
+    }
 
 }

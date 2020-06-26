@@ -12,9 +12,65 @@
 <div th:replace="fragments/nav-bar"></div>
 
 <div th:replace="fragments/message"></div>
+<!-- Rezerwacje -->
+<div class="container-xl" th:unless="${reservations} == null">
+    <div class="row p-1 m-1">
+        <div class="table-responsive">
+            <table class="table table-hover table-dark">
+                <caption>Lista utworzonych rezerwacji</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Od</th>
+                    <th scope="col">Do</th>
+                    <th scope="col">Pojazd</th>
+                    <th scope="col">Osoba</th>
+                    <th scope="col">Opis</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="trip: ${reservations}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
+                    <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
+                    <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
+                    <td th:text="${trip.car.brand} + ' ' + ${trip.car.model}"></td>
+                    <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
+                    <td th:text="${trip.additionalMessage}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Zmiany -->
+<div class="container-xl" th:unless="${conflicts} == null">
+    <div class="row p-1 m-1">
+        <div class="table-responsive">
+            <table class="table table-hover table-dark">
+                <caption>Lista rezerwacji, które wymagały zmian</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Od</th>
+                    <th scope="col">Do</th>
+                    <th scope="col">Pojazd</th>
+                    <th scope="col">Osoba</th>
+                    <th scope="col">Opis</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="trip: ${conflicts}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
+                    <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
+                    <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
+                    <td th:text="${trip.car.brand} + ' ' + ${trip.car.model}"></td>
+                    <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
+                    <td th:text="${trip.additionalMessage}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <div class="container-xl">
-    <a th:href="@{/}" class="shadow btn btn-block btn-success my-2">Potwierdź</a>
+    <a th:href="@{/}" class="shadow btn btn-block btn-success my-2">No i dobre</a>
 </div>
 
 

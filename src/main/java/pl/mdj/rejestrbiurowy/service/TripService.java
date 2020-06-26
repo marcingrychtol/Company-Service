@@ -13,9 +13,12 @@ public interface TripService extends BasicService<TripDto, Long> {
     List<TripDto> findByFilter(TripDto filter);
     TripDto completeFilterDtoData(TripDto tripDto);
     List<TripDto> getTripsByCar(LocalDate startingDate, Car car, Integer scope);
-    List<TripDto> findConflictedTrips(List<TripDto> resolvedTrips);
+
+    List<TripDto> findConflictedTrips(List<TripDto> requestedTrips);
 
     List<TripDto> addAll(BookingParamsDto bookingParams);
+
+    List<TripDto> joinRequestedTrips(BookingParamsDto bookingParams);
 }
 
 

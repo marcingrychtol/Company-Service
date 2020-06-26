@@ -19,4 +19,5 @@ public interface DateMapper {
     String valueWithZeroForJS(int i);
     String localDateTimeToString(LocalDateTime dateTime);
     DateDto getDateDto(LocalDate localDate);
+    DateDto getDateDto(Date date);
 }

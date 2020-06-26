@@ -74,13 +74,13 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public void addOne(TripDto tripDto) throws EntityNotCompleteException, EntityConflictException, CannotFindEntityException {
+    public Long addOne(TripDto tripDto) throws EntityNotCompleteException, EntityConflictException, CannotFindEntityException {
         checkTripComplete(tripDto); // throws CFEE and ENCE
         Trip trip = tripMapper.mapToEntity(tripDto);  // Need to save Entity, not Dto
-        addTrip(trip);
+        return addTrip(trip);
     }
 
-    private void addTrip(Trip trip) throws EntityConflictException, EntityNotCompleteException {
+    private Long addTrip(Trip trip) throws EntityConflictException, EntityNotCompleteException {
         checkAvailableCarConflict(trip); // throws EntityConflictException
         trip.setCreatedTime(LocalDateTime.now());
         trip.setLastModifiedTime(trip.getCreatedTime());
@@ -89,6 +89,7 @@ public class TripServiceImpl implements TripService {
         }
         tripRepository.save(trip);  // in this order to generate id before using save() inside DayService
         dayService.addTripToDay(trip);
+        return trip.getId();
     }
 
     /**
@@ -139,6 +140,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public void update(TripDto tripDto) {
         tripRepository.findById(tripDto.getId()).ifPresent(trip -> {
+            trip.setEmployee(employeeRepository.getOne(tripDto.getEmployeeId()));
             trip.setAdditionalMessage(tripDto.getAdditionalMessage());
             trip.setLastModifiedTime(LocalDateTime.now());
             tripRepository.save(trip);
@@ -240,7 +242,9 @@ public class TripServiceImpl implements TripService {
             }
         }
 
-        return tripList;
+        return tripList.stream()
+                .filter(tripDto -> !tripDto.getCancelled())
+                .collect(Collectors.toList());
     }
 
     private List<TripDto> filterWhenDatesGiven(List<DayDto> days, TripDto filter) {
@@ -270,7 +274,9 @@ public class TripServiceImpl implements TripService {
                     .filter(t -> Pattern.compile(Pattern.quote(filter.getFilterAdditionalMessage()), Pattern.CASE_INSENSITIVE).matcher(t.getAdditionalMessage()).find())
                     .collect(Collectors.toList());
         }
-        return tripList;
+        return tripList.stream()
+                .filter(tripDto -> !tripDto.getCancelled())
+                .collect(Collectors.toList());
     }
 
 
@@ -291,18 +297,23 @@ public class TripServiceImpl implements TripService {
      * @return list of conflicted trips
      */
     @Override
-    public List<TripDto> findConflictedTrips(List<TripDto> requestedTrips) {
+    public List<TripDto> findConflictedTrips(List<TripDto> requestedTrips){
+        return tripMapper.mapToDto(findConflicts(tripMapper.mapToEntity(requestedTrips)));
+    }
 
-        Set<TripDto> conflictedTripSet = new HashSet<>();
-
-        requestedTrips.forEach(trip -> {
-            conflictedTripSet.addAll(findByFilter(trip));
-        });
-
-        List<TripDto> conflictedTripList = new ArrayList<>(conflictedTripSet);
-        conflictedTripList.sort(Comparator.comparing(TripDto::getStartingDate));
-
-        return conflictedTripList;
+    private List<Trip> findConflicts(List<Trip> requestedTrips){
+        Set<Trip> existingTripSet = new HashSet<>();
+        for (Trip trip : requestedTrips) {
+            dayService.getDaysBetween(trip.getStartingDate(), trip.getEndingDate())
+                    .stream()
+                    .map(Day::getTrips)
+                    .forEach(existingTripSet::addAll);
+            existingTripSet = existingTripSet.stream()
+                    .filter(t -> !t.getCancelled())
+                    .filter(t -> t.getCar().getId().equals(trip.getCar().getId()))
+                    .collect(Collectors.toSet());
+        }
+        return new ArrayList<>(existingTripSet);
     }
 
     @Override
@@ -331,15 +342,23 @@ public class TripServiceImpl implements TripService {
                 removeConflicts(newTrip,existingTrip);
             }
         }
+        List<Long> ids = new ArrayList<>();
         resolvedTripDtos.forEach(t -> {
             try {
-                addOne(t);
+                ids.add(addOne(t));
             } catch (EntityNotCompleteException | CannotFindEntityException e) {
                 e.printStackTrace();
             } catch (EntityConflictException ignored) {
             }
         });
 
+        resolvedTripDtos = new ArrayList<>();
+        for (Long id :
+                ids) {
+            try {
+                resolvedTripDtos.add(findById(id));
+            } catch (CannotFindEntityException ignored) { }
+        }
         return resolvedTripDtos;
     }
 
@@ -402,11 +421,13 @@ public class TripServiceImpl implements TripService {
 
     /**
      * Used to find all trips around request
+     * Sets employee, car and additional message for all found trips
      *
      * @param bookingParams
      * @return
      */
-    private List<TripDto> joinRequestedTrips(BookingParamsDto bookingParams) {
+    @Override
+    public List<TripDto> joinRequestedTrips(BookingParamsDto bookingParams) {
 
         List<LocalDate> requestsDateList = new ArrayList<>();
         List<TripDto> requestedTripList = new ArrayList<>();
@@ -468,10 +489,15 @@ public class TripServiceImpl implements TripService {
             }
         }
 
+        if (bookingParams.getAdditionalMessage() == null){
+            bookingParams.setAdditionalMessage("");
+        }
+
         for (TripDto trip :
                 requestedTripList) {
             trip.setCarId(bookingParams.getCarId());
             trip.setEmployeeId(bookingParams.getEmployeeId());
+            trip.setAdditionalMessage(bookingParams.getAdditionalMessage());
         }
 
         return requestedTripList;
@@ -500,7 +526,6 @@ public class TripServiceImpl implements TripService {
             }
         } else {
             if (existingTrip.getEndingDate().compareTo(requestedTrip.getEndingDate()) >= 0) {
-//                LocalDate tempDate = existingTrip.getEndingDate();
                 Trip newTrip1 = new Trip();
                 newTrip1.setStartingDate(existingTrip.getStartingDate());
                 newTrip1.setEndingDate(requestedTrip.getStartingDate().minusDays(1));

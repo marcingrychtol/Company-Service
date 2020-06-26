@@ -76,12 +76,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void addOne(CarDto inputDto) throws EntityConflictException, WrongInputDataException {
+    public Long addOne(CarDto inputDto) throws EntityConflictException, WrongInputDataException {
         Car entity = carMapper.mapToEntity(inputDto);
 
         checkInputLengthData(entity); // Throws WIDE
         checkDuplicates(entity); // Throws ECE
         carRepository.save(entity);
+        return entity.getId();
     }
 
     /**
@@ -221,7 +222,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public BookingParamsDto fillBookingParamsDto(BookingParamsDto bookingParams) {
 
-        LocalDate start = bookingParams.getRequestedDate().with(DayOfWeek.MONDAY);
+        LocalDate start = dateMapper.toLocalDate(bookingParams.getRequestedDate()).with(DayOfWeek.MONDAY);
         LocalDate end = start.plusDays(bookingParams.getScope() - 1);
         CarDto car = bookingParams.getCar();
 

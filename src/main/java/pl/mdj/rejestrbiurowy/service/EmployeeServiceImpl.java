@@ -31,7 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> findAll() {
-        return employeeMapper.mapToDto(employeeRepository.findAll());
+        return employeeMapper.mapToDto(employeeRepository.findAllByOrderBySecondName());
     }
 
     @Override
@@ -61,10 +61,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void addOne(EmployeeDto employeeDto) throws WrongInputDataException, EntityConflictException {
+    public Long addOne(EmployeeDto employeeDto) throws WrongInputDataException, EntityConflictException {
         checkInputLengthData(employeeDto); // throws WIDE
         checkDuplicates(employeeDto); // throws ECE
-        employeeRepository.save(employeeMapper.mapToEntity(employeeDto));
+        Employee employee = employeeMapper.mapToEntity(employeeDto);
+        employeeRepository.save(employee);
+        return employee.getId();
     }
 
     @Override
@@ -112,6 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             empOptional.get().setName(employeeDto.getName());
             empOptional.get().setSecondName(employeeDto.getSecondName());
             empOptional.get().setEmail(employeeDto.getEmail());
+            empOptional.get().setPhoneNumber(employeeDto.getPhoneNumber());
             employeeRepository.save(empOptional.get());
         } else {
             throw new CannotFindEntityException(
