@@ -188,7 +188,7 @@ public class TripController {
         } else {
             model.addAttribute("filterIsActive", "false");
             model.addAttribute("trips", tripService.findAllActive().stream()
-                    .filter(t -> !t.getEndingDate().before(new Date(System.currentTimeMillis())))
+                    .filter(t -> !t.getEndingDate().before(dateMapper.toDate(LocalDate.now().minusDays(1))))
                     .collect(Collectors.toList()));
         }
 

@@ -10,7 +10,7 @@
     </parent>
     <groupId>pl.mdj</groupId>
     <artifactId>MDJ-Rezerwator</artifactId>
-    <version>1.0.6-sposob rezerwacji</version>
+    <version>1.0.7-8080-sposob rezerwacji</version>
     <name>MDJ-Rezerwator</name>
     <description>Rezerwacja pojazdów służbowych</description>
 
