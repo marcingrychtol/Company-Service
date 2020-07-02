@@ -11,7 +11,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.exceptions.CannotFindEntityException;
 import pl.mdj.rejestrbiurowy.model.dto.*;
-import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.DayService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
@@ -19,7 +19,6 @@ import pl.mdj.rejestrbiurowy.service.TripService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/booking")
@@ -32,14 +31,14 @@ public class BookingController {
     DayService dayService;
     final
     TripService tripService;
-    DateMapper dateMapper;
+    DateFactory dateFactory;
 
     @Autowired
-    public BookingController(EmployeeService employeeService, CarService carService, DayService dayService, DateMapper dateMapper, TripService tripService) {
+    public BookingController(EmployeeService employeeService, CarService carService, DayService dayService, DateFactory dateFactory, TripService tripService) {
         this.employeeService = employeeService;
         this.carService = carService;
         this.dayService = dayService;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
         this.tripService = tripService;
     }
 
@@ -62,10 +61,10 @@ public class BookingController {
         }
         bookingParams.setCar(carDto);
 
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("active", "booking");
 
-        model.addAttribute("requestedDate", dateMapper.getDateDto(bookingParams.getRequestedDate()));
+        model.addAttribute("requestedDate", dateFactory.getDateDto(bookingParams.getRequestedDate()));
         model.addAttribute("bookingParams", bookingParams);
         model.addAttribute("requestParams", carService.fillBookingParamsDto(bookingParams));
         model.addAttribute("newTrip", new TripDto());
@@ -84,37 +83,25 @@ public class BookingController {
         TripDto requestedTrip = new TripDto();
         requestedTrip.setCar(carDto);
         model.addAttribute("active", "booking");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
+        model.addAttribute("requestedDate", dateFactory.getDateDto(requestedDate));
         model.addAttribute("requestedTrip", requestedTrip);
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("employees", employeeService.findAllActive());
         model.addAttribute("cars", carService.findAllActive());
         return "main/booking";
     }
-
-    @InitBinder
-    public void customizeDateBinder(WebDataBinder binder) {
-        // tell spring to set empty values as null instead of empty string.
-        binder.registerCustomEditor(Date.class, new StringTrimmerEditor(true));
-        //The date format to parse or output your dates
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        //Create a new CustomDateEditor
-        CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
-        //Register it as custom editor for the Date type
-        binder.registerCustomEditor(Date.class, dateEditor);
-    }
-
-    @InitBinder
-    public void customizeLocalDateBinder(WebDataBinder binder) {
-        // tell spring to set empty values as null instead of empty string.
-        binder.registerCustomEditor(LocalDate.class, new StringTrimmerEditor(true));
-        //The date format to parse or output your dates
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        //Create a new CustomDateEditor
-        CustomDateEditor localDateEditor = new CustomDateEditor(localDateFormat, true);
-        //Register it as custom editor for the Date type
-        binder.registerCustomEditor(LocalDate.class, localDateEditor);
-    }
+//
+//    @InitBinder
+//    public void customizeLocalDateBinder(WebDataBinder binder) {
+//        // tell spring to set empty values as null instead of empty string.
+//        binder.registerCustomEditor(LocalDate.class, new StringTrimmerEditor(true));
+//        //The date format to parse or output your dates
+//        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        //Create a new CustomDateEditor
+//        CustomDateEditor localDateEditor = new CustomDateEditor(localDateFormat, true);
+//        //Register it as custom editor for the Date type
+//        binder.registerCustomEditor(LocalDate.class, localDateEditor);
+//    }
 
 }

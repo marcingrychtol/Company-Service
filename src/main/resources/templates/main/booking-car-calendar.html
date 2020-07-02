@@ -19,24 +19,11 @@
     <form id="bookingParamsForm" th:action="@{/booking/}" th:object="${bookingParams}" method="get">
         <div class="form-row">
 
-            <!--            <div class="col-2 col-md-1">-->
-            <!--                <label class="my-1 mx-2" for="backSeven">Cofej:</label>-->
-            <!--                <button id="backSeven" type="button"-->
-            <!--                        class="btn btn-block bg-secondary btn-outline-light text-white">-->
-            <!--                    -7-->
-            <!--                </button>-->
-            <!--            </div>-->
             <div class="col-6 col-md-3">
                 <label class="my-1 mx-2" for="requestedDatepicker">Wybrane:</label>
                 <input type="text" readonly="true" class="bg-secondary text-white" id="requestedDatepicker"
                        th:field="*{requestedDate}"/>
             </div>
-            <!--            <div class="col-2 col-md-1">-->
-            <!--                <label class="my-1 mx-2" for="aheadSeven">Pociś:</label>-->
-            <!--                <button id="aheadSeven" type="button" class="btn btn-block bg-secondary text-white btn-outline-light">-->
-            <!--                    +7-->
-            <!--                </button>-->
-            <!--            </div>-->
 
             <div class="col-6 col-md-3">
                 <label class="my-1 mx-2" for="selectScope">Wyświetlanie:</label>
@@ -45,6 +32,8 @@
                     <option value="7">1 tydzień</option>
                     <option selected value="14">2 tygodnie</option>
                     <option value="28">4 tygodnie</option>
+                    <option value="42">6 tygodni</option>
+                    <option value="56">8 tygodni</option>
                 </select>
             </div>
 
@@ -85,7 +74,7 @@
 
         <div class="row">
             <div class="col-12 col-sm-6">
-              <textarea class="form-control bg-light" rows="1"
+              <textarea class="shadow form-control bg-light" rows="1"
                         placeholder="Miejsce na dodatkową wiadomość"
                         th:field="*{additionalMessage}"></textarea>
             </div>
@@ -120,7 +109,7 @@
                                     style="height: 34px;" th:id="'checkButton'+${day.getId().hashCode()}">
                             </button>
                             <input type="hidden" th:name="carDayInfoList[__${dayStat.index}__].LDid"
-                                   th:value="${day.getId().getLocalDate()}">
+                                   th:value="${day.id.date}">
                         </div>
                     </div>
                 </div>
@@ -215,6 +204,7 @@
 <script th:inline="javascript">
 
     /*[# th:each="day : ${requestParams.carDayInfoList}"]*/
+
     $('#checkButton[(${day.getId().hashCode()})]').click(
         function () {
             var checkSwitch = document.getElementById('checkSwitch[(${day.getId().hashCode()})]');

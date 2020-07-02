@@ -29,8 +29,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="trip: ${reservations}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
-                    <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
-                    <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
+                    <td th:text="${trip.startingDate.toString().split(',')[0]}"></td>
+                    <td th:text="${trip.endingDate.toString().split(',')[0]}"></td>
                     <td th:text="${trip.car.brand} + ' ' + ${trip.car.model}"></td>
                     <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
                     <td th:text="${trip.additionalMessage}"></td>
@@ -57,8 +57,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="trip: ${conflicts}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
-                    <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
-                    <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
+                    <td th:text="${trip.startingDate.toString().split(',')[0]}"></td>
+                    <td th:text="${trip.endingDate.toString().split(',')[0]}"></td>
                     <td th:text="${trip.car.brand} + ' ' + ${trip.car.model}"></td>
                     <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
                     <td th:text="${trip.additionalMessage}"></td>

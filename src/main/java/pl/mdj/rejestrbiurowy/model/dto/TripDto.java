@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -23,10 +25,10 @@ public class TripDto{
     private Long employeeId;
     private EmployeeDto employee;
 
-    @DateTimeFormat(pattern = "MM/dd/YYYY")
-    private Date startingDate;
-    @DateTimeFormat(pattern = "MM/dd/YYYY")
-    private Date endingDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate startingDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate endingDate;
 
     private String createdTime;
     private String lastModifiedTime;  // TODO: not working
@@ -41,10 +43,10 @@ public class TripDto{
     private Long filterEmployeeId;
     private EmployeeDto filterEmployee;
 
-    @DateTimeFormat(pattern = "MM/dd/YYYY")
-    private Date filterStartingDate;
-    @DateTimeFormat(pattern = "MM/dd/YYYY")
-    private Date filterEndingDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate filterStartingDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate filterEndingDate;
 
     private String filterCreatedTime;
     private String filterLastModifiedTime;

@@ -18,10 +18,10 @@ public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,  CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,  CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "car_id")
     private Car car;
     private Boolean cancelled = false;
@@ -34,7 +34,8 @@ public class Trip {
     private LocalDateTime lastModifiedTime;
     private LocalDateTime cancelledTime;
 
-    @ManyToMany(mappedBy = "trips", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "trips", cascade = {CascadeType.PERSIST, CascadeType.MERGE,  CascadeType.DETACH, CascadeType.REFRESH})
+//    @ManyToMany(mappedBy = "trips", cascade = {CascadeType.ALL})
     private List<Day> days;
 
     public List<Day> getDays() {

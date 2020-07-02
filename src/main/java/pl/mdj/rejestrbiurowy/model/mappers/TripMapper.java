@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
@@ -24,18 +25,18 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
     TripRepository tripRepository;
     CarMapper carMapper;
     EmployeeMapper employeeMapper;
-    DateMapper dateMapper;
+    DateFactory dateFactory;
 
     private static Logger LOG = LoggerFactory.getLogger(TripMapper.class);
 
     @Autowired
-    public TripMapper(CarRepository carRepository, EmployeeRepository employeeRepository, TripRepository tripRepository, CarMapper carMapper, EmployeeMapper employeeMapper, DateMapper dateMapper) {
+    public TripMapper(CarRepository carRepository, EmployeeRepository employeeRepository, TripRepository tripRepository, CarMapper carMapper, EmployeeMapper employeeMapper, DateFactory dateFactory) {
         this.carRepository = carRepository;
         this.employeeRepository = employeeRepository;
         this.tripRepository = tripRepository;
         this.carMapper = carMapper;
         this.employeeMapper = employeeMapper;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
     }
 
     public TripDto completeTripData(TripDto tripDto) {
@@ -65,9 +66,9 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
                     dto.setEmployeeId(entity.getEmployee().getId());
                 });
         Optional.ofNullable(entity.getStartingDate())
-                .ifPresent(date -> dto.setStartingDate(dateMapper.toDate(date)));
+                .ifPresent(dto::setStartingDate);
         Optional.ofNullable(entity.getEndingDate())
-                .ifPresent(date -> dto.setEndingDate(dateMapper.toDate(date)));
+                .ifPresent(dto::setEndingDate);
         Optional.ofNullable(entity.getAdditionalMessage())
                 .ifPresent(dto::setAdditionalMessage);
         Optional.ofNullable(entity.getCancelled())
@@ -75,17 +76,17 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
 
         Optional.ofNullable(entity.getCreatedTime())
                 .ifPresent(created -> dto
-                        .setCreatedTime(dateMapper
+                        .setCreatedTime(dateFactory
                                 .localDateTimeToString(created)));
 
         Optional.ofNullable(entity.getLastModifiedTime())
                 .ifPresent(created -> dto
-                        .setLastModifiedTime(dateMapper
+                        .setLastModifiedTime(dateFactory
                                 .localDateTimeToString(created)));
 
         Optional.ofNullable(entity.getCancelledTime())
                 .ifPresent(created -> dto
-                        .setCancelledTime(dateMapper
+                        .setCancelledTime(dateFactory
                                 .localDateTimeToString(created)));
 
         dto.setCancelled(entity.getCancelled());
@@ -127,9 +128,9 @@ public class TripMapper implements BasicMapper<Trip, TripDto> {
             }
         }
         Optional.ofNullable(dto.getStartingDate())
-                .ifPresent(date -> entity.setStartingDate(dateMapper.toLocalDate(date)));
+                .ifPresent(entity::setStartingDate);
         Optional.ofNullable(dto.getEndingDate())
-                .ifPresent(date -> entity.setEndingDate(dateMapper.toLocalDate(date)));
+                .ifPresent(entity::setEndingDate);
         Optional.ofNullable(dto.getAdditionalMessage())
                 .ifPresent(entity::setAdditionalMessage);
 

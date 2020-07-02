@@ -22,14 +22,14 @@
             <button type="button" class="btn btn-block btn-warning" th:text="
                     'Wyświetlasz: ' + ${requestedDate.getDayOfWeekPL()}
                     + ' '
-                    + ${requestedDate.getLocalDate().getDayOfMonth()}
+                    + ${requestedDate.getDate().getDayOfMonth()}
                     + ' '
                     + ${requestedDate.getMonthPL()}">
             </button>
         </div>
         <div class="col-3 col-md-1 mb-2">
             <form th:action="@{/calendar/day}" th:object="${dateDto}">
-                <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().minusDays(1)}"/>
+                <input type="hidden" name="date" th:value="${requestedDate.getDate().minusDays(1)}"/>
                 <button type="submit" class="btn btn-block bg-secondary btn-outline-dark text-white btn-outline-dark">
                     &laquo;
                 </button>
@@ -43,7 +43,7 @@
         </div>
         <div class="col-3 col-md-1 mb-2">
             <form th:action="@{/calendar/day}" th:object="${dateDto}">
-                <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate().plusDays(1)}"/>
+                <input type="hidden" name="date" th:value="${requestedDate.getDate().plusDays(1)}"/>
                 <button type="submit" class="btn btn-block bg-secondary text-white btn-outline-dark">
                     &raquo;
                 </button>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-12 col-md-4 mb-2">
             <form th:action="@{/calendar/find}" th:object="${dateDto}">
-                <input type="hidden" name="localDate" th:value="${requestedDate.getLocalDate()}"/>
+                <input type="hidden" name="date" th:value="${requestedDate.getDate()}"/>
                 <button type="submit" class="btn btn-block btn-outline-dark text-dark bg-warning">
                     Pokaż w kalendarzu
                 </button>
@@ -65,10 +65,12 @@
         <tr th:each="car: ${carsByDay}">
             <div class="col-6 col-md-4 col-lg-3 mb-1">
 
-                <span th:if="${car.isAvailable()}">
                     <form id="dayForm" th:action="@{/booking/}" th:object="${bookingParams}"
                           method="get">
-                    <div class="shadow card text-white bg-info text-center h-100">
+                    <div th:class="${car.isAvailable()}
+                                        ? 'shadow card text-white bg-info text-center h-100'
+                                        : 'shadow card text-white bg-danger text-center h-100'"
+                         class="shadow card text-white bg-info text-center h-100">
                         <div class="card-header" th:text="${car.getBrand()}
                         + ' '
                         + ${car.getModel()}
@@ -85,8 +87,8 @@
                         </div>
                         <button type="submit"
                                 th:class="${car.isAvailable()}
-                                        ? 'btn btn-info stretched-link btn-block text-white'
-                                        : 'btn btn-danger stretched-link btn-block text-white'"
+                                        ? 'btn btn-sm btn-info stretched-link btn-block text-white'
+                                        : 'btn btn-sm btn-danger stretched-link btn-block text-white'"
                                 th:text="${car.isAvailable()}
                                         ? 'Wybierz'
                                         : ${car.getOccupier().getSecondName()}"
@@ -95,34 +97,8 @@
                         </button>
                     </div>
                 </form>
-                </span>
 
-                <span th:if="${car.available==false}">
-                    <form id="dayForm1" th:action="@{/booking/}" th:object="${bookingParams}"
-                    method="get">
-                    <div class="shadow card text-white bg-danger text-center h-100">
-                        <div class="card-header" th:text="${car.getBrand()}
-                        + ' '
-                        + ${car.getModel()}
-                        + ' - '
-                        + ${car.getRegistration()}"></div>
-                        <img th:src="@{/cars/image/{id}(id=${car.getId()})}" alt="No such car image"
-                             class="img-thumbnail">
-                        <div class="card-img-overlay h-100">
 
-                            <input type="hidden" name="carId" th:value="${car.getId()}">
-                            <input type="hidden" name="requestedDate"
-                                   th:value="${requestedDate.getLocalDateFormatted()}">
-
-                        </div>
-                        <button type="submit"
-                                class="btn btn-danger stretched-link btn-block text-white"
-                                th:text="${car.getOccupier().getName()} + ' ' + ${car.getOccupier().getSecondName()}"
-                        >
-                        </button>
-                    </div>
-                    </form>
-                </span>
 
             </div>
         </tr>
@@ -148,8 +124,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="trip: ${trips}" th:class="${trip.cancelled} ? 'bg-dark text-secondary' : ''">
-                    <td th:text="${trip.startingDate.toLocaleString().split(',')[0]}"></td>
-                    <td th:text="${trip.endingDate.toLocaleString().split(',')[0]}"></td>
+                    <td th:text="${trip.startingDate.toString().split(',')[0]}"></td>
+                    <td th:text="${trip.endingDate.toString().split(',')[0]}"></td>
                     <td th:text="${trip.car.model}"></td>
                     <td th:text="${trip.employee.name}+' '+${trip.employee.secondName}"></td>
                     <td th:text="${trip.additionalMessage}"></td>
@@ -197,9 +173,9 @@
                                             </p>
                                         </h5>
                                         <div class="card-body">
-                                            <td th:text="'Od: ' + ${trip.getStartingDate().toLocaleString().split(',')[0]}"></td>
+                                            <td th:text="'Od: ' + ${trip.getStartingDate().toString().split(',')[0]}"></td>
                                             <br/>
-                                            <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
+                                            <td th:text="'Do: ' + ${trip.getEndingDate().toString().split(',')[0]}"></td>
                                             <p class="card-text">
                                             <td th:text="${trip.getEmployee().getName()}"></td>
                                             <td th:text="${trip.getEmployee().getSecondName()}"></td>
@@ -261,9 +237,9 @@
                                             </p>
                                         </h5>
                                         <div class="card-body">
-                                            <td th:text="'Od: ' + ${trip.getStartingDate().toLocaleString().split(',')[0]}"></td>
+                                            <td th:text="'Od: ' + ${trip.getStartingDate().toString().split(',')[0]}"></td>
                                             <br/>
-                                            <td th:text="'Do: ' + ${trip.getEndingDate().toLocaleString().split(',')[0]}"></td>
+                                            <td th:text="'Do: ' + ${trip.getEndingDate().toString().split(',')[0]}"></td>
                                             <p class="card-text">
                                             <td th:text="${trip.getEmployee().getName()}"></td>
                                             <td th:text="${trip.getEmployee().getSecondName()}"></td>

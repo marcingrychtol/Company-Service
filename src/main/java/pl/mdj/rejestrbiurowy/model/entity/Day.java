@@ -40,7 +40,7 @@ public class Day {
     /**
      * Used to store reservation list.
      */
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "day_trip",
             joinColumns = @JoinColumn(name = "day_id"),

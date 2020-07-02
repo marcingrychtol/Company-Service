@@ -17,12 +17,11 @@ import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.DayService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
-import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -36,15 +35,15 @@ public class CalendarController {
     TripService tripService;
     CarService carService;
     EmployeeService employeeService;
-    DateMapper dateMapper;
+    DateFactory dateFactory;
     DayService dayService;
 
     @Autowired
-    public CalendarController(TripService tripService, CarService carService, EmployeeService employeeService, DateMapper dateMapper, DayService dayService) {
+    public CalendarController(TripService tripService, CarService carService, EmployeeService employeeService, DateFactory dateFactory, DayService dayService) {
         this.tripService = tripService;
         this.carService = carService;
         this.employeeService = employeeService;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
         this.dayService = dayService;
     }
 
@@ -53,17 +52,17 @@ public class CalendarController {
 
         LocalDate requestedDate;
 
-        if (dateDto.getLocalDate() != null){
-            requestedDate = dateDto.getLocalDate();
+        if (dateDto.getDate() != null){
+            requestedDate = dateDto.getDate();
         } else if (tripDto.getStartingDate() != null){
-            requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
+            requestedDate = tripDto.getStartingDate();
         } else {
             requestedDate = LocalDate.now();
         }
 
         model.addAttribute("active", "day");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
+        model.addAttribute("requestedDate", dateFactory.getDateDto(requestedDate));
         model.addAttribute("tripDto", new TripDto());
         model.addAttribute("bookingParams", new BookingParamsDto());
         model.addAttribute("dateDto", new DateDto());
@@ -79,7 +78,7 @@ public class CalendarController {
         model.addAttribute("page", page);
         model.addAttribute("scope", scope);
         model.addAttribute("active", "calendar");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(Integer.parseInt(page), Integer.parseInt(scope)));
         model.addAttribute("cars", carService.findAllActive());
         model.addAttribute("tripDto", new TripDto());
@@ -94,7 +93,7 @@ public class CalendarController {
         model.addAttribute("page", page);
         model.addAttribute("scope", 14);
         model.addAttribute("active", "calendar");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("calendarPreview", getDataForIndexCalendarView(page, 14));
         model.addAttribute("cars", carService.findAllActive());
         model.addAttribute("tripDto", new TripDto());
@@ -104,7 +103,7 @@ public class CalendarController {
 
     private long calculatePage(DateDto tripDto) {
         LocalDate now = LocalDate.now().with(DayOfWeek.MONDAY);
-        long diff = DAYS.between(now, tripDto.getLocalDate());
+        long diff = DAYS.between(now, tripDto.getDate());
         long scope = 14;
         long page;
         if (diff == 0){
@@ -116,19 +115,18 @@ public class CalendarController {
         }
         return page;
     }
-
-    @InitBinder
-    public void customizeDateBinder( WebDataBinder binder )
-    {
-        // tell spring to set empty values as null instead of empty string.
-        binder.registerCustomEditor( Date.class, new StringTrimmerEditor( true ));
-        //The date format to parse or output your dates
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        //Create a new CustomDateEditor
-        CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
-        //Register it as custom editor for the Date type
-        binder.registerCustomEditor(Date.class, dateEditor);
-    }
+//
+//    @InitBinder
+//    public void customizeLocalDateBinder(WebDataBinder binder) {
+//        // tell spring to set empty values as null instead of empty string.
+//        binder.registerCustomEditor(LocalDate.class, new StringTrimmerEditor(true));
+//        //The date format to parse or output your dates
+//        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        //Create a new CustomDateEditor
+//        CustomDateEditor localDateEditor = new CustomDateEditor(localDateFormat, true);
+//        //Register it as custom editor for the Date type
+//        binder.registerCustomEditor(LocalDate.class, localDateEditor);
+//    }
 
 
     private List<DayDto> getDataForIndexCalendarView(long page, long daysByPage){

@@ -100,7 +100,7 @@
 <script th:inline="javascript">
     var today = new Date(
         [(${requestedDate.getYear()})],
-        [(${requestedDate.localDate.getMonthValue()})] - 1,
+        [(${requestedDate.getDate().getMonthValue()})] - 1,
         [(${requestedDate.getDayValueWithZeroJS()})]);
 
 

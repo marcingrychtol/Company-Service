@@ -17,9 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class DateDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate localDate;
-    @DateTimeFormat(pattern = "MM/dd/YYYY")
-    private Date date;
+    private LocalDate date;
     private String monthPL;
     private String monthValueWithZero;
     private String monthValueWithZeroJS;
@@ -30,6 +28,6 @@ public class DateDto {
     private String year;
     public String getLocalDateFormatted(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return formatter.format(localDate);
+        return formatter.format(date);
     }
 }

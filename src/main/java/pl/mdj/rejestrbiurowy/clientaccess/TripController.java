@@ -18,12 +18,10 @@ import pl.mdj.rejestrbiurowy.model.dto.*;
 import pl.mdj.rejestrbiurowy.service.CarService;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
-import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,19 +35,36 @@ public class TripController {
     TripService tripService;
     EmployeeService employeeService;
     CarService carService;
-    DateMapper dateMapper;
+    DateFactory dateFactory;
 
     @Autowired
-    public TripController(TripService tripService, EmployeeService employeeService, CarService carService, DateMapper dateMapper) {
+    public TripController(TripService tripService, EmployeeService employeeService, CarService carService, DateFactory dateFactory) {
         this.tripService = tripService;
         this.employeeService = employeeService;
         this.carService = carService;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
     }
 
     @GetMapping("")
-    public String getAllTrips(@ModelAttribute TripDto tripDto, Model model) {
+    public String getAllActiveTrips(@ModelAttribute TripDto tripDto, Model model) {
         addTripsPageAttributesToModel(model, ActivePage.TRIPS, new TripDto());
+        return "manager/manager-trips";
+    }
+
+    @GetMapping("/cancelled")
+    public String getAllCancelledTrips(@ModelAttribute TripDto tripDto, Model model) {
+
+        model.addAttribute("active", ActivePage.TRIPS);
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
+        model.addAttribute("cars", carService.findAll());
+        model.addAttribute("employees", employeeService.findAll());
+
+        model.addAttribute("filterIsActive", "false");
+        model.addAttribute("trips", tripService.findAll().stream().filter(TripDto::getCancelled).collect(Collectors.toList()));
+
+
+        model.addAttribute("tripDto", tripDto);
+
         return "manager/manager-trips";
     }
 
@@ -114,7 +129,7 @@ public class TripController {
     @PostMapping("/add")
     public String addTrip(@ModelAttribute TripDto tripDto, Model model) {
 
-        LocalDate requestedDate = dateMapper.toLocalDate(tripDto.getStartingDate());
+        LocalDate requestedDate = tripDto.getStartingDate();
 
         try {
             tripService.addOne(tripDto);
@@ -124,8 +139,8 @@ public class TripController {
             model.addAttribute("errorMessage", e.getMessage());
         }
 
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
-        model.addAttribute("requestedDate", dateMapper.getDateDto(requestedDate));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
+        model.addAttribute("requestedDate", dateFactory.getDateDto(requestedDate));
         model.addAttribute("newTrip", new TripDto());
         model.addAttribute("filter", new TripDto());
         model.addAttribute("carsByDay", carService.findAllByDay(requestedDate));
@@ -138,7 +153,7 @@ public class TripController {
     public String postBookingForm(@ModelAttribute(name = "requestParams") BookingParamsDto bookingParamsDto, Model model) {
 
         model.addAttribute("active", "booking");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("employees", employeeService.findAll());
 
@@ -154,24 +169,23 @@ public class TripController {
         return "main/booking-confirmation";
 
     }
-
-    @InitBinder
-    public void customizeDateBinder(WebDataBinder binder) {
-        // tell spring to set empty values as null instead of empty string.
-        binder.registerCustomEditor(Date.class, new StringTrimmerEditor(true));
-
-        //The date format to parse or output your dates
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        //Create a new CustomDateEditor
-        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-        //Register it as custom editor for the Date type
-        binder.registerCustomEditor(Date.class, editor);
-    }
+//
+//    @InitBinder
+//    public void customizeLocalDateBinder(WebDataBinder binder) {
+//        // tell spring to set empty values as null instead of empty string.
+//        binder.registerCustomEditor(LocalDate.class, new StringTrimmerEditor(true));
+//        //The date format to parse or output your dates
+//        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        //Create a new CustomDateEditor
+//        CustomDateEditor localDateEditor = new CustomDateEditor(localDateFormat, true);
+//        //Register it as custom editor for the Date type
+//        binder.registerCustomEditor(LocalDate.class, localDateEditor);
+//    }
 
     private void addTripsPageAttributesToModel(Model model, ActivePage active, TripDto tripDto) {
 
         model.addAttribute("active", active.get());
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("employees", employeeService.findAll());
 
@@ -188,7 +202,7 @@ public class TripController {
         } else {
             model.addAttribute("filterIsActive", "false");
             model.addAttribute("trips", tripService.findAllActive().stream()
-                    .filter(t -> !t.getEndingDate().before(dateMapper.toDate(LocalDate.now().minusDays(1))))
+                    .filter(t -> t.getEndingDate().isAfter(LocalDate.now().minusDays(1)))
                     .collect(Collectors.toList()));
         }
 

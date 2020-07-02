@@ -20,19 +20,29 @@
             <li th:class="${active == 'booking'} ? 'nav-item active' : 'nav-item'">
                 <a class="nav-link" th:href="@{/booking/0}">Rezerwacja</a>
             </li>
-            <li th:class="${active == 'trips'} ? 'nav-item active' : 'nav-item'">
-                <a class="nav-link" th:href="@{/trips}">Przeglądaj</a>
-            </li>
-            <li th:class="${active == 'data'} ? 'nav-item dropdown active' : 'nav-item dropdown'">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownManagement" role="button"
+
+            <li th:class="${active == 'trips'} ? 'nav-item dropdown active' : 'nav-item dropdown'">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarBrowseDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dane
+                    Przeglądaj
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownManagement">
+                <div class="dropdown-menu" aria-labelledby="navbarBrowseDropdown">
+                    <a class="dropdown-item" th:href="@{/trips}">Aktualne</a>
+                    <a class="dropdown-item" th:href="@{/trips/cancelled}">Anulowane</a>
+                </div>
+            </li>
+
+            <li th:class="${active == 'data'} ? 'nav-item dropdown active' : 'nav-item dropdown'">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDataDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Zarządzanie
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDataDropdown">
                     <a class="dropdown-item" th:href="@{/cars/manager}">Pojazdy</a>
                     <a class="dropdown-item" th:href="@{/employees/manager}">Pracownicy</a>
                 </div>
             </li>
+
         </ul>
     </div>
 
@@ -43,7 +53,7 @@
               + ${today.getYear()}">
             Navbar text with an inline element
         </button>
-        <input type="hidden" name="localDate" th:value="${today.getLocalDate()}">
+        <input type="hidden" name="localDate" th:value="${today.getDate()}">
     </form>
     </div>
 </nav></div>

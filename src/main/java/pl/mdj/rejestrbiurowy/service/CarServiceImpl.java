@@ -20,7 +20,7 @@ import pl.mdj.rejestrbiurowy.model.mappers.EmployeeMapper;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.CarMapper;
-import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -41,14 +41,14 @@ public class CarServiceImpl implements CarService {
     EmployeeMapper employeeMapper;
     TripRepository tripRepository;
     DayService dayService;
-    DateMapper dateMapper;
+    DateFactory dateFactory;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateMapper dateMapper, EmployeeMapper employeeMapper, DayService dayService) {
+    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateFactory dateFactory, EmployeeMapper employeeMapper, DayService dayService) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
         this.tripRepository = tripRepository;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
         this.employeeMapper = employeeMapper;
         this.dayService = dayService;
     }
@@ -222,7 +222,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public BookingParamsDto fillBookingParamsDto(BookingParamsDto bookingParams) {
 
-        LocalDate start = dateMapper.toLocalDate(bookingParams.getRequestedDate()).with(DayOfWeek.MONDAY);
+        LocalDate start = bookingParams.getRequestedDate().with(DayOfWeek.MONDAY);
         LocalDate end = start.plusDays(bookingParams.getScope() - 1);
         CarDto car = bookingParams.getCar();
 
@@ -232,7 +232,7 @@ public class CarServiceImpl implements CarService {
 
         for (LocalDate date : localDateList) {
             CarDayInfoDto carDayInfoDto = new CarDayInfoDto();
-            carDayInfoDto.setId(dateMapper.getDateDto(date));
+            carDayInfoDto.setId(dateFactory.getDateDto(date));
             List<CarDto> notAvailableCarList = getNotAvailableCarsByDay(date);
             if (!notAvailableCarList.contains(car)) {
                 carDayInfoDto.setAvailable(true);

@@ -10,7 +10,7 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.EmployeeDto;
-import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 import pl.mdj.rejestrbiurowy.service.EmployeeService;
 
 import java.time.LocalDate;
@@ -20,18 +20,18 @@ import java.time.LocalDate;
 public class EmployeeController {
 
     EmployeeService employeeService;
-    DateMapper dateMapper;
+    DateFactory dateFactory;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, DateMapper dateMapper) {
+    public EmployeeController(EmployeeService employeeService, DateFactory dateFactory) {
         this.employeeService = employeeService;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
     }
 
     @GetMapping("/manager")
     public String getEmployees(Model model){
         model.addAttribute("active", "data");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("employees", employeeService.findAll());
         model.addAttribute("newEmployee", new EmployeeDto());
         return "manager/manager-employees";

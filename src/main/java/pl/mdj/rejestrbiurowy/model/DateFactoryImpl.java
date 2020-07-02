@@ -1,29 +1,15 @@
-package pl.mdj.rejestrbiurowy.model.mappers;
+package pl.mdj.rejestrbiurowy.model;
 
 import org.springframework.stereotype.Component;
 import pl.mdj.rejestrbiurowy.model.dto.DateDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Component
-public class DateMapperImpl implements DateMapper {
-    @Override
-    public Date toDate(LocalDate localDate) {
-        return Date.from(localDate
-                        .atStartOfDay(ZoneId.of("CET"))
-                        .toInstant());
-    }
+public class DateFactoryImpl implements DateFactory {
 
-    @Override
-    public LocalDate toLocalDate(Date date) {
-        return LocalDate.ofInstant(date.toInstant(), ZoneId.of("CET"));
-    }
-
-    @Override
-    public String dayOfWeekPL(LocalDate localDate) {
+    private String dayOfWeekPL(LocalDate localDate) {
         switch (localDate.getDayOfWeek()){
             case MONDAY: return "Poniedziałek";
             case TUESDAY: return "Wtorek";
@@ -36,8 +22,7 @@ public class DateMapperImpl implements DateMapper {
         }
     }
 
-    @Override
-    public String dayOfWeekPLShort(LocalDate localDate) {
+    private String dayOfWeekPLShort(LocalDate localDate) {
         switch (localDate.getDayOfWeek()){
             case MONDAY: return "Pon";
             case TUESDAY: return "Wto";
@@ -50,18 +35,8 @@ public class DateMapperImpl implements DateMapper {
         }
     }
 
-    @Override
-    public String dayOfWeekPL(Date date) {
-        return dayOfWeekPL(toLocalDate(date));
-    }
 
-    @Override
-    public String dayOfWeekPLShort(Date date) {
-        return dayOfWeekPLShort(toLocalDate(date));
-    }
-
-    @Override
-    public String monthPL(LocalDate localDate) {
+    private String monthPL(LocalDate localDate) {
         switch (localDate.getMonth()){
             case JANUARY: return "Stycznia";
             case FEBRUARY: return "Lutego";
@@ -79,21 +54,14 @@ public class DateMapperImpl implements DateMapper {
         }
     }
 
-    @Override
-    public String monthPL(Date date) {
-        return monthPL(toLocalDate(date));
-    }
-
-    @Override
-    public String valueWithZero(int i) {
+    private String valueWithZero(int i) {
         if (i < 10){
             return "0"+i;
         }
         return String.valueOf(i);
     }
 
-    @Override
-    public String valueWithZeroForJS(int i) {
+    private String valueWithZeroForJS(int i) {
         if (i < 10){
             return "\"0\"+"+i;
         }
@@ -114,8 +82,7 @@ public class DateMapperImpl implements DateMapper {
     @Override
     public DateDto getDateDto(LocalDate localDate) {
         DateDto dateDto = new DateDto();
-        dateDto.setLocalDate(localDate);
-        dateDto.setDate(toDate(localDate));
+        dateDto.setDate(localDate);
         dateDto.setDayOfWeekPL(dayOfWeekPL(localDate));
         dateDto.setDayOfWeekPLShort(dayOfWeekPLShort(localDate));
         dateDto.setDayValueWithZero(valueWithZero(localDate.getDayOfMonth()));
@@ -125,11 +92,6 @@ public class DateMapperImpl implements DateMapper {
         dateDto.setMonthValueWithZeroJS(valueWithZeroForJS(localDate.getMonthValue()));
         dateDto.setYear(String.valueOf(localDate.getYear()));
         return dateDto;
-    }
-
-    @Override
-    public DateDto getDateDto(Date date) {
-        return getDateDto(toLocalDate(date));
     }
 
 }

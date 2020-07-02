@@ -4,7 +4,6 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,10 +18,8 @@ public class BookingParamsDto {
     private Long carId;
     private EmployeeDto employee;
     private Long employeeId;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate requestedLocalDate;
-    @DateTimeFormat(pattern = "MM/dd/YYYY")
-    private Date requestedDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate requestedDate;
     private Integer scope = 28;
     private List<CarDayInfoDto> carDayInfoList;
     private String additionalMessage;

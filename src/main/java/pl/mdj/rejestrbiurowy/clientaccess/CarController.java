@@ -16,7 +16,7 @@ import pl.mdj.rejestrbiurowy.exceptions.EntityConflictException;
 import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.exceptions.WrongInputDataException;
 import pl.mdj.rejestrbiurowy.model.dto.CarDto;
-import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 import pl.mdj.rejestrbiurowy.service.CarService;
 
 import java.time.LocalDate;
@@ -29,18 +29,18 @@ public class CarController {
     private static final String REDIR_MANAGER_CARS = "redirect:/cars/manager";
     Logger LOG = LoggerFactory.getLogger(CarController.class);
     private CarService carService;
-    private DateMapper dateMapper;
+    private DateFactory dateFactory;
 
     @Autowired
-    public CarController(CarService carService, DateMapper dateMapper) {
+    public CarController(CarService carService, DateFactory dateFactory) {
         this.carService = carService;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
     }
 
     @GetMapping(path = "/manager")
     public String getCars(Model model) {
         model.addAttribute("active", "data");
-        model.addAttribute("today", dateMapper.getDateDto(LocalDate.now()));
+        model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("newCar", new CarDto());
         return ("manager/manager-cars");

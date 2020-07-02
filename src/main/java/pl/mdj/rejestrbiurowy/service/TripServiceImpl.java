@@ -15,8 +15,9 @@ import pl.mdj.rejestrbiurowy.model.entity.Car;
 import pl.mdj.rejestrbiurowy.model.entity.Day;
 import pl.mdj.rejestrbiurowy.model.entity.Employee;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
-import pl.mdj.rejestrbiurowy.model.mappers.DateMapper;
+import pl.mdj.rejestrbiurowy.model.DateFactory;
 import pl.mdj.rejestrbiurowy.repository.CarRepository;
+import pl.mdj.rejestrbiurowy.repository.DayRepository;
 import pl.mdj.rejestrbiurowy.repository.EmployeeRepository;
 import pl.mdj.rejestrbiurowy.repository.TripRepository;
 import pl.mdj.rejestrbiurowy.model.mappers.TripMapper;
@@ -38,16 +39,18 @@ public class TripServiceImpl implements TripService {
     CarRepository carRepository;
     TripMapper tripMapper;
     DayService dayService;
-    DateMapper dateMapper;
+    DayRepository dayRepository;
+    DateFactory dateFactory;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository, TripMapper tripMapper, DayService dayService, EmployeeRepository employeeRepository, CarRepository carRepository, DateMapper dateMapper) {
+    public TripServiceImpl(TripRepository tripRepository, TripMapper tripMapper, DayService dayService, EmployeeRepository employeeRepository, CarRepository carRepository, DateFactory dateFactory, DayRepository dayRepository) {
         this.tripRepository = tripRepository;
         this.tripMapper = tripMapper;
         this.dayService = dayService;
         this.employeeRepository = employeeRepository;
         this.carRepository = carRepository;
-        this.dateMapper = dateMapper;
+        this.dateFactory = dateFactory;
+        this.dayRepository = dayRepository;
     }
 
     @Override
@@ -114,7 +117,7 @@ public class TripServiceImpl implements TripService {
      * @throws DataIntegrityViolationException
      */
     @Override
-    public void deleteByDto(TripDto tripDto) throws CannotFindEntityException, WrongInputDataException, DataIntegrityViolationException {
+    public void deleteByDto(TripDto tripDto) throws CannotFindEntityException, WrongInputDataException {
         Optional<Trip> tripOptional = tripRepository.findById(tripDto.getId());
         if (!tripOptional.isPresent()) {
             throw new CannotFindEntityException("Rezerwacja nie istnieje, wystąpił błąd! (jednoczesna edycja z innego stanowiska)");
@@ -123,8 +126,14 @@ public class TripServiceImpl implements TripService {
         if (!requestedEmployee.getPhoneNumber().equals(tripDto.getEmployee().getPhoneNumber())) {
             throw new WrongInputDataException("Niepoprawne dane, nie można anulować rezerwacji!");
         }
-        throw new DataIntegrityViolationException("Usuwanie rezerwacji nie jest możliwe w tej wersji systemu!");
+        Trip trip = tripOptional.get();
+        trip.getDays().forEach(day -> {
+            day.getTrips().remove(trip);
+            dayRepository.save(day);
+        });
+        tripRepository.delete(trip);
     }
+
 
     @Override
     public void enableByDto(TripDto tripDto) throws CannotFindEntityException {
@@ -189,16 +198,16 @@ public class TripServiceImpl implements TripService {
         List<DayDto> days = new ArrayList<>();
         // at first let's find out if we have any dates provided, and get Days basing on that
         if (filter.getFilterStartingDate() != null) {
-            start = dateMapper.toLocalDate(filter.getFilterStartingDate());
+            start = filter.getFilterStartingDate();
             datesGiven = true;
             if (filter.getFilterEndingDate() != null) {
-                end = dateMapper.toLocalDate(filter.getFilterEndingDate());
+                end = filter.getFilterEndingDate();
                 days = dayService.getDaysDtoBetween(start, end);
             } else {
                 days = dayService.getDaysDtoAfter(start);
             }
         } else if (filter.getFilterEndingDate() != null) {
-            end = dateMapper.toLocalDate(filter.getFilterEndingDate());
+            end = filter.getFilterEndingDate();
             days = dayService.getDaysDtoBefore(end);
             datesGiven = true;
         }
@@ -293,15 +302,16 @@ public class TripServiceImpl implements TripService {
     /**
      * Used to find any trips conflicted with request
      * using findByFilter()
+     *
      * @param requestedTrips all trips from request joined together, must have car, and both dates
      * @return list of conflicted trips
      */
     @Override
-    public List<TripDto> findConflictedTrips(List<TripDto> requestedTrips){
+    public List<TripDto> findConflictedTrips(List<TripDto> requestedTrips) {
         return tripMapper.mapToDto(findConflicts(tripMapper.mapToEntity(requestedTrips)));
     }
 
-    private List<Trip> findConflicts(List<Trip> requestedTrips){
+    private List<Trip> findConflicts(List<Trip> requestedTrips) {
         Set<Trip> existingTripSet = new HashSet<>();
         for (Trip trip : requestedTrips) {
             dayService.getDaysBetween(trip.getStartingDate(), trip.getEndingDate())
@@ -339,7 +349,7 @@ public class TripServiceImpl implements TripService {
                 conflictMap.keySet()) {
             for (Trip existingTrip :
                     conflictMap.get(newTrip)) {
-                removeConflicts(newTrip,existingTrip);
+                removeConflicts(newTrip, existingTrip);
             }
         }
         List<Long> ids = new ArrayList<>();
@@ -357,7 +367,8 @@ public class TripServiceImpl implements TripService {
                 ids) {
             try {
                 resolvedTripDtos.add(findById(id));
-            } catch (CannotFindEntityException ignored) { }
+            } catch (CannotFindEntityException ignored) {
+            }
         }
         return resolvedTripDtos;
     }
@@ -449,7 +460,7 @@ public class TripServiceImpl implements TripService {
         // SECOND case - one request
         if (requestsDateList.size() == 1) {
             TripDto trip = new TripDto();
-            trip.setStartingDate(dateMapper.toDate(requestsDateList.get(0)));
+            trip.setStartingDate(requestsDateList.get(0));
             trip.setEndingDate(trip.getStartingDate());
             requestedTripList.add(trip);
         }
@@ -463,17 +474,17 @@ public class TripServiceImpl implements TripService {
             // first we check IS GAP?
             if (!requestsDateList.get(i).minusDays(1).equals(endingDate)) {
                 TripDto trip = new TripDto();
-                trip.setStartingDate(dateMapper.toDate(startingDate));
-                trip.setEndingDate(dateMapper.toDate(endingDate));
+                trip.setStartingDate(startingDate);
+                trip.setEndingDate(endingDate);
                 requestedTripList.add(trip);
                 startingDate = requestsDateList.get(i);
                 endingDate = requestsDateList.get(i);
 
             } else if (i == requestsDateList.size() - 1) {             // was this last iteration?
                 TripDto trip = new TripDto();
-                trip.setStartingDate(dateMapper.toDate(startingDate));
+                trip.setStartingDate(startingDate);
                 endingDate = requestsDateList.get(i);
-                trip.setEndingDate(dateMapper.toDate(endingDate));
+                trip.setEndingDate(endingDate);
                 requestedTripList.add(trip);
                 done = true;
             } else {
@@ -483,13 +494,13 @@ public class TripServiceImpl implements TripService {
             // was this last iteration and not done yet?
             if (i == requestsDateList.size() - 1 && !done) {
                 TripDto lastOneTrip = new TripDto();
-                lastOneTrip.setStartingDate(dateMapper.toDate(startingDate));
-                lastOneTrip.setEndingDate(dateMapper.toDate(endingDate));
+                lastOneTrip.setStartingDate(startingDate);
+                lastOneTrip.setEndingDate(endingDate);
                 requestedTripList.add(lastOneTrip);
             }
         }
 
-        if (bookingParams.getAdditionalMessage() == null){
+        if (bookingParams.getAdditionalMessage() == null) {
             bookingParams.setAdditionalMessage("");
         }
 
@@ -506,7 +517,8 @@ public class TripServiceImpl implements TripService {
     /**
      * Used to make place in database.
      * Taking over only one existing trip in database. If more conflicts exists, must be called multiple times.
-     * @param existingTrip must be trip connected to database context
+     *
+     * @param existingTrip  must be trip connected to database context
      * @param requestedTrip any trip object with dates
      */
     private void removeConflicts(Trip requestedTrip, Trip existingTrip) {
@@ -546,7 +558,8 @@ public class TripServiceImpl implements TripService {
             trip.setEmployee(existingTrip.getEmployee());
             try {
                 addTrip(trip);
-            } catch (EntityConflictException | EntityNotCompleteException ignored) { }
+            } catch (EntityConflictException | EntityNotCompleteException ignored) {
+            }
         });
 
     }
