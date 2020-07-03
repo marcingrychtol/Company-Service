@@ -25,6 +25,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.*;
+
 
 @Controller
 @RequestMapping(path = "trips")
@@ -58,11 +60,8 @@ public class TripController {
         model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("employees", employeeService.findAll());
-
         model.addAttribute("filterIsActive", "false");
         model.addAttribute("trips", tripService.findAll().stream().filter(TripDto::getCancelled).collect(Collectors.toList()));
-
-
         model.addAttribute("tripDto", tripDto);
 
         return "manager/manager-trips";
@@ -131,12 +130,18 @@ public class TripController {
 
         LocalDate requestedDate = tripDto.getStartingDate();
 
-        try {
-            tripService.addOne(tripDto);
-            model.addAttribute("successMessage", "Rezerwacja dodana poprawnie!");
-        } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
-            LOG.info(e.getMessage());
-            model.addAttribute("errorMessage", e.getMessage());
+        if (DAYS.between(tripDto.getStartingDate(), tripDto.getEndingDate()) > 56) {
+            model.addAttribute("errorMessage", "Nie rób se jaj...");
+        } else {
+
+            try {
+                tripService.addOne(tripDto);
+                model.addAttribute("successMessage", "Rezerwacja dodana poprawnie!");
+            } catch (EntityNotCompleteException | EntityConflictException | WrongInputDataException | CannotFindEntityException e) {
+                LOG.info(e.getMessage());
+                model.addAttribute("errorMessage", e.getMessage());
+            }
+
         }
 
         model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
@@ -150,7 +155,8 @@ public class TripController {
     }
 
     @PostMapping("/add-many")
-    public String postBookingForm(@ModelAttribute(name = "requestParams") BookingParamsDto bookingParamsDto, Model model) {
+    public String postBookingForm(@ModelAttribute(name = "requestParams") BookingParamsDto bookingParamsDto, Model
+            model) {
 
         model.addAttribute("active", "booking");
         model.addAttribute("today", dateFactory.getDateDto(LocalDate.now()));
@@ -169,18 +175,7 @@ public class TripController {
         return "main/booking-confirmation";
 
     }
-//
-//    @InitBinder
-//    public void customizeLocalDateBinder(WebDataBinder binder) {
-//        // tell spring to set empty values as null instead of empty string.
-//        binder.registerCustomEditor(LocalDate.class, new StringTrimmerEditor(true));
-//        //The date format to parse or output your dates
-//        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        //Create a new CustomDateEditor
-//        CustomDateEditor localDateEditor = new CustomDateEditor(localDateFormat, true);
-//        //Register it as custom editor for the Date type
-//        binder.registerCustomEditor(LocalDate.class, localDateEditor);
-//    }
+
 
     private void addTripsPageAttributesToModel(Model model, ActivePage active, TripDto tripDto) {
 
