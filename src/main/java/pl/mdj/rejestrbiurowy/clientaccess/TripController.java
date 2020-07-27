@@ -22,6 +22,7 @@ import pl.mdj.rejestrbiurowy.model.DateFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -168,10 +169,16 @@ public class TripController {
             model.addAttribute("conflicts", conflictedTrips);
         }
 
-        List<TripDto> reservations = tripService.addAll(bookingParamsDto);
-        model.addAttribute("reservations", reservations);
+        List<TripDto> reservations = null;
+        try {
+            reservations = tripService.addAll(bookingParamsDto);
+            model.addAttribute("infoMessage", "Rezerwacja powiodła się");
+            model.addAttribute("reservations", reservations);
+        } catch (EntityNotCompleteException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("reservations", new ArrayList<>());
+        }
 
-        model.addAttribute("infoMessage", "Rezerwacja powiodła się");
         return "main/booking-confirmation";
 
     }

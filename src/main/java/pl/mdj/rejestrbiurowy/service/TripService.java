@@ -1,5 +1,6 @@
 package pl.mdj.rejestrbiurowy.service;
 
+import pl.mdj.rejestrbiurowy.exceptions.EntityNotCompleteException;
 import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
 import pl.mdj.rejestrbiurowy.model.dto.TripDto;
 import pl.mdj.rejestrbiurowy.model.entity.Car;
@@ -16,7 +17,7 @@ public interface TripService extends BasicService<TripDto, Long> {
 
     List<TripDto> findConflictedTrips(List<TripDto> requestedTrips);
 
-    List<TripDto> addAll(BookingParamsDto bookingParams);
+    List<TripDto> addAll(BookingParamsDto bookingParams) throws EntityNotCompleteException;
 
     List<TripDto> joinRequestedTrips(BookingParamsDto bookingParams);
 }

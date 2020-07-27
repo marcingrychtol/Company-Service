@@ -327,7 +327,19 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public List<TripDto> addAll(BookingParamsDto bookingParams) {
+    public List<TripDto> addAll(BookingParamsDto bookingParams) throws EntityNotCompleteException {
+
+        boolean hasAny = false;
+        for (CarDayInfoDto carDayInfoDto: bookingParams.getCarDayInfoList()
+             ) {
+            if (carDayInfoDto.getRequested()){
+                hasAny = true;
+                break;
+            }
+        }
+        if(!hasAny){
+            throw new EntityNotCompleteException("Brak rezerwacji w żądaniu, spróbuj ponownie.");
+        }
 
         List<TripDto> resolvedTripDtos = joinRequestedTrips(bookingParams);
         List<Trip> resolvedTrips = tripMapper.mapToEntity(resolvedTripDtos);

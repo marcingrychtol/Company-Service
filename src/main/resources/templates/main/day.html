@@ -91,7 +91,7 @@
                                         : 'btn btn-sm btn-danger stretched-link btn-block text-white'"
                                 th:text="${car.isAvailable()}
                                         ? 'Wybierz'
-                                        : ${car.getOccupier().getSecondName()}"
+                                        : ${car.getOccupier().getName().charAt(0)} + '. ' + ${car.getOccupier().getSecondName()}"
 
                         >Wybierz
                         </button>
