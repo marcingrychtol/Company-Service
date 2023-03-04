@@ -1,0 +1,21 @@
+License Agreement
+
+This software (the "Rent-a-car software") is free and open source software, which means you are free to use, copy, distribute, and modify it. However, you are not allowed to sell this software or any part of it.
+
+By using this software, you agree to the following terms and conditions:
+
+1. This software is provided "as is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
+
+2. You may use the Rent-a-car software for any purpose, including commercial purposes, as long as you do not sell it or any part of it.
+
+3. You may modify the Rent-a-car software and distribute your modifications, as long as you include this license agreement and give credit to the original authors.
+
+4. You may distribute the Rent-a-car software in its original form, as long as you include this license agreement and give credit to the original authors.
+
+5. You may not use the name of the original authors or the names of the contributors to endorse or promote products derived from the Rent-a-car software without specific prior written permission.
+
+6. This license agreement may be modified at any time by the original authors, and such modifications will be effective immediately upon posting of the modified agreement on the website where the Rent-a-car software is hosted.
+
+If you do not agree to these terms and conditions, you are not allowed to use or distribute the Rent-a-car software.
+
+Copyright (c) 2023 Marcin Grychtoł
