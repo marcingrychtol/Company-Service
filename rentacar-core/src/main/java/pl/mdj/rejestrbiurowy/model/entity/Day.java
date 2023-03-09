@@ -1,8 +1,8 @@
 package pl.mdj.rejestrbiurowy.model.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+// needed due to initialization error, "day" is reserved keyword
+@Table(name = "\"DAY\"")
 public class Day {
 
     @Id

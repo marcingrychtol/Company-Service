@@ -131,7 +131,7 @@ public class TripController {
 
         LocalDate requestedDate = tripDto.getStartingDate();
 
-        if (DAYS.between(tripDto.getStartingDate(), tripDto.getEndingDate()) > 56) {
+        if (tripDto.getEndingDate() != null && DAYS.between(tripDto.getStartingDate(), tripDto.getEndingDate()) > 56) {
             model.addAttribute("errorMessage", "Nie rób se jaj...");
         } else {
 

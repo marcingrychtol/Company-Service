@@ -3,11 +3,8 @@ package pl.mdj.rejestrbiurowy.clientaccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
 import pl.mdj.rejestrbiurowy.model.dto.DateDto;
@@ -19,7 +16,6 @@ import pl.mdj.rejestrbiurowy.service.EmployeeService;
 import pl.mdj.rejestrbiurowy.service.TripService;
 import pl.mdj.rejestrbiurowy.model.DateFactory;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
@@ -115,18 +111,6 @@ public class CalendarController {
         }
         return page;
     }
-//
-//    @InitBinder
-//    public void customizeLocalDateBinder(WebDataBinder binder) {
-//        // tell spring to set empty values as null instead of empty string.
-//        binder.registerCustomEditor(LocalDate.class, new StringTrimmerEditor(true));
-//        //The date format to parse or output your dates
-//        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        //Create a new CustomDateEditor
-//        CustomDateEditor localDateEditor = new CustomDateEditor(localDateFormat, true);
-//        //Register it as custom editor for the Date type
-//        binder.registerCustomEditor(LocalDate.class, localDateEditor);
-//    }
 
 
     private List<DayDto> getDataForIndexCalendarView(long page, long daysByPage){

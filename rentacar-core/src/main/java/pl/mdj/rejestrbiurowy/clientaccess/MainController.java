@@ -10,7 +10,7 @@ public class MainController {
 
     @GetMapping("/")
     public String getHome(){
-        return "redirect:/calendar/day/";
+        return "redirect:/calendar/day";
     }
 
 }

@@ -50,7 +50,7 @@ public class BookingController {
      * @param model
      * @return supplemented CarCalendarInfoDto
      */
-    @GetMapping
+    @GetMapping("/")
     public String getBookingByCar(@ModelAttribute(name = "bookingParams") BookingParamsDto bookingParams, Model model) {
 
         CarDto carDto = new CarDto();

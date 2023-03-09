@@ -1,11 +1,10 @@
 package pl.mdj.rejestrbiurowy.model.entity;
 
 
-import lombok.Data;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.List;
 public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,  CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "employee_id")
