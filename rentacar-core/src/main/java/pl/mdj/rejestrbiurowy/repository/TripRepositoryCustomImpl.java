@@ -1,10 +1,10 @@
 package pl.mdj.rejestrbiurowy.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mdj.rejestrbiurowy.model.entity.Trip;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 public class TripRepositoryCustomImpl implements TripRepositoryCustom {
     @PersistenceContext

@@ -1,11 +1,11 @@
 package pl.mdj.rejestrbiurowy.model.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.Nullable;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarCategory;
 import pl.mdj.rejestrbiurowy.model.entity.enums.CarFuel;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
