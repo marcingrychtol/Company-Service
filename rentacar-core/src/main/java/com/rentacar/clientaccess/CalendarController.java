@@ -1,20 +1,21 @@
-package pl.mdj.rejestrbiurowy.clientaccess;
+package com.rentacar.clientaccess;
 
+import com.rentacar.aspect.RentacarLoggable;
+import com.rentacar.model.DateFactory;
+import com.rentacar.model.dto.BookingParamsDto;
+import com.rentacar.model.dto.DateDto;
+import com.rentacar.model.dto.DayDto;
+import com.rentacar.model.dto.TripDto;
+import com.rentacar.service.CarService;
+import com.rentacar.service.DayService;
+import com.rentacar.service.EmployeeService;
+import com.rentacar.service.TripService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.mdj.rejestrbiurowy.model.dto.BookingParamsDto;
-import pl.mdj.rejestrbiurowy.model.dto.DateDto;
-import pl.mdj.rejestrbiurowy.model.dto.DayDto;
-import pl.mdj.rejestrbiurowy.model.dto.TripDto;
-import pl.mdj.rejestrbiurowy.service.CarService;
-import pl.mdj.rejestrbiurowy.service.DayService;
-import pl.mdj.rejestrbiurowy.service.EmployeeService;
-import pl.mdj.rejestrbiurowy.service.TripService;
-import pl.mdj.rejestrbiurowy.model.DateFactory;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -43,9 +44,11 @@ public class CalendarController {
         this.dayService = dayService;
     }
 
+    @RentacarLoggable
     @GetMapping("/day")
     public String getDay(@ModelAttribute(name = "tripDto") TripDto tripDto, @ModelAttribute DateDto dateDto, Model model) {
 
+        LOG.info("*** *** *** *** LOG INFO CALENDAR CONTROLLER *** *** *** ***");
         LocalDate requestedDate;
 
         if (dateDto.getDate() != null){
@@ -67,6 +70,7 @@ public class CalendarController {
         return "main/day";
     }
 
+    @RentacarLoggable
     @GetMapping("/{scope}/{page}")
     public String getMonth(Model model, @PathVariable("page") String page, @PathVariable("scope") String scope) {
 
@@ -82,7 +86,7 @@ public class CalendarController {
         return "main/calendar";
     }
 
-
+    @RentacarLoggable
     @GetMapping("/find")
     public String getCalendarByDay(Model model, @ModelAttribute DateDto tripDto) {
         long page = calculatePage(tripDto);
@@ -97,6 +101,7 @@ public class CalendarController {
         return "redirect:/calendar/14/"+page;
     }
 
+    @RentacarLoggable
     private long calculatePage(DateDto tripDto) {
         LocalDate now = LocalDate.now().with(DayOfWeek.MONDAY);
         long diff = DAYS.between(now, tripDto.getDate());
@@ -112,7 +117,7 @@ public class CalendarController {
         return page;
     }
 
-
+    @RentacarLoggable
     private List<DayDto> getDataForIndexCalendarView(long page, long daysByPage){
         LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY).plusDays(page*daysByPage);
         LocalDate end = start.plusDays(daysByPage-1);
