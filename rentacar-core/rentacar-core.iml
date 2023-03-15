@@ -37,6 +37,7 @@
     <orderEntry type="library" name="Maven: org.attoparser:attoparser:2.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.unbescape:unbescape:1.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.6" level="project" />
+    <orderEntry type="module" module-name="rentacar-aop" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-actuator:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:3.0.2" level="project" />
@@ -63,7 +64,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-jpa:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-aop:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:6.0.4" level="project" />
-    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.9.19" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:5.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:6.0.4" level="project" />
@@ -145,5 +145,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-devtools:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.9.19" level="project" />
   </component>
 </module>

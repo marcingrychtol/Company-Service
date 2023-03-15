@@ -2,7 +2,7 @@
   <configuration default="false" name="Rentacar PROD" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="prod" />
     <module name="rentacar-core" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="pl.mdj.rejestrbiurowy.RentACarApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.rentacar.RentACarApplication" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
