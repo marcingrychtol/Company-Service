@@ -23,6 +23,12 @@
             <artifactId>thymeleaf-extras-java8time</artifactId>
             <version>3.0.1.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.rentacar</groupId>
+            <artifactId>rentacar-aop</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 
