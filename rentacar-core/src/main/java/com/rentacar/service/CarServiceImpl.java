@@ -38,12 +38,12 @@ public class CarServiceImpl implements CarService {
 
     private Logger LOG = LoggerFactory.getLogger(CarServiceImpl.class);
 
-    CarRepository carRepository;
-    CarMapper carMapper;
-    EmployeeMapper employeeMapper;
-    TripRepository tripRepository;
-    DayService dayService;
-    DateFactory dateFactory;
+    private CarRepository carRepository;
+    private CarMapper carMapper;
+    private EmployeeMapper employeeMapper;
+    private TripRepository tripRepository;
+    private DayService dayService;
+    private DateFactory dateFactory;
 
     @Autowired
     public CarServiceImpl(CarRepository carRepository, CarMapper carMapper, TripRepository tripRepository, DateFactory dateFactory, EmployeeMapper employeeMapper, DayService dayService) {
